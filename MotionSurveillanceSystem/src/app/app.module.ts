@@ -6,15 +6,13 @@ import { AppComponent } from './app.component';
 import { LiveComponent } from './live/live.component';
 import { RecordingComponent } from './recording/recording.component';
 import { ManagementComponent } from './management/management.component';
-import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LiveComponent,
     RecordingComponent,
-    ManagementComponent,
-    LoginComponent
+    ManagementComponent
   ],
   imports: [
     BrowserModule,
