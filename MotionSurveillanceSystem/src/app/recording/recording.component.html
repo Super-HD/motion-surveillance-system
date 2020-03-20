@@ -12,7 +12,7 @@
         Full text search: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="service.searchTerm"/>
         <span class="ml-3" *ngIf="service.loading$ | async">Loading...</span>
     </div>
-  
+
     <table class="table table-striped">
       <thead>
       <tr>
@@ -39,7 +39,7 @@
       <ngb-pagination
         [collectionSize]="total$ | async" [(page)]="service.page" [pageSize]="service.pageSize">
       </ngb-pagination>
-  
+
       <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
         <option [ngValue]="2">2 items per page</option>
         <option [ngValue]="4">4 items per page</option>
@@ -48,9 +48,13 @@
     </div>
   </form>
 
+  <hr>
+  <!-- <mat-video src="http://static.videogular.com/assets/videos/videogular.mp4"></mat-video> -->
   <!--Modal-->
   <ngx-smart-modal #myModal identifier="myModal">
     <h1>Title</h1>
     <p>Some stuff...</p>
-    <button (click)="myModal.close()">Close</button>
+    <!-- <mat-video src="http://static.videogular.com/assets/videos/videogular.mp4"></mat-video> -->
+    <mat-video src="../assets/video/recording.mp4"></mat-video>
+    <!-- <button (click)="myModal.close()">Close</button> -->
   </ngx-smart-modal>

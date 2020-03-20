@@ -7,7 +7,11 @@ import {DecimalPipe} from '@angular/common';
 
 import { ClipService } from './_services/clip.service';
 import { NgbdSortableHeader } from './_helpers/sortable.directive';
+// import ngx-smart-modal
 import { NgxSmartModalModule } from 'ngx-smart-modal';
+// import for mat-video
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatVideoModule } from 'mat-video';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,7 +34,9 @@ import { ManagementComponent } from './management/management.component';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    NgxSmartModalModule.forRoot()
+    NgxSmartModalModule.forRoot(),
+    BrowserAnimationsModule,
+    MatVideoModule
   ],
   providers: [ClipService, DecimalPipe],
   bootstrap: [AppComponent]
