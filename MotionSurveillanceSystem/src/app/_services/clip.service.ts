@@ -44,7 +44,7 @@ function matches(clip: Clip, term: string, pipe: PipeTransform) {
 }
 
 @Injectable({providedIn: 'root'})
-export class CountryService {
+export class ClipService {
   private _loading$ = new BehaviorSubject<boolean>(true);
   private _search$ = new Subject<void>();
   private _clips$ = new BehaviorSubject<Clip[]>([]);

@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {DecimalPipe} from '@angular/common';
 
-import {CountryService} from './_services/country.service';
+import { ClipService } from './_services/clip.service';
 import { NgbdSortableHeader } from './_helpers/sortable.directive';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -31,7 +31,7 @@ import { ManagementComponent } from './management/management.component';
     NgbModule
 
   ],
-  providers: [CountryService, DecimalPipe],
+  providers: [ClipService, DecimalPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

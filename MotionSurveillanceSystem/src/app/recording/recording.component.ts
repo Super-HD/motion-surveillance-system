@@ -1,9 +1,10 @@
+
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import {DecimalPipe} from '@angular/common';
 import {Observable} from 'rxjs';
 
 import {Clip} from '../_helpers/clip';
-import {CountryService} from '../_services/country.service';
+import {ClipService} from '../_services/clip.service'
 import {NgbdSortableHeader, SortEvent} from '../_helpers/sortable.directive';
 
 @Component({
@@ -21,7 +22,7 @@ export class RecordingComponent implements OnInit {
 
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
 
-  constructor(public service: CountryService) {
+  constructor(public service: ClipService) {
     this.clips$ = service.clips$;
     this.total$ = service.total$;
   }
