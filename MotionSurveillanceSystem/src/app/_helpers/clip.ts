@@ -1,5 +1,5 @@
 export interface Clip {
-    clipID: number;
+    clipID: string;
     cameraID: number;
     cameraLocation: string;
     recordingDate: string;

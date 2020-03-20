@@ -16,7 +16,7 @@
     <table class="table table-striped">
       <thead>
       <tr>
-        <th scope="col" sortable="clipID | number" (sort)="onSort($event)">Clip ID</th>
+        <th scope="col">Clip ID</th>
         <th scope="col" sortable="cameraID | number" (sort)="onSort($event)">Camera ID</th>
         <th scope="col" sortable="cameraLocation" (sort)="onSort($event)">Camera Location</th>
         <th scope="col" sortable="recordingDate" (sort)="onSort($event)">Recording Date</th>
@@ -26,12 +26,19 @@
       </thead>
       <tbody>
       <tr *ngFor="let clip of clips$ | async">
-        <th scope="row">{{ clip.clipID }}</th>
+        <th>{{clip.clipID}}</th>
         <td><ngb-highlight [result]="clip.cameraID | number" [term]="service.searchTerm"></ngb-highlight></td>
         <td><ngb-highlight [result]="clip.cameraLocation" [term]="service.searchTerm"></ngb-highlight></td>
         <td><ngb-highlight [result]="clip.recordingDate" [term]="service.searchTerm"></ngb-highlight></td>
         <td><ngb-highlight [result]="clip.cameraClient" [term]="service.searchTerm"></ngb-highlight></td>
-        <td><button type="button" class="btn btn-primary" (click)="ngxSmartModalService.getModal('myModal').open()">Watch</button></td>
+        <td><ngx-smart-modal identifier={{clip.clipID}}>
+            <h1>Clip ID: {{clip.clipID}}</h1>
+            <p>Some stuff...</p>
+            <!-- <mat-video src="http://static.videogular.com/assets/videos/videogular.mp4"></mat-video> -->
+            <mat-video src="../assets/video/recording.mp4"></mat-video>
+            <!-- <button (click)="myModal.close()">Close</button> -->
+          </ngx-smart-modal>
+        <button type="button" class="btn btn-primary" (click)="ngxSmartModalService.getModal(clip.clipID).open()">Watch</button></td>
       </tr>
       </tbody>
     </table>
