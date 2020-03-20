@@ -2,6 +2,7 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import {DecimalPipe} from '@angular/common';
 import {Observable} from 'rxjs';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 
 import {Clip} from '../_helpers/clip';
 import {ClipService} from '../_services/clip.service'
@@ -22,7 +23,8 @@ export class RecordingComponent implements OnInit {
 
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
 
-  constructor(public service: ClipService) {
+  constructor(public service: ClipService,
+    public ngxSmartModalService: NgxSmartModalService) {
     this.clips$ = service.clips$;
     this.total$ = service.total$;
   }

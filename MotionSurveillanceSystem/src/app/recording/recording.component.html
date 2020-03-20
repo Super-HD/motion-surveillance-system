@@ -31,7 +31,7 @@
         <td><ngb-highlight [result]="clip.cameraLocation" [term]="service.searchTerm"></ngb-highlight></td>
         <td><ngb-highlight [result]="clip.recordingDate" [term]="service.searchTerm"></ngb-highlight></td>
         <td><ngb-highlight [result]="clip.cameraClient" [term]="service.searchTerm"></ngb-highlight></td>
-        <td><button type="button" class="btn btn-primary">Watch</button></td>
+        <td><button type="button" class="btn btn-primary" (click)="ngxSmartModalService.getModal('myModal').open()">Watch</button></td>
       </tr>
       </tbody>
     </table>
@@ -46,5 +46,11 @@
         <option [ngValue]="6">6 items per page</option>
       </select>
     </div>
-  
   </form>
+
+  <!--Modal-->
+  <ngx-smart-modal #myModal identifier="myModal">
+    <h1>Title</h1>
+    <p>Some stuff...</p>
+    <button (click)="myModal.close()">Close</button>
+  </ngx-smart-modal>

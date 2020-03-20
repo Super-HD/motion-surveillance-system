@@ -7,6 +7,7 @@ import {DecimalPipe} from '@angular/common';
 
 import { ClipService } from './_services/clip.service';
 import { NgbdSortableHeader } from './_helpers/sortable.directive';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,8 +29,8 @@ import { ManagementComponent } from './management/management.component';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule
-
+    NgbModule,
+    NgxSmartModalModule.forRoot()
   ],
   providers: [ClipService, DecimalPipe],
   bootstrap: [AppComponent]
