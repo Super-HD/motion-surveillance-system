@@ -31,6 +31,7 @@
         <td><ngb-highlight [result]="clip.cameraLocation" [term]="service.searchTerm"></ngb-highlight></td>
         <td><ngb-highlight [result]="clip.recordingDate" [term]="service.searchTerm"></ngb-highlight></td>
         <td><ngb-highlight [result]="clip.cameraClient" [term]="service.searchTerm"></ngb-highlight></td>
+        <!--Modal-->
         <td><ngx-smart-modal identifier={{clip.clipID}}>
             <h1>Clip ID: {{clip.clipID}}</h1>
             <p>Some stuff...</p>
@@ -46,7 +47,6 @@
       <ngb-pagination
         [collectionSize]="total$ | async" [(page)]="service.page" [pageSize]="service.pageSize">
       </ngb-pagination>
-
       <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
         <!-- <option [ngValue]="2">2 items per page</option> -->
         <option [ngValue]="5">5 items per page</option>
@@ -55,13 +55,4 @@
     </div>
   </form>
 
-  <hr>
-  <!-- <mat-video src="http://static.videogular.com/assets/videos/videogular.mp4"></mat-video> -->
-  <!--Modal-->
-  <ngx-smart-modal #myModal identifier="myModal">
-    <h1>Title</h1>
-    <p>Some stuff...</p>
-    <!-- <mat-video src="http://static.videogular.com/assets/videos/videogular.mp4"></mat-video> -->
-    <mat-video src="../assets/video/recording.mp4"></mat-video>
-    <!-- <button (click)="myModal.close()">Close</button> -->
-  </ngx-smart-modal>
+ 
