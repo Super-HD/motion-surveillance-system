@@ -1,1 +1,1 @@
-      'Motion Surveillance System that will utilize webcams to provide live streaming functionality alongside motion detection video snapshots. Front-End will be Developed using the MEAN Stack, & Back-End using C++. Server + Storage Solution will utilize AWS.'
+Motion Surveillance System that will utilize webcams to provide live streaming functionality alongside motion detection video snapshots. Front-End will be Developed using the MEAN Stack, & Back-End using C++. Server + Storage Solution will utilize AWS.
