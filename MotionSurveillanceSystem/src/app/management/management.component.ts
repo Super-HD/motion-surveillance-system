@@ -1,22 +1,30 @@
 
+
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import {Observable} from 'rxjs';
 
 import { Camera } from './../_helpers/camera';
 import { CameraService } from './../_services/camera.service';
 import {NgbdSortableHeader, SortEvent} from '../_helpers/sortable.directive';
+import {NgbTimeStruct} from '../_helpers/ngb-time-struct';
+import { CustomTimeStruct } from './../_helpers/custom-time-struct';
+
 
 @Component({
   selector: 'app-management',
   templateUrl: './management.component.html',
   styleUrls: ['./management.component.css']
 })
+
 export class ManagementComponent implements OnInit {
 
   cameraID: number;
   cameraClient: string;
   cameraLocation: string;
-  
+
+  startTime = {hour: 0, minute: 0};
+  endTime = {hour: 0, minute: 0};
+
   ngOnInit() {
   }
 
@@ -45,11 +53,17 @@ export class ManagementComponent implements OnInit {
     this.cameraID = camera.cameraID;
     this.cameraClient = camera.cameraClient;
     this.cameraLocation = camera.cameraLocation;
-    console.log(this.cameraID);
-    console.log(this.cameraClient);
-    console.log(this.cameraLocation);
-    
-    
-    
+    this.startTime = {hour: Number(camera.startTime.hour), minute: Number(camera.startTime.minute)};
+    this.endTime = {hour: Number(camera.endTime.hour), minute: Number(camera.endTime.minute)};
   }
+
+  /**
+   * Converts a NgbTimeStruct value into CustomTimeStruct value
+   */
+  toModel(time: NgbTimeStruct | null): CustomTimeStruct | null {
+    return (time && Number.isInteger(time.hour) && Number.isInteger(time.minute)) ?
+        {hour: ("0" + time.hour).slice(-2), minute: ("0" + time.minute).slice(-2)} :
+        null;
+  }
+
 }

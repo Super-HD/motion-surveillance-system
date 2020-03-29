@@ -112,6 +112,6 @@ export const Cameras: Camera[] = [
     cameraLocation: "Adelaide, SA",
     cameraClient: "The University of Adelaide",
     startTime: {hour: "02", minute: "17"},
-    endTime: {hour: "13", minute: "17"}
+    endTime: {hour: "13", minute: "00"}
   },
 ];
