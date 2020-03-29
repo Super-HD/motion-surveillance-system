@@ -25,11 +25,11 @@ function compare(v1, v2) {
   return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
 }
 
-function sort(clips: Camera[], column: string, direction: string): Camera[] {
+function sort(cameras: Camera[], column: string, direction: string): Camera[] {
   if (direction === '') {
-    return clips;
+    return cameras;
   } else {
-    return [...clips].sort((a, b) => {
+    return [...cameras].sort((a, b) => {
       const res = compare(a[column], b[column]);
       return direction === 'asc' ? res : -res;
     });
@@ -43,10 +43,10 @@ function matches(cameras: Camera, term: string, pipe: PipeTransform) {
 }
 
 @Injectable({providedIn: 'root'})
-export class ClipService {
+export class CameraService {
   private _loading$ = new BehaviorSubject<boolean>(true);
   private _search$ = new Subject<void>();
-  private _clips$ = new BehaviorSubject<Camera[]>([]);
+  private _cameras$ = new BehaviorSubject<Camera[]>([]);
   private _total$ = new BehaviorSubject<number>(0);
 
   private _state: State = {
@@ -65,14 +65,14 @@ export class ClipService {
       delay(200),
       tap(() => this._loading$.next(false))
     ).subscribe(result => {
-      this._clips$.next(result.cameras);
+      this._cameras$.next(result.cameras);
       this._total$.next(result.total);
     });
 
     this._search$.next();
   }
 
-  get clips$() { return this._clips$.asObservable(); }
+  get cameras$() { return this._cameras$.asObservable(); }
   get total$() { return this._total$.asObservable(); }
   get loading$() { return this._loading$.asObservable(); }
   get page() { return this._state.page; }
@@ -97,7 +97,7 @@ export class ClipService {
     let cameras = sort(Cameras, sortColumn, sortDirection);
 
     // 2. filter
-    cameras = cameras.filter(clip => matches(clip, searchTerm, this.pipe));
+    cameras = cameras.filter(camera => matches(camera, searchTerm, this.pipe));
     const total = cameras.length;
 
     // 3. paginate
