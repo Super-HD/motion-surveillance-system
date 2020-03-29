@@ -60,7 +60,14 @@
             <label for="Client">Camera Client</label>
             <input type="text" class="form-control" id="Client" [(ngModel)]="cameraClient" name="cameraClient">
         </div>
-        
-        <!-- <button type="submit" class="btn btn-primary" (click)="">Update Camera</button> -->
+        <div class="form-group">
+            <label for="startTime">Start Time</label>
+            <ngb-timepicker [(ngModel)]="startTime" name="startTime"></ngb-timepicker>
+        </div>
+        <div class="form-group">
+            <label for="endTime">End Time</label>
+            <ngb-timepicker [(ngModel)]="endTime" name="endTime"></ngb-timepicker>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Camera</button>
     </div>
   </form>
