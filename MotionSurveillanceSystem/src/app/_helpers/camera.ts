@@ -1,8 +1,5 @@
-export interface Clip {
-    clipID: string;
+export interface Camera {
     cameraID: number;
     cameraLocation: string;
-    recordingDate: string;
     cameraClient: string;
 }
-  
