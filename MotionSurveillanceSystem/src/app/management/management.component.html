@@ -5,4 +5,43 @@
     </div>
 </div>
 <hr>
+
 <!--Management-->
+<form>
+    <div class="form-group form-inline">
+        Full text search: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="service.searchTerm"/>
+        <span class="ml-3" *ngIf="service.loading$ | async">Loading...</span>
+    </div>
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col" sortable="cameraID | number" (sort)="onSort($event)">Camera ID</th>
+        <th scope="col" sortable="cameraLocation" (sort)="onSort($event)">Camera Location</th>
+        <th scope="col" sortable="cameraClient" (sort)="onSort($event)">Camera Client</th>
+        <th scope="col">Edit</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let camera of cameras$ | async">
+        <td><ngb-highlight [result]="camera.cameraID | number" [term]="service.searchTerm"></ngb-highlight></td>
+        <td><ngb-highlight [result]="camera.cameraLocation" [term]="service.searchTerm"></ngb-highlight></td>
+        <td><ngb-highlight [result]="camera.cameraClient" [term]="service.searchTerm"></ngb-highlight></td>
+        <!--Modal-->
+        <td>
+        <button type="button" class="btn btn-primary" (click)="ngxSmartModalService.getModal(clip.clipID).open()">Edit</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination
+        [collectionSize]="total$ | async" [(page)]="service.page" [pageSize]="service.pageSize">
+      </ngb-pagination>
+      <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
+        <!-- <option [ngValue]="2">2 items per page</option> -->
+        <option [ngValue]="5">5 items per page</option>
+        <option [ngValue]="10">10 items per page</option>
+      </select>
+    </div>
+  </form>
