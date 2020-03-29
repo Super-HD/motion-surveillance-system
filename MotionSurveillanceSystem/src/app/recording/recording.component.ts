@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
 import {Clip} from '../_helpers/clip';
-import {ClipService} from '../_services/clip.service'
+import {ClipService} from '../_services/clip.service';
 import {NgbdSortableHeader, SortEvent} from '../_helpers/sortable.directive';
 
 @Component({
