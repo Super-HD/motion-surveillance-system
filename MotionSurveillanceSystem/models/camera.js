@@ -1,10 +1,8 @@
-import { truncate } from 'fs';
-import { stringify } from 'querystring';
 
 const mongoose = require('mongoose');
 
 const cameraSchema = new mongoose.Schema({
-    _id: mongoose.model.Schema.Types.ObjectID,
+    _id: mongoose.Schema.Types.ObjectId,
     cameraID: {
         type: Number,
         required: true
