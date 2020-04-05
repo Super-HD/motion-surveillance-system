@@ -1,8 +1,13 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 const Camera = require('./models/camera');
+const camera = require('./routers/camera');
 const mongoURI = "mongodb://" + process.argv[2] + ":27017/mssDB";
 
 mongoose.connect(mongoURI, function(err){
@@ -36,5 +41,10 @@ mongoose.connect(mongoURI, function(err){
         
     });
 })
+
+app.get('/cameras', camera.getAll);
+app.post('/cameras', camera.createOne);
+
+app.put('/cameras/:id', camera.updateOne);
 
 
