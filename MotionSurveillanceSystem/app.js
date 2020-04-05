@@ -2,9 +2,11 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+let path = require('path');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use('/', express.static(path.join(__dirname, 'dist/MotionSurveillanceSystem')))
 
 //const Camera = require('./models/camera');
 const camera = require('./routers/camera');
