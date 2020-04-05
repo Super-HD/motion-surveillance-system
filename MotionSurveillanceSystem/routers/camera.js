@@ -18,6 +18,14 @@ module.exports = {
         });
     },
 
+    getOne: function(req, res) {
+        Camera.findOne({_id: req.params.id}, function(err, camera) {
+            if (err) return res.status(400).json(err);
+            if (!camera) return res.status(400).json();
+            res.json(camera);
+        })
+    },
+
     updateOne: function(req, res) {
         Camera.findOneAndUpdate({_id: req.params.id}, req.body, function(err, camera) {
             if (err) return res.status(400).json(err);

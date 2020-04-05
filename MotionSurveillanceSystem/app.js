@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-const Camera = require('./models/camera');
+//const Camera = require('./models/camera');
 const camera = require('./routers/camera');
 const mongoURI = "mongodb://" + process.argv[2] + ":27017/mssDB";
 
@@ -20,31 +20,32 @@ mongoose.connect(mongoURI, function(err){
         console.log("Web App is running on port 4200");
     });
 
-    let camera1 = new Camera({
-        _id: new mongoose.Types.ObjectId(),
-        cameraID: 1,
-        cameraLocation: "Melbourne",
-        cameraClient: "Monash University",
-        startTime: {
-            hour: 13,
-            minute: 30
-        },
-        endTime: {
-            hour: 23,
-            minute: 30
-        }
-    });
+    // let camera1 = new Camera({
+    //     _id: new mongoose.Types.ObjectId(),
+    //     cameraID: 1,
+    //     cameraLocation: "Melbourne",
+    //     cameraClient: "Monash University",
+    //     startTime: {
+    //         hour: 13,
+    //         minute: 30
+    //     },
+    //     endTime: {
+    //         hour: 23,
+    //         minute: 30
+    //     }
+    // });
 
-    camera1.save(function(err){
-        if (err) throw err;
-        console.log("Camera successfully added to DB");
+    // camera1.save(function(err){
+    //     if (err) throw err;
+    //     console.log("Camera successfully added to DB");
         
-    });
+    // });
 })
 
+// Camera RESTFul endpoints
 app.get('/cameras', camera.getAll);
 app.post('/cameras', camera.createOne);
-
+app.get('/cameras/:id', camera.getOne);
 app.put('/cameras/:id', camera.updateOne);
 
 
