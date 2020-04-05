@@ -7,7 +7,7 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class CameraService {
+export class CamerasService {
 
   constructor(private http: HttpClient) { }
 
