@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {DecimalPipe} from '@angular/common';
+import { DecimalPipe } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http'; 
 
 import { ClipService } from './_services/clip.service';
 import { NgbdSortableHeader } from './_helpers/sortable.directive';
@@ -18,6 +19,7 @@ import { AppComponent } from './app.component';
 import { LiveComponent } from './live/live.component';
 import { RecordingComponent } from './recording/recording.component';
 import { ManagementComponent } from './management/management.component';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { ManagementComponent } from './management/management.component';
     NgbModule,
     NgxSmartModalModule.forRoot(),
     BrowserAnimationsModule,
-    MatVideoModule
+    MatVideoModule,
+    HttpClientModule
   ],
   providers: [ClipService, DecimalPipe],
   bootstrap: [AppComponent]
