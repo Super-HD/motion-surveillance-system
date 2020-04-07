@@ -1,73 +1,58 @@
 <div class="container">
-    <div>
-        <br>
-        <h2>Camera Management</h2>
-    </div>
+  <div>
+      <br>
+      <h2>Camera Management</h2>
+  </div>
 </div>
 <hr>
 
 <!--Management-->
 <form>
-    <div class="form-group form-inline">
-        Full text search: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="service.searchTerm"/>
-        <span class="ml-3" *ngIf="service.loading$ | async">Loading...</span>
-    </div>
-
-    <table class="table table-striped">
-      <thead>
+  <table class="table table-striped">
+    <thead>
       <tr>
-        <th scope="col" sortable="cameraID | number" (sort)="onSort($event)">Camera ID</th>
-        <th scope="col" sortable="cameraLocation" (sort)="onSort($event)">Camera Location</th>
-        <th scope="col" sortable="cameraClient" (sort)="onSort($event)">Camera Client</th>
+        <th scope="col">Camera ID</th>
+        <th scope="col">Camera Location</th>
+        <th scope="col">Camera Client</th>
         <th scope="col">Detection Active Time</th>
         <th scope="col">Edit</th>
       </tr>
       </thead>
-      <tbody>
-      <tr *ngFor="let camera of cameras$ | async">
-        <td><ngb-highlight [result]="camera.cameraID | number" [term]="service.searchTerm"></ngb-highlight></td>
-        <td><ngb-highlight [result]="camera.cameraLocation" [term]="service.searchTerm"></ngb-highlight></td>
-        <td><ngb-highlight [result]="camera.cameraClient" [term]="service.searchTerm"></ngb-highlight></td>
-        <td>{{camera.startTime['hour']}}:{{camera.startTime['minute']}} - {{camera.endTime['hour']}}:{{camera.endTime['minute']}}</td>
-        <!--Modal-->
-        <td>
-        <button type="button" class="btn btn-primary" (click)="onSelectUpdate(camera)">Edit</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-    <div class="d-flex justify-content-between p-2">
-      <ngb-pagination
-        [collectionSize]="total$ | async" [(page)]="service.page" [pageSize]="service.pageSize">
-      </ngb-pagination>
-      <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
-        <!-- <option [ngValue]="2">2 items per page</option> -->
-        <option [ngValue]="5">5 items per page</option>
-        <option [ngValue]="10">10 items per page</option>
-      </select>
-    </div>
-    <hr>
-    <div *ngIf="(cameras$ | async)?.length > 0">
-        <div class="form-group">
-            <label for="ID">Camera ID</label>
-            <input type="number" class="form-control" id="ID" [(ngModel)]="cameraID" name="cameraID">
-        </div>
-        <div class="form-group">
-            <label for="Location">Camera Location</label>
-            <input type="text" class="form-control" id="Location" [(ngModel)]="cameraLocation" name="cameraLocation">
-        </div>
-        <div class="form-group">
-            <label for="Client">Camera Client</label>
-            <input type="text" class="form-control" id="Client" [(ngModel)]="cameraClient" name="cameraClient">
-        </div>
-        <div class="form-group">
-            <label for="startTime">Start Time</label>
-            <ngb-timepicker [(ngModel)]="startTime" name="startTime"></ngb-timepicker>
-        </div>
-        <div class="form-group">
-            <label for="endTime">End Time</label>
-            <ngb-timepicker [(ngModel)]="endTime" name="endTime"></ngb-timepicker>
-        </div>
-        <button type="submit" class="btn btn-primary">Update Camera</button>
-    </div>
-  </form>
+    <tbody>
+    <tr *ngFor="let camera of camerasDB">
+      <td>{{camera.cameraID}}</td>
+      <td>{{camera.cameraLocation}}</td>
+      <td>{{camera.cameraClient}}</td>
+      <td>{{camera.startTime['hour']}}:{{camera.startTime['minute']}} - {{camera.endTime['hour']}}:{{camera.endTime['minute']}}</td>
+      <!--Modal-->
+      <td>
+      <button type="button" class="btn btn-primary" (click)="onSelectUpdate(camera)">Edit</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <hr>
+  <div *ngIf="camerasDB.length > 0">
+      <div class="form-group">
+          <label for="ID">Camera ID</label>
+          <input type="number" class="form-control" id="ID" [(ngModel)]="cameraID" name="cameraID">
+      </div>
+      <div class="form-group">
+          <label for="Location">Camera Location</label>
+          <input type="text" class="form-control" id="Location" [(ngModel)]="cameraLocation" name="cameraLocation">
+      </div>
+      <div class="form-group">
+          <label for="Client">Camera Client</label>
+          <input type="text" class="form-control" id="Client" [(ngModel)]="cameraClient" name="cameraClient">
+      </div>
+      <div class="form-group">
+          <label for="startTime">Start Time</label>
+          <ngb-timepicker [(ngModel)]="startTime" name="startTime"></ngb-timepicker>
+      </div>
+      <div class="form-group">
+          <label for="endTime">End Time</label>
+          <ngb-timepicker [(ngModel)]="endTime" name="endTime"></ngb-timepicker>
+      </div>
+      <button type="submit" class="btn btn-primary">Update Camera</button>
+  </div>
+</form>
