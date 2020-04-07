@@ -21,6 +21,7 @@ export class ManagementComponent implements OnInit {
 
   constructor(private cameraService: CamerasService, private http: HttpClient){};
 
+  id: string;
   cameraID: number;
   cameraClient: string;
   cameraLocation: string;
@@ -31,10 +32,10 @@ export class ManagementComponent implements OnInit {
   camerasDB: Array<any> = [];
 
   ngOnInit() {
-    this.onGetRecords();
+    this.onGetCameras();
   }
 
-  onGetRecords() {
+  onGetCameras() {
     this.cameraService.getCameras().subscribe((data:any[])=>{
       this.camerasDB = data;
       console.log(this.camerasDB);
@@ -68,6 +69,21 @@ export class ManagementComponent implements OnInit {
     this.cameraLocation = camera.cameraLocation;
     this.startTime = {hour: Number(camera.startTime.hour), minute: Number(camera.startTime.minute)};
     this.endTime = {hour: Number(camera.endTime.hour), minute: Number(camera.endTime.minute)};
+    this.id = camera._id;
+  }
+
+  onUpdateCamera(){
+    let obj = {
+      // cameraID cannot be changed
+      //cameraID: this.cameraID,
+      cameraClient: this.cameraClient,
+      cameraLocation: this.cameraLocation,
+      startTime: this.toModel(this.startTime),
+      endTime: this.toModel(this.endTime)
+    };
+    this.cameraService.updateCamera(this.id, obj).subscribe(result => {
+      this.onGetCameras();
+    });
   }
 
   /**
