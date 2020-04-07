@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+
 
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 // import {Observable} from 'rxjs';
 
 // import { Camera } from './../_helpers/camera';
@@ -11,6 +12,7 @@ import {NgbTimeStruct} from '../_helpers/ngb-time-struct';
 import { CustomTimeStruct } from './../_helpers/custom-time-struct';
 
 
+
 @Component({
   selector: 'app-management',
   templateUrl: './management.component.html',
@@ -18,8 +20,6 @@ import { CustomTimeStruct } from './../_helpers/custom-time-struct';
 })
 
 export class ManagementComponent implements OnInit {
-
-  constructor(private cameraService: CamerasService, private http: HttpClient){};
 
   id: string;
   cameraID: number;
@@ -30,6 +30,8 @@ export class ManagementComponent implements OnInit {
   endTime = {hour: 0, minute: 0};
 
   camerasDB: Array<any> = [];
+  
+  constructor(private cameraService: CamerasService, private http: HttpClient){};
 
   ngOnInit() {
     this.onGetCameras();
