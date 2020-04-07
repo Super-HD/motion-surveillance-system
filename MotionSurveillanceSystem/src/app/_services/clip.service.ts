@@ -37,10 +37,12 @@ function sort(clips: Clip[], column: string, direction: string): Clip[] {
 }
 
 function matches(clip: Clip, term: string, pipe: PipeTransform) {
-  return clip.cameraLocation.toLowerCase().includes(term.toLowerCase())
-    || clip.recordingDate.toLowerCase().includes(term.toLowerCase())
-    || clip.cameraClient.toLowerCase().includes(term.toLowerCase())
-    || pipe.transform(clip.cameraID).includes(term);
+  // return clip.cameraLocation.toLowerCase().includes(term.toLowerCase())
+  //   || clip.recordingDate.toLowerCase().includes(term.toLowerCase())
+  //   || clip.cameraClient.toLowerCase().includes(term.toLowerCase())
+  //   || pipe.transform(clip.cameraID).includes(term);
+  return clip.recordingDate.toLowerCase().includes(term.toLowerCase())
+  || pipe.transform(clip.cameraID).includes(term);
 }
 
 @Injectable({providedIn: 'root'})
