@@ -8,51 +8,32 @@
 
 <!--Recordings-->
 <form>
-    <div class="form-group form-inline">
-        Full text search: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="service.searchTerm"/>
-        <span class="ml-3" *ngIf="service.loading$ | async">Loading...</span>
-    </div>
-
     <table class="table table-striped">
       <thead>
       <tr>
-        <!-- <th scope="col">Clip ID</th> -->
-        <th scope="col" sortable="cameraID | number" (sort)="onSort($event)">Camera ID</th>
-        <!-- <th scope="col" sortable="cameraLocation" (sort)="onSort($event)">Camera Location</th> -->
-        <th scope="col" sortable="recordingDate" (sort)="onSort($event)">Recording Date</th>
-        <!-- <th scope="col" sortable="cameraClient" (sort)="onSort($event)">Camera Client</th> -->
+        <th scope="col">#</th>
+        <th scope="col">Camera ID</th>
+        <th scope="col">Recording Date</th>
         <th scope="col">Clip</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let clip of clips$ | async">
-        <!-- <th>{{clip.clipID}}</th> -->
-        <td><ngb-highlight [result]="clip.cameraID | number" [term]="service.searchTerm"></ngb-highlight></td>
-        <!-- <td><ngb-highlight [result]="clip.cameraLocation" [term]="service.searchTerm"></ngb-highlight></td> -->
-        <td><ngb-highlight [result]="clip.recordingDate" [term]="service.searchTerm"></ngb-highlight></td>
-        <!-- <td><ngb-highlight [result]="clip.cameraClient" [term]="service.searchTerm"></ngb-highlight></td> -->
+      <tr *ngFor="let clip of clipsDB; let i = index">
+        <td>{{i+1}}</td>
+        <td>{{clip.cameraID}}</td>
+        <td>{{clip.recordingDate}}</td>
         <!--Modal-->
         <td><ngx-smart-modal identifier={{clip.cameraID+clip.recordingDate}}>
             <h1>Clip ID: {{clip.cameraID+clip.recordingDate}}</h1>
             <p>Some stuff...</p>
             <!-- <mat-video src="http://static.videogular.com/assets/videos/videogular.mp4"></mat-video> -->
-            <mat-video src="../assets/video/recording.mp4"></mat-video>
+            <mat-video src="{{clip.clipLink}}"></mat-video>{{clip.clipLink}}
             <!-- <button (click)="myModal.close()">Close</button> -->
           </ngx-smart-modal>
         <button type="button" class="btn btn-primary" (click)="ngxSmartModalService.getModal(clip.cameraID+clip.recordingDate).open()">Watch</button></td>
       </tr>
       </tbody>
     </table>
-    <div class="d-flex justify-content-between p-2">
-      <ngb-pagination
-        [collectionSize]="total$ | async" [(page)]="service.page" [pageSize]="service.pageSize">
-      </ngb-pagination>
-      <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
-        <!-- <option [ngValue]="2">2 items per page</option> -->
-        <option [ngValue]="5">5 items per page</option>
-        <option [ngValue]="10">10 items per page</option>
-      </select>
-    </div>
   </form>
 
  
