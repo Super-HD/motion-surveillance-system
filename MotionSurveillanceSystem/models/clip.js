@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const clipSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    clipID: {
-        type: Number,
-        required: true
-    },
+    // clipID: {
+    //     type: Number,
+    //     required: true
+    // },
     cameraID: {
         type: Number,
         required: true
@@ -14,6 +14,10 @@ const clipSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    clipLink: {
+        type: String,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('Clip', clipSchema);
