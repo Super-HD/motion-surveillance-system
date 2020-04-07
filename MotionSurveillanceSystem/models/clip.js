@@ -11,7 +11,7 @@ const clipSchema = new mongoose.Schema({
         required: true
     },
     recordingDate: {
-        type: Date,
+        type: String,
         required: true
     },
     clipLink: {
