@@ -10,6 +10,7 @@ app.use('/', express.static(path.join(__dirname, 'dist/MotionSurveillanceSystem'
 
 //const Camera = require('./models/camera');
 const camera = require('./routers/camera');
+const clip = require('./routers/clip');
 const mongoURI = "mongodb://" + process.argv[2] + ":27017/mssDB";
 
 mongoose.connect(mongoURI, function(err){
@@ -49,5 +50,11 @@ app.get('/cameras', camera.getAll);
 app.post('/cameras', camera.createOne);
 app.get('/cameras/:id', camera.getOne);
 app.put('/cameras/:id', camera.updateOne);
+
+// Clip RESTFull endpoints
+app.get('/clips', clip.getAll);
+app.post('/clips', clip.createOne);
+app.get('/clips/:id', clip.getOne);
+app.put('/clips/:id', clip.updateOne);
 
 
