@@ -1,8 +1,8 @@
 export interface Clip {
-    clipID: string;
+    //clipID: string;
     cameraID: number;
-    cameraLocation: string;
+    //cameraLocation: string;
     recordingDate: string;
-    cameraClient: string;
+    //cameraClient: string;
 }
   

@@ -1,13 +1,16 @@
 
 
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import {Observable} from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+// import {Observable} from 'rxjs';
 
-import { Camera } from './../_helpers/camera';
-import { CameraService } from './../_services/camera.service';
-import {NgbdSortableHeader, SortEvent} from '../_helpers/sortable.directive';
+// import { Camera } from './../_helpers/camera';
+// import { CameraService } from './../_services/camera.service';
+// import {NgbdSortableHeader, SortEvent} from '../_helpers/sortable.directive';
+import {CamerasService} from '../camerasservice/cameras.service'
 import {NgbTimeStruct} from '../_helpers/ngb-time-struct';
 import { CustomTimeStruct } from './../_helpers/custom-time-struct';
+
 
 
 @Component({
@@ -18,6 +21,7 @@ import { CustomTimeStruct } from './../_helpers/custom-time-struct';
 
 export class ManagementComponent implements OnInit {
 
+  id: string;
   cameraID: number;
   cameraClient: string;
   cameraLocation: string;
@@ -25,29 +29,41 @@ export class ManagementComponent implements OnInit {
   startTime = {hour: 0, minute: 0};
   endTime = {hour: 0, minute: 0};
 
+  camerasDB: Array<any> = [];
+  
+  constructor(private cameraService: CamerasService, private http: HttpClient){};
+
   ngOnInit() {
+    this.onGetCameras();
   }
 
-  cameras$: Observable<Camera[]>;
-  total$: Observable<number>;
-
-  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
-
-  constructor(public service: CameraService) {
-    this.cameras$ = service.cameras$;
-    this.total$ = service.total$;
-  }
-
-  onSort({column, direction}: SortEvent) {
-    // resetting other headers
-    this.headers.forEach(header => {
-      if (header.sortable !== column) {
-        header.direction = '';
-      }
+  onGetCameras() {
+    this.cameraService.getCameras().subscribe((data:any[])=>{
+      this.camerasDB = data;
+      console.log(this.camerasDB);
     });
-    this.service.sortColumn = column;
-    this.service.sortDirection = direction;
   }
+
+  // cameras$: Observable<Camera[]>;
+  // total$: Observable<number>;
+
+  // @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
+
+  // constructor(public service: CameraService) {
+  //   this.cameras$ = service.cameras$;
+  //   this.total$ = service.total$;
+  // }
+
+  // onSort({column, direction}: SortEvent) {
+  //   // resetting other headers
+  //   this.headers.forEach(header => {
+  //     if (header.sortable !== column) {
+  //       header.direction = '';
+  //     }
+  //   });
+  //   this.service.sortColumn = column;
+  //   this.service.sortDirection = direction;
+  // }
 
   onSelectUpdate(camera){
     this.cameraID = camera.cameraID;
@@ -55,6 +71,21 @@ export class ManagementComponent implements OnInit {
     this.cameraLocation = camera.cameraLocation;
     this.startTime = {hour: Number(camera.startTime.hour), minute: Number(camera.startTime.minute)};
     this.endTime = {hour: Number(camera.endTime.hour), minute: Number(camera.endTime.minute)};
+    this.id = camera._id;
+  }
+
+  onUpdateCamera(){
+    let obj = {
+      // cameraID cannot be changed
+      //cameraID: this.cameraID,
+      cameraClient: this.cameraClient,
+      cameraLocation: this.cameraLocation,
+      startTime: this.toModel(this.startTime),
+      endTime: this.toModel(this.endTime)
+    };
+    this.cameraService.updateCamera(this.id, obj).subscribe(result => {
+      this.onGetCameras();
+    });
   }
 
   /**
