@@ -16,6 +16,15 @@ const handleSignIn = (db, bcrypt) => (req, res) => {
   // Jason, I will need your mongoDB Settings so i can update this code to work for MongoDB.
   // This Code is my code for PostgreSQL database, not for MongoDB
 
+  // There should be a login table containing
+  // user email for signin
+  // hashed value of user password
+  // user type: Supervisor or Client?
+
+  // we perform a database request to check if the sign in details from POST request matches a user in the login table.
+
+  // You will then need to update your front end Angular App code to respond after POST request is done, if supervisor, go to main page. If Client, go to another page where they can approve upload their webcam stream.
+
   db.select("email", "hash")
     .from("login")
     // first check email
