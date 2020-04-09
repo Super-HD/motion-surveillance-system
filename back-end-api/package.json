@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^4.0.1",
+    "bcrypt-nodejs": "0.0.3",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.9.7"
   }
 }
