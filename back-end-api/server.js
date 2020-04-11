@@ -18,6 +18,8 @@ app.use(cors());
 // dont need body parser anymore just do this
 app.use(express.json());
 
+app.use('/', express.static(path.join(__dirname, '../front-end/dist/MotionSurveillanceSystem')))
+
 
 // THERE IS NO REGISTER - We assume that we give clients their login details personally for them to login to upload webcam stream
 
