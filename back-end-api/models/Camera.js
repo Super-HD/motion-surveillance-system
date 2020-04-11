@@ -12,7 +12,7 @@ const cameraSchema = new mongoose.Schema({
         required: true
     },
     cameraClient: {
-        type: String,
+        type: User,
         required: true
     },
     startTime: {

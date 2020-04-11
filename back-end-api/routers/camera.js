@@ -1,4 +1,4 @@
-const Camera = require('../models/CameraClient')
+const Camera = require('../models/Camera')
 
 module.exports = {
     getAll: (req, res) => Camera.find((err, cameras) => {

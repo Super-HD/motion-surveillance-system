@@ -1,5 +1,5 @@
 const validate = require("../form-validation");
-const User = require('../models/User')
+const User = require('../models/Client')
 
 const handleSignIn = (bcrypt) => (req, res) => {
 

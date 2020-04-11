@@ -1,4 +1,4 @@
-const Clip = require('../models/CameraClip');
+const Clip = require('../models/MotionClip');
 const mongoose = require('mongoose');
 
 module.exports = {

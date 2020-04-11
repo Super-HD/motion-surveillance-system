@@ -7,8 +7,8 @@ const signinSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  email: {
-    type: String,
+  camera: {
+    type: [],
     required: true
   },
   password: {

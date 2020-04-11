@@ -94,7 +94,6 @@ mongoose.connect(mongoURI, mongoConfig, (err) => {
     //     if (err) throw err;
     //     console.log("Client successfully added to DB");
     // });
-
 })
 
 app.get("/", (req, res) => {
@@ -106,6 +105,14 @@ app.get("/", (req, res) => {
 
 //signin --> POST Request --> Success/Fail
 app.post("/signin", signin.handleSignIn(bcrypt));
+
+// retrieve video frames
+// app.get
+
+// retrieve motion snapshot video clip
+// app.get
+
+
 
 // Camera RESTFul endpoints
 app.get('/cameras', camera.getAll);
