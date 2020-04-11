@@ -1,21 +1,17 @@
 const mongoose = require('mongoose');
+const cameraSchema = require('./Camera')
 
 //password value is hashed
-const signinSchema = new mongoose.Schema({
+const clientSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  userType: {
+  clientName: {
     type: String,
     required: true
   },
   camera: {
     type: [],
     required: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-
+  }
 });
 
-module.exports = mongoose.model('User', signinSchema);
+module.exports = mongoose.model('Client', clientSchema);

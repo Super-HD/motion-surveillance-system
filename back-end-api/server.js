@@ -106,13 +106,13 @@ app.get("/", (req, res) => {
 //signin --> POST Request --> Success/Fail
 app.post("/signin", signin.handleSignIn(bcrypt));
 
-// retrieve video frames
-// app.get
+// retrieve video frames by specific camera id
+app.post('/stream/:id')
 
-// retrieve motion snapshot video clip
-// app.get
+// retrieve motion snapshot video clip mp4 by specific camera id
+app.post('/motion/:id')
 
-
+// server will store live stream data every 30 minutes into the file storage server (localhost at first then digitalOcean)
 
 // Camera RESTFul endpoints
 app.get('/cameras', camera.getAll);
