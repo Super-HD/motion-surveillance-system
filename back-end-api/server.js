@@ -100,11 +100,10 @@ app.get("/", (req, res) => {
     res.send("App is working!");
 });
 
-// TODO
-// Create login page for Supervisor + Client Computers who upload their webcam stream
-
 //signin --> POST Request --> Success/Fail
-app.post("/signin", signin.handleSignIn(bcrypt));
+// Signin for checking if user is supervisor in login page.
+// temporarily dont do first.
+// app.post("/signin", signin.handleSignIn(bcrypt));
 
 // retrieve video frames by specific camera id
 app.post('/stream/:id')
