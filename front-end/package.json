@@ -26,6 +26,7 @@
     "bootstrap": "^4.4.1",
     "hammerjs": "^2.0.8",
     "mat-video": "^2.7.2",
+    "ngx-pagination": "^5.0.0",
     "ngx-smart-modal": "^7.4.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
