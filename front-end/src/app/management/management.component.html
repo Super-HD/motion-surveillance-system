@@ -9,7 +9,7 @@
 <div class="row">
   <div class="col">
       <label class="control">Filter items:
-          <input type="text" class="input" placeholder="filter" >
+          <input type="text" class="input" placeholder="filter" [(ngModel)]="listFilter">
       </label>
   </div>
   <div class="col">
@@ -33,7 +33,7 @@
       </tr>
       </thead>
     <tbody>
-    <tr *ngFor="let camera of camerasDB | paginate: config; let i = index">
+    <tr *ngFor="let camera of filteredCameras | paginate: config; let i = index">
       <td>{{i+1}}</td>
       <td>{{camera.cameraID}}</td>
       <td>{{camera.cameraLocation}}</td>

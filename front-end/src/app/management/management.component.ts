@@ -1,5 +1,5 @@
 
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PaginationInstance} from 'ngx-pagination';
 // import {Observable} from 'rxjs';
@@ -7,11 +7,10 @@ import { PaginationInstance} from 'ngx-pagination';
 // import { Camera } from './../_helpers/camera';
 // import { CameraService } from './../_services/camera.service';
 // import {NgbdSortableHeader, SortEvent} from '../_helpers/sortable.directive';
-import {CamerasService} from '../camerasservice/cameras.service'
-import {NgbTimeStruct} from '../_helpers/ngb-time-struct';
+import { Camera } from "../../../../back-end-api/models/Camera"
+import { CamerasService } from '../camerasservice/cameras.service'
+import { NgbTimeStruct } from '../_helpers/ngb-time-struct';
 import { CustomTimeStruct } from './../_helpers/custom-time-struct';
-
-
 
 @Component({
   selector: 'app-management',
@@ -29,7 +28,8 @@ export class ManagementComponent implements OnInit {
   startTime = {hour: 0, minute: 0};
   endTime = {hour: 0, minute: 0};
 
-  camerasDB: Array<any> = [];
+  public camerasDB: Camera[] = [];
+  // variables for pagination
   public maxSize: number = 7;
   public directionLinks: boolean = true;
   public autoHide: boolean = false;
@@ -48,15 +48,22 @@ export class ManagementComponent implements OnInit {
   };
   public eventLog: string[] = [];
 
-  constructor(private cameraService: CamerasService, private http: HttpClient){};
+  // variables for filter
+  _listFilter = "";
+  filteredCameras: Camera[] = []
+
+  constructor(private cameraService: CamerasService, private http: HttpClient){
+  };
 
   ngOnInit() {
     this.onGetCameras();
+    this.listFilter = '';
   }
 
   onGetCameras() {
     this.cameraService.getCameras().subscribe((data:any[])=>{
       this.camerasDB = data;
+      this.filteredCameras = this.camerasDB;
       console.log(this.camerasDB);
     });
   }
@@ -75,25 +82,35 @@ export class ManagementComponent implements OnInit {
     this.eventLog.unshift(`${new Date().toISOString()}: ${message}`)
   }
 
-  // cameras$: Observable<Camera[]>;
-  // total$: Observable<number>;
+  // Filter functions
+  get listFilter(): string {
+    return this._listFilter;
+  }
 
-  // @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
+  set listFilter(value: string) {
+    this._listFilter = value;
+    this.filteredCameras = this.listFilter ? this.doFilter(this.listFilter) : this.camerasDB;
+  }
+  
+  doFilter(filterBy: string): Camera[] {
+    filterBy = filterBy.toLocaleLowerCase();
+    return this.camerasDB.filter((camera: Camera) =>
+        camera.cameraClient.toLocaleLowerCase().indexOf(filterBy) !== -1 ||
+        camera.cameraID.toString(10).toLocaleLowerCase().indexOf(filterBy) !== -1 ||
+        camera.cameraLocation.toLocaleLowerCase().indexOf(filterBy) !== -1);
+  }
 
-  // constructor(public service: CameraService) {
-  //   this.cameras$ = service.cameras$;
-  //   this.total$ = service.total$;
-  // }
-
-  // onSort({column, direction}: SortEvent) {
-  //   // resetting other headers
-  //   this.headers.forEach(header => {
-  //     if (header.sortable !== column) {
-  //       header.direction = '';
-  //     }
-  //   });
-  //   this.service.sortColumn = column;
-  //   this.service.sortDirection = direction;
+  // Search(filter) {
+  //   if (this.filter != "") {
+  //     this.camerasDB = this.camerasDB.filter(res => {
+  //       return res.cameraID.toString(10).toLocaleLowerCase().match(filter.toLocaleLowerCase())
+  //       || res.cameraLocation.toLocaleLowerCase().match(filter.toLocaleLowerCase())
+  //       || res.cameraClient.toLocaleLowerCase().match(filter.toLocaleLowerCase());
+  //    });
+  //   } else {
+  //     this.onGetCameras()
+  //   }
+    
   // }
 
   onSelectUpdate(camera){
