@@ -1,7 +1,7 @@
 
-
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { PaginationInstance} from 'ngx-pagination';
 // import {Observable} from 'rxjs';
 
 // import { Camera } from './../_helpers/camera';
@@ -30,7 +30,24 @@ export class ManagementComponent implements OnInit {
   endTime = {hour: 0, minute: 0};
 
   camerasDB: Array<any> = [];
-  
+  public maxSize: number = 7;
+  public directionLinks: boolean = true;
+  public autoHide: boolean = false;
+  public responsive: boolean = false;
+  public config: PaginationInstance = {
+      id: 'management',
+      itemsPerPage: 5,
+      currentPage: 1
+  };
+  public labels: any = {
+    previousLabel: 'Previous',
+    nextLabel: 'Next',
+    screenReaderPaginationLabel: 'Pagination',
+    screenReaderPageLabel: 'page',
+    screenReaderCurrentLabel: `You're on page`
+  };
+  public eventLog: string[] = [];
+
   constructor(private cameraService: CamerasService, private http: HttpClient){};
 
   ngOnInit() {
@@ -42,6 +59,20 @@ export class ManagementComponent implements OnInit {
       this.camerasDB = data;
       console.log(this.camerasDB);
     });
+  }
+  // Pagination functions
+  onPageChange(number: number) {
+    this.logEvent(`pageChange(${number})`);
+    this.config.currentPage = number;
+  }
+
+  onPageBoundsCorrection(number: number) {
+      this.logEvent(`pageBoundsCorrection(${number})`);
+      this.config.currentPage = number;
+  }
+
+  private logEvent(message: string) {
+    this.eventLog.unshift(`${new Date().toISOString()}: ${message}`)
   }
 
   // cameras$: Observable<Camera[]>;

@@ -5,12 +5,26 @@
   </div>
 </div>
 <hr>
+<!--Pagination-->
+<div class="row">
+  <div class="col">
+      <label class="control">Filter items:
+          <input type="text" class="input" placeholder="filter" >
+      </label>
+  </div>
+  <div class="col">
+      <label class="control">itemsPerPage:
+          <input type="number" class="input" min="0" [(ngModel)]="config.itemsPerPage">
+      </label>
+  </div>
+</div>
 
 <!--Management-->
 <form>
   <table class="table table-striped">
     <thead>
       <tr>
+        <th scope="col">#</th>
         <th scope="col">Camera ID</th>
         <th scope="col">Camera Location</th>
         <th scope="col">Camera Client</th>
@@ -19,7 +33,8 @@
       </tr>
       </thead>
     <tbody>
-    <tr *ngFor="let camera of camerasDB">
+    <tr *ngFor="let camera of camerasDB | paginate: config; let i = index">
+      <td>{{i+1}}</td>
       <td>{{camera.cameraID}}</td>
       <td>{{camera.cameraLocation}}</td>
       <td>{{camera.cameraClient}}</td>
@@ -31,28 +46,47 @@
     </tr>
     </tbody>
   </table>
-  <hr>
-  <div *ngIf="camerasDB.length > 0">
-      <div class="form-group">
-          <label for="ID">Camera ID: {{cameraID}}</label>
-          <!-- <input type="number" class="form-control" id="ID" [(ngModel)]="cameraID" name="cameraID"> -->
-      </div>
-      <div class="form-group">
-          <label for="Location">Camera Location</label>
-          <input type="text" class="form-control" id="Location" [(ngModel)]="cameraLocation" name="cameraLocation">
-      </div>
-      <div class="form-group">
-          <label for="Client">Camera Client</label>
-          <input type="text" class="form-control" id="Client" [(ngModel)]="cameraClient" name="cameraClient">
-      </div>
-      <div class="form-group">
-          <label for="startTime">Start Time</label>
-          <ngb-timepicker [(ngModel)]="startTime" name="startTime"></ngb-timepicker>
-      </div>
-      <div class="form-group">
-          <label for="endTime">End Time</label>
-          <ngb-timepicker [(ngModel)]="endTime" name="endTime"></ngb-timepicker>
-      </div>
-      <button type="submit" class="btn btn-primary" (click)="onUpdateCamera()">Update Camera</button>
+  <!--Pagination Control-->
+  <div class="has-text-centered">
+    <pagination-controls [id]="config.id"
+                        [maxSize]="maxSize"
+                        [directionLinks]="directionLinks"
+                        [autoHide]="autoHide"
+                        [responsive]="responsive"
+                        [previousLabel]="labels.previousLabel"
+                        [nextLabel]="labels.nextLabel"
+                        [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+                        [screenReaderPageLabel]="labels.screenReaderPageLabel"
+                        [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+                        (pageChange)="onPageChange($event)"
+                        (pageBoundsCorrection)="onPageBoundsCorrection($event)"></pagination-controls>
   </div>
 </form>
+<hr>
+<form>
+  <div *ngIf="camerasDB.length > 0">
+    <div class="form-group">
+        <label for="ID">Camera ID: {{cameraID}}</label>
+        <!-- <input type="number" class="form-control" id="ID" [(ngModel)]="cameraID" name="cameraID"> -->
+    </div>
+    <div class="form-group">
+        <label for="Location">Camera Location</label>
+        <input type="text" class="form-control" id="Location" [(ngModel)]="cameraLocation" name="cameraLocation">
+    </div>
+    <div class="form-group">
+        <label for="Client">Camera Client</label>
+        <input type="text" class="form-control" id="Client" [(ngModel)]="cameraClient" name="cameraClient">
+    </div>
+    <div class="form-group">
+        <label for="startTime">Start Time</label>
+        <ngb-timepicker [(ngModel)]="startTime" name="startTime"></ngb-timepicker>
+    </div>
+    <div class="form-group">
+        <label for="endTime">End Time</label>
+        <ngb-timepicker [(ngModel)]="endTime" name="endTime"></ngb-timepicker>
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="onUpdateCamera()">Update Camera</button>
+  </div>
+</form>
+
+

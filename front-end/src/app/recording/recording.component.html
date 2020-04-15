@@ -5,35 +5,63 @@
     </div>
 </div>
 <hr>
+<!--Pagination-->
+<div class="row">
+  <div class="col">
+      <label class="control">Filter items:
+          <input type="text" class="input" placeholder="filter" >
+      </label>
+  </div>
+  <div class="col">
+      <label class="control">itemsPerPage:
+          <input type="number" class="input" min="0" [(ngModel)]="config.itemsPerPage">
+      </label>
+  </div>
+</div>
 
 <!--Recordings-->
 <form>
     <table class="table table-striped">
       <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Camera ID</th>
-        <th scope="col">Recording Date</th>
-        <th scope="col">Clip</th>
-      </tr>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Camera ID</th>
+          <th scope="col">Recording Date</th>
+          <th scope="col">Clip</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let clip of clipsDB; let i = index">
-        <td>{{i+1}}</td>
-        <td>{{clip.cameraID}}</td>
-        <td>{{clip.recordingDate}}</td>
-        <!--Modal-->
-        <td><ngx-smart-modal identifier={{clip.cameraID+clip.recordingDate}}>
-            <h1>Clip ID: {{clip.cameraID+clip.recordingDate}}</h1>
-            <p>Some stuff...</p>
-            <!-- <mat-video src="http://static.videogular.com/assets/videos/videogular.mp4"></mat-video> -->
-            <mat-video src="{{clip.clipLink}}"></mat-video>{{clip.clipLink}}
-            <!-- <button (click)="myModal.close()">Close</button> -->
-          </ngx-smart-modal>
-        <button type="button" class="btn btn-primary" (click)="ngxSmartModalService.getModal(clip.cameraID+clip.recordingDate).open()">Watch</button></td>
-      </tr>
+        <tr *ngFor="let clip of clipsDB | paginate: config; let i = index">
+          <td>{{i+1}}</td>
+          <td>{{clip.cameraID}}</td>
+          <td>{{clip.recordingDate}}</td>
+          <!--Modal-->
+          <td><ngx-smart-modal identifier={{clip.cameraID+clip.recordingDate}}>
+              <h1>Clip ID: {{clip.cameraID+clip.recordingDate}}</h1>
+              <p>Some stuff...</p>
+              <!-- <mat-video src="http://static.videogular.com/assets/videos/videogular.mp4"></mat-video> -->
+              <mat-video src="{{clip.clipLink}}"></mat-video>{{clip.clipLink}}
+              <!-- <button (click)="myModal.close()">Close</button> -->
+            </ngx-smart-modal>
+          <button type="button" class="btn btn-primary" (click)="ngxSmartModalService.getModal(clip.cameraID+clip.recordingDate).open()">Watch</button></td>
+        </tr>
       </tbody>
     </table>
-  </form>
+</form>
+<!--Pagination Control-->
+<div class="has-text-centered">
+  <pagination-controls [id]="config.id"
+                       [maxSize]="maxSize"
+                       [directionLinks]="directionLinks"
+                       [autoHide]="autoHide"
+                       [responsive]="responsive"
+                       [previousLabel]="labels.previousLabel"
+                       [nextLabel]="labels.nextLabel"
+                       [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+                       [screenReaderPageLabel]="labels.screenReaderPageLabel"
+                       [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+                       (pageChange)="onPageChange($event)"
+                       (pageBoundsCorrection)="onPageBoundsCorrection($event)"></pagination-controls>
+</div>
 
  
