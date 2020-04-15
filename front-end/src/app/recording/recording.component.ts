@@ -5,9 +5,13 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { ClipsService} from '../clipsservice/clips.service';
 import { PaginationInstance} from 'ngx-pagination';
 
+import { Clip } from "../../../../back-end-api/models/MotionClip"
+
 // import {Clip} from '../_helpers/clip';
 // import {ClipService} from '../_services/clip.service';
 // import {NgbdSortableHeader, SortEvent} from '../_helpers/sortable.directive';
+
+
 @Component({
   selector: 'app-recording',
   templateUrl: './recording.component.html',
@@ -15,8 +19,8 @@ import { PaginationInstance} from 'ngx-pagination';
 })
 export class RecordingComponent implements OnInit {
 
-  public clipsDB: Array<any> = [];
-
+  public clipsDB: Clip[] = [];
+  // variables for pagination
   public maxSize: number = 7;
   public directionLinks: boolean = true;
   public autoHide: boolean = false;
@@ -35,15 +39,22 @@ export class RecordingComponent implements OnInit {
   };
   public eventLog: string[] = [];
 
-  constructor(private clipService: ClipsService, public ngxSmartModalService: NgxSmartModalService) {}
+  // variables for filter
+  _listFilter = "";
+  filteredClips: Clip[] = []
+
+  constructor(private clipService: ClipsService, public ngxSmartModalService: NgxSmartModalService) {
+  }
 
   ngOnInit() {
     this.onGetClips();
+    this.listFilter = '';
   }
 
   onGetClips() {
     this.clipService.getClips().subscribe((data:any[])=>{
       this.clipsDB = data;
+      this.filteredClips = this.clipsDB
       console.log(this.clipsDB);
     });
   }
@@ -63,27 +74,21 @@ export class RecordingComponent implements OnInit {
     this.eventLog.unshift(`${new Date().toISOString()}: ${message}`)
   }
 
-  // clips$: Observable<Clip[]>;
-  // total$: Observable<number>;
+  // Filter functions
+  get listFilter(): string {
+    return this._listFilter;
+  }
 
-  // @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
+  set listFilter(value: string) {
+    this._listFilter = value;
+    this.filteredClips = this.listFilter ? this.doFilter(this.listFilter) : this.clipsDB;
+  }
 
-  // constructor(public service: ClipService,
-  //   public ngxSmartModalService: NgxSmartModalService) {
-  //   this.clips$ = service.clips$;
-  //   this.total$ = service.total$;
-  // }
-
-  // onSort({column, direction}: SortEvent) {
-  //   // resetting other headers
-  //   this.headers.forEach(header => {
-  //     if (header.sortable !== column) {
-  //       header.direction = '';
-  //     }
-  //   });
-
-  //   this.service.sortColumn = column;
-  //   this.service.sortDirection = direction;
-  // }
+  doFilter(filterBy: string): Clip[] {
+    filterBy = filterBy.toLocaleLowerCase();
+    return this.clipsDB.filter((clip: Clip) =>
+      clip.cameraID.toString(10).toLocaleLowerCase().indexOf(filterBy) !== -1 ||
+      clip.recordingDate.toLocaleLowerCase().indexOf(filterBy) !== -1);
+  }
 
 }
