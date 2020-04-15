@@ -16,4 +16,4 @@ const clipSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('CameraClip', clipSchema);
+module.exports = mongoose.model('Clip', clipSchema);

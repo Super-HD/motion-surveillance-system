@@ -12,7 +12,7 @@ const cameraSchema = new mongoose.Schema({
         required: true
     },
     cameraClient: {
-        type: User,
+        type: String,
         required: true
     },
     startTime: {
@@ -23,4 +23,4 @@ const cameraSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('CameraClient', cameraSchema);
+module.exports = mongoose.model('Camera', cameraSchema);
