@@ -13,6 +13,8 @@ import { NgxSmartModalModule } from 'ngx-smart-modal';
 // import for mat-video
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatVideoModule } from 'mat-video';
+// import ngx-pagination
+import { NgxPaginationModule} from 'ngx-pagination'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,7 +41,8 @@ import { ManagementComponent } from './management/management.component';
     NgxSmartModalModule.forRoot(),
     BrowserAnimationsModule,
     MatVideoModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxPaginationModule
   ],
   providers: [ClipService, DecimalPipe],
   bootstrap: [AppComponent]
