@@ -13,17 +13,16 @@ using namespace std;
 
 // Notes for Shawn
 
-
-
 // Every moment frame is updated - send the frame to server API via POST call. Assume server connection is localhost:4200
 
 // use POST request for both frame and video recording
 
-
-
 // video frame request : localhost:4200/:cameraid - send a frame
 
 // video recording request: localhost:4200/motion/:cameraid - send a video file + Time of clip and End of clip.
+
+
+//this function is a test functino of your camera
 void readCamera() {
 	VideoCapture capture(0);
 	if (!capture.isOpened())
@@ -47,20 +46,25 @@ void readCamera() {
 	destroyAllWindows();
 }
 
-void writeVideo(int timer) {
-	VideoCapture capture(0);
+//this function is to write a video depends on the length of the video, the capture it gets matrices from and the count number of the that video
+void writeVideo(int timer, VideoCapture capture,int count) {
+	
+	//form the name for the video
+	string video_name = "motion";
+	video_name += to_string(count);
+	video_name += ".avi";
 
 	//VideoWriter (const String &filename, int fourcc, double fps, Size frameSize, bool isColor=true)
-	VideoWriter writer("test.avi", CV_FOURCC('M', 'J', 'P', 'G'),24.0f, Size(640, 480));
+	VideoWriter writer(video_name, CV_FOURCC('M', 'J', 'P', 'G'),15.0f, Size(640, 480));
+	
 	int64 t0 = getTickCount(); // start time
 	while (capture.isOpened()) {
 		Mat frame;
 		capture >> frame;
+		imshow("Camera", frame);
 		//read the current frame
 		writer << frame;
 		//save the read frame
-		imshow("video", frame);
-		//press Esc to Exit
 		int64 t1 = getTickCount();
 		double timeRunning = double(t1 - t0)/getTickFrequency();
 		if (timeRunning>=timer){
@@ -69,6 +73,9 @@ void writeVideo(int timer) {
 	}
 }
 
+
+//the diffImage and motion is a backgrouop subtraction algorithm, will not be called currently
+/*
 Mat diffImage(Mat t0, Mat t1, Mat t2)
 {
 	Mat d1, d2, motion;
@@ -108,14 +115,21 @@ int motion() {
 	}
 	return 0;
 }
-
+*/
 int motion2() {
+	bool writingVideo = false;  //a boolean to determine whether we are writing a video
+	int video_count = 0;   //the counter of the video
 	Mat frame, gray, frameDelta, thresh, firstFrame;
 	vector<vector<Point> > cnts;
 	VideoCapture camera(0); //open camera
-	//set the video size to 512x288 to process faster
-	camera.set(3, 512);
-	camera.set(4, 288);
+	//set the video size to 640x480
+	camera.set(3, 640);
+	camera.set(4, 480);
+	/*
+	for (int i = 0; i < 10; i++) {
+		cout<<camera.get(5)<<endl;
+	}
+	*/
 	Sleep(3);
 	camera.read(frame);
 	//convert to grayscale and set the first frame
@@ -123,111 +137,53 @@ int motion2() {
 	GaussianBlur(firstFrame, firstFrame, Size(21, 21), 0);
 
 	while (camera.read(frame)) {
-		//convert to grayscale
-		cvtColor(frame, gray, COLOR_BGR2GRAY);
-		GaussianBlur(gray, gray, Size(21, 21), 0);
-		//compute difference between first frame and current frame
-		absdiff(firstFrame, gray, frameDelta);
-		threshold(frameDelta, thresh, 25, 255, THRESH_BINARY);
-		dilate(thresh, thresh, Mat(), Point(-1, -1), 2);
-		findContours(thresh, cnts, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-		for (int i = 0; i < cnts.size(); i++) {
-			if (contourArea(cnts[i]) < 500) {
-				continue;
+		if (writingVideo == false) {
+			//convert to grayscale
+			cvtColor(frame, gray, COLOR_BGR2GRAY);
+			GaussianBlur(gray, gray, Size(21, 21), 0);
+			//compute difference between first frame and current frame
+			absdiff(firstFrame, gray, frameDelta);
+			threshold(frameDelta, thresh, 25, 255, THRESH_BINARY);
+			dilate(thresh, thresh, Mat(), Point(-1, -1), 2);
+			findContours(thresh, cnts, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+			for (int i = 0; i < cnts.size(); i++) {
+				if (contourArea(cnts[i]) < 500) {
+					continue;
+				}
+				writingVideo = true;
+				putText(frame, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0, 0, 255), 2);
 			}
-			putText(frame, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0, 0, 255), 2); 
-			writeVideo(5);
+			imshow("Camera", frame);
+			camera.read(frame);
+			//convert to grayscale and set the first frame
+			cvtColor(frame, firstFrame, COLOR_BGR2GRAY);
+			GaussianBlur(firstFrame, firstFrame, Size(21, 21), 0);
+			if (waitKey(1) == 27) {
+				//exit if ESC is pressed
+				break;
+			}
 		}
-		imshow("Camera", frame);
-		if (waitKey(1) == 27) {
-			//exit if ESC is pressed
-			break;
+		else {
+			//set the length of record,camear and the count of the  video and write a video
+			writeVideo(6,camera,video_count);
+
+			video_count += 1;    //increase the count of the video
+
+			writingVideo = false;
+
+			//reset the first frame to current frame
+			camera.read(frame);
+			//convert to grayscale and set the first frame
+			cvtColor(frame, firstFrame, COLOR_BGR2GRAY);
+			GaussianBlur(firstFrame, firstFrame, Size(21, 21), 0);
 		}
 	}
-
 	return 0;
 }
 
-void times()
-{
-  SYSTEMTIME sys_time;
-  GetLocalTime( &sys_time );
-  printf( "%4d/%02d/%02d %02d:%02d:%02d.%03d 星期%1d\n",sys_time.wYear,
-	sys_time.wMonth,
-	sys_time.wDay,
-	sys_time.wHour,
-	sys_time.wMinute,
-	sys_time.wSecond,
-	sys_time.wMilliseconds,
-	sys_time.wDayOfWeek);
- system("time");
- system("pause");
-} 
-
-/*
-int film1Sc(int timea) {
-	CvCapture* capture = cvCaptureFromCAM(0);
-	CvVideoWriter* video = NULL;
-	IplImage* frame = NULL;
-	int n;
-	if (!capture)
-	{
-		cout << "Can not open the camera." << endl;
-		return -1;
-	}
-	else
-	{
-		frame = cvQueryFrame(capture); 
-		int c = 0;
-		SYSTEMTIME sys_time;
-
-		GetLocalTime(&sys_time);
-		char buf[1024];
-		sprintf_s(buf, "camera-%4d-%2d-%02d-%02d-%02d-%02d.avi", sys_time.wYear, sys_time.wMonth, sys_time.wDay,
-			sys_time.wHour, sys_time.wMinute, sys_time.wSecond);
-
-		video = cvCreateVideoWriter(buf, CV_FOURCC('X', 'V', 'I', 'D'), 25,
-			cvSize(frame->width, frame->height)); 
- 
-		if (video) 
-		{
-			cout << "VideoWriter has created." << endl;
-		}
-		cout << "set the record time\n" << endl;
-		cin >> timea;
-		int ti = timea * 25;
-
-
-		cvNamedWindow("Camera Video", 1);  
-		int i = 0;
-		while (i <= ti) 
-		{
-			frame = cvQueryFrame(capture); 
-			if (!frame)
-			{
-				cout << "Can not get frame from the capture." << endl;
-				break;
-			}
-			n = cvWriteFrame(video, frame);  
-			// cout<<n<<endl;  
-			cvShowImage("Camera Video", frame);
-			i++;
-			if (cvWaitKey(2) > 0)
-				break;
-		}
-
-		cvReleaseVideoWriter(&video); 
-		cvReleaseCapture(&capture);
-		cvDestroyWindow("Camera Video");
-	}
-	return 0;
-
-}
-*/
 int main(int argc, char** argv) {
 
 	motion2();
 	return 0;
 }
-
 
