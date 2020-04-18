@@ -1,25 +1,28 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
-// bcrypt for hashing passwords
-const bcrypt = require("bcrypt-nodejs");
-
+const cv = require('opencv4nodejs')
+const path = require('path');
 // cors for allowing cross origin resource sharing between different localhosts
 const cors = require("cors")
-
-// // Port Number for once server is deployed online - Ignore for now
-// const PORT = process.env.PORT;
-
-let path = require('path');
-
 const app = express();
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
+// bcrypt for hashing passwords
+const bcrypt = require("bcrypt-nodejs");
 // allow cross origin resource sharing
 app.use(cors());
 // dont need body parser anymore just do this
 app.use(express.json());
 
+const vCap = new cv.VideoCapture(0)
+vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
+vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
+const FPS = 10;
+
 app.use('/', express.static(path.join(__dirname, '../front-end/dist/MotionSurveillanceSystem')))
 
+// // Port Number for once server is deployed online - Ignore for now
+// const PORT = process.env.PORT;
 
 // THERE IS NO REGISTER - We assume that we give clients their login details personally for them to login to upload webcam stream
 
@@ -95,7 +98,6 @@ mongoose.connect(mongoURI, mongoConfig, (err) => {
     //     console.log("Client successfully added to DB");
     // });
 })
-
 app.get("/", (req, res) => {
     res.send("App is working!");
 });
@@ -105,8 +107,20 @@ app.get("/", (req, res) => {
 // temporarily dont do first.
 // app.post("/signin", signin.handleSignIn(bcrypt));
 
-// retrieve video frames by specific camera id
-app.post('/stream/:id')
+// TESTING LIVE STREAM ON A STATIC HTML PAGE
+// retrieve video frames by specific camera id later app.get('/stream/:id')
+app.get('/stream', (req, res) => {
+    res.sendFile(path.join(__dirname, 'livestream.html'))
+    // This code sets up repeating frame callback to send live stream data
+    setInterval(() => {
+        // vCap.read returns a mat file
+        const frame = vCap.read();
+        const image = cv.imencode('.jpg', frame).toString('base64')
+        io.emit('image', image)
+    }, 1000 / FPS)
+})
+
+
 
 // retrieve motion snapshot video clip mp4 by specific camera id
 app.post('/motion/:id')
@@ -126,6 +140,6 @@ app.get('/clips/:id', clip.getOne);
 app.put('/clips/:id', clip.updateOne);
 
 // Change to PORT constant once deployed online
-app.listen(4200, () => {
+server.listen(4200, () => {
     console.log(`Server Successfully Started on Port ${4200}`);
 })
