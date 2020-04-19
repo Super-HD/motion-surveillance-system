@@ -1,5 +1,4 @@
 const validate = require("../form-validation");
-const mongoose = require('mongoose')
 const Client = require('../models/Client')
 
 // not needed at this stage
@@ -41,11 +40,14 @@ const getAll = (req, res) => {
 
 const createOne = (req, res) => {
   let newClient = req.body
-  newClient._id = new mongoose.Types.ObjectId()
-  let client = new Client(newClient)
-  client.save((err) => {
-    console.log("New Client Added.")
-    res.json(client)
+  // check if exists already, if yes then return and do nothing
+  Client.findOneAndUpdate({ clientName: newClient.clientName }, newClient, {
+    new: true,
+    upsert: true
+  }, (err, result) => {
+    if (err) res.json(err)
+    console.log(result)
+    res.json(result._id)
   })
 }
 

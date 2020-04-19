@@ -11,7 +11,6 @@ const io = require('socket.io')(server)
 const bcrypt = require("bcrypt-nodejs");
 // allow cross origin resource sharing
 app.use(cors());
-// dont need body parser anymore just do this
 app.use(express.json());
 
 app.use('/', express.static(path.join(__dirname, '../front-end/dist/MotionSurveillanceSystem')))
@@ -35,7 +34,8 @@ const Camera = require('./models/Camera')
 const mongoURI = "mongodb://localhost:27017/mssDB";
 mongoConfig = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 }
 mongoose.connect(mongoURI, mongoConfig, (err) => {
     if (err) {

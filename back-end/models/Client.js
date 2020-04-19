@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const cameraSchema = require('./Camera')
 
 //password value is hashed
 const clientSchema = new mongoose.Schema({
