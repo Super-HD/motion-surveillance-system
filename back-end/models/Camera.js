@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 
 const cameraSchema = new mongoose.Schema({
@@ -12,15 +11,24 @@ const cameraSchema = new mongoose.Schema({
         required: true
     },
     cameraClient: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: 'Client',
         required: true
     },
-    startTime: {
-        type: Object
-    },
-    endTime: {
-        type: Object
-    }
+    // stores the start and end time whenever a camera has started and ended
+    deployTimes: [{
+        startTime: {
+            type: Date
+        },
+        endTime: {
+            type: Date
+        }
+    }],
+    // LINK to MotionClip Model
+    motionClips: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'MotionClip'
+    }]
 });
 
 module.exports = mongoose.model('Camera', cameraSchema);

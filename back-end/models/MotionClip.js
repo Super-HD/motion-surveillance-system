@@ -2,8 +2,10 @@ const mongoose = require('mongoose');
 
 const clipSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    cameraID: {
-        type: Number,
+
+    camera: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Camera',
         required: true
     },
     recordingDate: {
@@ -16,4 +18,4 @@ const clipSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Clip', clipSchema);
+module.exports = mongoose.model('MotionClip', clipSchema);

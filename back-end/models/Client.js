@@ -8,10 +8,11 @@ const clientSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  camera: {
-    type: [],
-    required: true
-  }
+  // LINK to Camera Model
+  cameras: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'Camera'
+  }]
 });
 
 module.exports = mongoose.model('Client', clientSchema);

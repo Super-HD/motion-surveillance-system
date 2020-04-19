@@ -9,10 +9,12 @@ module.exports = {
     createOne: (req, res) => {
         let newCameraDetails = req.body;
         newCameraDetails._id = new mongoose.Types.ObjectId();
-        Camera.create(newCameraDetails, (err, camera) => {
-            if (err) return res.status(400).json(err);
-            res.json(camera);
-        });
+        let camera = new Camera(newCameraDetails)
+
+        camera.save((err) => {
+            if (err) res.json(err)
+            console.log("Camera successfully added to DB.")
+        })
     },
 
     getOne: (req, res) => Camera.findOne({ _id: req.params.id }, (err, camera) => {

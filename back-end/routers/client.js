@@ -1,6 +1,8 @@
 const validate = require("../form-validation");
-const User = require('../models/Client')
+const mongoose = require('mongoose')
+const Client = require('../models/Client')
 
+// not needed at this stage
 const handleSignIn = (bcrypt) => (req, res) => {
 
   // data is sent via req body
@@ -27,6 +29,48 @@ const handleSignIn = (bcrypt) => (req, res) => {
   })
 }
 
+const getAll = (req, res) => {
+  Client.find({})
+    .populate('cameras')
+    .exec((err, clients) => {
+      if (err) { return res.json(err) }
+      if (!clients) { return res.json() }
+      res.json(clients)
+    })
+}
+
+const createOne = (req, res) => {
+  let newClient = req.body
+  newClient._id = new mongoose.Types.ObjectId()
+  let client = new Client(newClient)
+  client.save((err) => {
+    console.log("New Client Added.")
+    res.json(client)
+  })
+}
+
+const getOne = (req, res) => {
+  Client.findOne({ _id: req.params.id })
+    .populate('cameras')
+    .exec((err, client) => {
+      if (err) { return res.json(err) }
+      if (!actor) { return res.json() }
+      res.json(client)
+    })
+}
+
+const updateOne = (req, res) => {
+  Client.findOneAndUpdate({ _id: req.params.id }, req.body, (err, client) => {
+    if (err) return res.status(400).json(err);
+    if (!client) return res.status(404).json();
+    res.json(client);
+  });
+}
+
 module.exports = {
-  handleSignIn
+  getAll,
+  createOne,
+  getOne,
+  updateOne
+  // I WILL ADD MORE IF NECESSARY e.g. deleteOne etc.
 };
