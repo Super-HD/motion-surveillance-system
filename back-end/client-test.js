@@ -11,10 +11,10 @@ app.use(cors());
 // dont need body parser anymore just do this
 app.use(express.json());
 
-// const vCap = new cv.VideoCapture(0)
-// vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
-// vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
-// const FPS = 10;
+const vCap = new cv.VideoCapture(0)
+vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
+vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
+const FPS = 10;
 
 // do async call register API to make server store the new client & camera data
 const testClient = {
@@ -61,4 +61,14 @@ axios.post('http://localhost:4200/client', testClient)
     console.log(error)
   })
 
-// this code runs and tests a client webcam and uses socket.io to send frame data to server with a fake id
+// Change to PORT constant once deployed online
+server.listen(4300, () => {
+  console.log(`Client Server Successfully Started on Port ${4300}`);
+  // this code runs and tests a client webcam and uses socket.io to send frame data to server with a fake id
+  setInterval(() => {
+    // vCap.read returns a mat file
+    const frame = vCap.read();
+    const image = cv.imencode('.jpg', frame).toString('base64')
+    io.emit('buildingAFrame', image)
+  }, 1000 / FPS)
+})

@@ -5,6 +5,7 @@ const path = require('path');
 // cors for allowing cross origin resource sharing between different localhosts
 const cors = require("cors")
 const app = express();
+const fs = require('fs')
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 // bcrypt for hashing passwords
@@ -50,6 +51,16 @@ app.get("/", (req, res) => {
     res.send("App is working!");
 });
 
+// TESTING LIVE STREAM ON A STATIC HTML PAGE
+// retrieve video frames by specific camera id later app.get('/stream/:id')
+app.get('/stream', (req, res) => {
+    fs.readFile("./livestream.html", (err, data) => {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.write(data);
+        res.end();
+    });
+})
+
 // Client RESTFul endpoints
 app.get('/clients', client.getAll);
 app.post('/client', client.createOne);
@@ -77,19 +88,6 @@ server.listen(4200, () => {
 // Signin for checking if user is supervisor in login page.
 // temporarily dont do first.
 // app.post("/signin", signin.handleSignIn(bcrypt));
-
-// TESTING LIVE STREAM ON A STATIC HTML PAGE
-// retrieve video frames by specific camera id later app.get('/stream/:id')
-app.get('/stream', (req, res) => {
-    res.sendFile(path.join(__dirname, 'livestream.html'))
-    // This code sets up repeating frame callback to send live stream data
-    setInterval(() => {
-        // vCap.read returns a mat file
-        const frame = vCap.read();
-        const image = cv.imencode('.jpg', frame).toString('base64')
-        io.emit('image', image)
-    }, 1000 / FPS)
-})
 
 // retrieve motion snapshot video clip mp4 by specific camera id
 app.post('/motion/:id')
