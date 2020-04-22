@@ -52,7 +52,6 @@ app.get("/", (req, res) => {
 });
 
 // TESTING LIVE STREAM ON A STATIC HTML PAGE
-// retrieve video frames by specific camera id later app.get('/stream/:id')
 app.get('/stream', (req, res) => {
     fs.readFile("./livestream.html", (err, data) => {
         res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -66,6 +65,7 @@ app.get('/clients', client.getAll);
 app.post('/client', client.createOne);
 app.get('/client/:id', client.getOne);
 app.put('/client/:id', client.updateOne);
+app.post('/addcamera', client.addCamera);
 
 // Camera RESTFul endpoints
 app.get('/cameras', camera.getAll);

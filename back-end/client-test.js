@@ -22,48 +22,47 @@ const testClient = {
   cameras: []
 }
 
-axios.post('http://localhost:4200/client', testClient)
-  .then(res => {
+const testCameraOne = {
+  cameraLocation: "Building A",
+  // cameraClient: clientRes.data._id,
+  deployTimes: [],
+  motionClips: []
+}
 
-    // res.data is the id of the client
-    const clientRef = res.data
+const testCameraTwo = {
+  cameraLocation: "Building B",
+  // cameraClient: clientRes.data._id,
+  deployTimes: [],
+  motionClips: []
+}
 
-    const testCameraOne = {
-      cameraLocation: "Building A",
-      cameraClient: clientRef,
-      deployTimes: [],
-      motionClips: []
-    }
-    const testCameraTwo = {
-      cameraLocation: "Building B",
-      cameraClient: clientRef,
-      deployTimes: [],
-      motionClips: []
-    }
+async function doSetup() {
+  const client = await axios.post('http://localhost:4200/client', testClient)
+  console.log("Client Added: ", client.data._id)
 
-    axios.post('http://localhost:4200/camera', testCameraOne)
-      .then(res => {
-        console.log("Success")
-      })
-      .catch(error => {
-        console.log(error)
-      })
+  const cameraOne = await axios.post('http://localhost:4200/camera', { ...testCameraOne, cameraClient: client.data._id })
+  console.log("Camera 1 Added: ", cameraOne.data._id)
 
-    axios.post('http://localhost:4200/camera', testCameraTwo)
-      .then(res => {
-        console.log("Success")
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  })
-  .catch(error => {
-    console.log(error)
-  })
+  // add camera1 to client camera array
+  const camToClientOne = await axios.post('http://localhost:4200/addcamera', { clientId: client.data._id, cameraId: cameraOne.data._id })
+
+  console.log("Camera 1 Added to Client Camera Array ", camToClientOne.data.cameras)
+
+  const cameraTwo = await axios.post('http://localhost:4200/camera', { ...testCameraTwo, cameraClient: client.data._id })
+  console.log("Camera 2 Added: ", cameraTwo.data._id)
+
+  // add camera2 to client camera array
+  const camToClientTwo = await axios.post('http://localhost:4200/addcamera', { clientId: client.data._id, cameraId: cameraTwo.data._id })
+  console.log("Camera 1 Added to Client Camera Array ", camToClientTwo.data.cameras)
+}
 
 // Change to PORT constant once deployed online
 server.listen(4300, () => {
   console.log(`Client Server Successfully Started on Port ${4300}`);
+
+  // run function to setup adding cameras and clients to mongoDB
+  doSetup()
+
   // this code runs and tests a client webcam and uses socket.io to send frame data to server with a fake id
   setInterval(() => {
     // vCap.read returns a mat file

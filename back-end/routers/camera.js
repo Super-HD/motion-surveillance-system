@@ -1,19 +1,21 @@
 const Camera = require('../models/Camera')
 
+// TODOS: MAYBE IMPLEMENT an 'isOperating' type for Camera Schema so Server can always know from mongoDB which clients are currently ON and which are OFF.
+
 const getAll = (req, res) => Camera.find((err, cameras) => {
     if (err) res.status(400).json(err);
     res.json(cameras);
 })
 
 const createOne = (req, res) => {
-    let newCamera = req.body
+    let { cameraClient, cameraLocation } = req.body
     // check if exists already, if yes then return and do nothing
-    Camera.findOneAndUpdate({ cameraClient: newCamera.cameraClient, cameraLocation: newCamera.cameraLocation }, newCamera, {
+    Camera.findOneAndUpdate({ cameraClient, cameraLocation }, { cameraClient, cameraLocation }, {
         new: true,
         upsert: true
     }, (err, result) => {
         if (err) res.json(err)
-        res.json("Camera added or already exists.")
+        res.json(result)
     })
 }
 

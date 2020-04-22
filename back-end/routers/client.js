@@ -39,15 +39,15 @@ const getAll = (req, res) => {
 }
 
 const createOne = (req, res) => {
-  let newClient = req.body
+  let { clientName } = req.body
   // check if exists already, if yes then return and do nothing
-  Client.findOneAndUpdate({ clientName: newClient.clientName }, newClient, {
+  Client.findOneAndUpdate({ clientName }, { clientName }, {
     new: true,
     upsert: true
   }, (err, result) => {
     if (err) res.json(err)
     console.log(result)
-    res.json(result._id)
+    res.json(result)
   })
 }
 
@@ -69,10 +69,23 @@ const updateOne = (req, res) => {
   });
 }
 
+const addCamera = (req, res) => {
+  let { clientId, cameraId } = req.body
+  Client.findByIdAndUpdate(clientId, {
+    $push: {
+      "cameras": cameraId
+    }
+  }, { new: true, upsert: true }, (err, client) => {
+    if (err) res.json(err)
+    res.json(client)
+  })
+}
+
 module.exports = {
   getAll,
   createOne,
   getOne,
-  updateOne
+  updateOne,
+  addCamera
   // I WILL ADD MORE IF NECESSARY e.g. deleteOne etc.
 };
