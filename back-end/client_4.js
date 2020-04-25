@@ -18,7 +18,7 @@ const FPS = 10;
 
 // do async call register API to make server store the new client & camera data
 const testClient = {
-  clientName: "Monash University",
+  clientName: "Queensland University",
   cameras: []
 }
 
@@ -43,7 +43,7 @@ async function doSetup() {
 }
 
 // Change to PORT constant once deployed online
-server.listen(4300, () => {
+server.listen(5400, () => {
   console.log(`Client Server Successfully Started on Port ${5400}`);
 
   // run function to setup adding cameras and clients to mongoDB
