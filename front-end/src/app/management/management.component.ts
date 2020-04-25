@@ -7,7 +7,7 @@ import { PaginationInstance} from 'ngx-pagination';
 // import { Camera } from './../_helpers/camera';
 // import { CameraService } from './../_services/camera.service';
 // import {NgbdSortableHeader, SortEvent} from '../_helpers/sortable.directive';
-import { Camera } from "../../../../back-end-api/models/Camera"
+import { Camera } from "../../../../back-end/models/Camera"
 import { CamerasService } from '../camerasservice/cameras.service'
 import { NgbTimeStruct } from '../_helpers/ngb-time-struct';
 import { CustomTimeStruct } from './../_helpers/custom-time-struct';

@@ -5,7 +5,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { ClipsService} from '../clipsservice/clips.service';
 import { PaginationInstance} from 'ngx-pagination';
 
-import { Clip } from "../../../../back-end-api/models/MotionClip"
+import { MotionClip } from "../../../../back-end/models/MotionClip"
 
 // import {Clip} from '../_helpers/clip';
 // import {ClipService} from '../_services/clip.service';
@@ -19,7 +19,7 @@ import { Clip } from "../../../../back-end-api/models/MotionClip"
 })
 export class RecordingComponent implements OnInit {
 
-  public clipsDB: Clip[] = [];
+  public clipsDB: MotionClip[] = [];
   // variables for pagination
   public maxSize: number = 7;
   public directionLinks: boolean = true;
@@ -41,7 +41,7 @@ export class RecordingComponent implements OnInit {
 
   // variables for filter
   _listFilter = "";
-  filteredClips: Clip[] = []
+  filteredClips: MotionClip[] = []
 
   constructor(private clipService: ClipsService, public ngxSmartModalService: NgxSmartModalService) {
   }
@@ -84,9 +84,9 @@ export class RecordingComponent implements OnInit {
     this.filteredClips = this.listFilter ? this.doFilter(this.listFilter) : this.clipsDB;
   }
 
-  doFilter(filterBy: string): Clip[] {
+  doFilter(filterBy: string): MotionClip[] {
     filterBy = filterBy.toLocaleLowerCase();
-    return this.clipsDB.filter((clip: Clip) =>
+    return this.clipsDB.filter((clip: MotionClip) =>
       clip.cameraID.toString(10).toLocaleLowerCase().indexOf(filterBy) !== -1 ||
       clip.recordingDate.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
