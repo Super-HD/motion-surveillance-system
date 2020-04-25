@@ -43,7 +43,7 @@ async function doSetup() {
 }
 
 // Change to PORT constant once deployed online
-server.listen(4300, () => {
+server.listen(5600, () => {
   console.log(`Client Server Successfully Started on Port ${5600}`);
 
   // run function to setup adding cameras and clients to mongoDB
