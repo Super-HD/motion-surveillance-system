@@ -29,12 +29,12 @@ const testCameraOne = {
   motionClips: []
 }
 
-const testCameraTwo = {
-  cameraLocation: "Building B",
-  // cameraClient: clientRes.data._id,
-  deployTimes: [],
-  motionClips: []
-}
+// const testCameraTwo = {
+//   cameraLocation: "Building B",
+//   // cameraClient: clientRes.data._id,
+//   deployTimes: [],
+//   motionClips: []
+// }
 
 async function doSetup() {
   const client = await axios.post('http://localhost:4200/client', testClient)
@@ -48,12 +48,12 @@ async function doSetup() {
 
   console.log("Camera 1 Added to Client Camera Array ", camToClientOne.data.cameras)
 
-  const cameraTwo = await axios.post('http://localhost:4200/camera', { ...testCameraTwo, cameraClient: client.data._id })
-  console.log("Camera 2 Added: ", cameraTwo.data._id)
+  // const cameraTwo = await axios.post('http://localhost:4200/camera', { ...testCameraTwo, cameraClient: client.data._id })
+  // console.log("Camera 2 Added: ", cameraTwo.data._id)
 
-  // add camera2 to client camera array
-  const camToClientTwo = await axios.post('http://localhost:4200/addcamera', { clientId: client.data._id, cameraId: cameraTwo.data._id })
-  console.log("Camera 1 Added to Client Camera Array ", camToClientTwo.data.cameras)
+  // // add camera2 to client camera array
+  // const camToClientTwo = await axios.post('http://localhost:4200/addcamera', { clientId: client.data._id, cameraId: cameraTwo.data._id })
+  // console.log("Camera 2 Added to Client Camera Array ", camToClientTwo.data.cameras)
 }
 
 // Change to PORT constant once deployed online
