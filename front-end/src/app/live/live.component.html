@@ -6,69 +6,15 @@
 </div>
 <hr>
 <!--Live Preview-->
-<div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="thumbnail">
-          <a href="#" target="_blank">
-            <img [src]="img" alt="Lights" style="width:100%">
-            <div class="caption">
-                <p>Camera 1</p>
-            </div>
-          </a>  
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="thumbnail">
-          <a href="#" target="_blank">
-            <img src="../assets/image/nature.jpg" alt="Nature" style="width:100%">
-            <div class="caption">
-              <p>Camera 2</p>
-            </div>
-          </a>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="thumbnail">
-          <a href="#" target="_blank">
-            <img src="../assets/image/fjords.jpg" alt="Fjords" style="width:100%">
-            <div class="caption">
-              <p>Camera 3</p>
-            </div>
-          </a>
-        </div>
+<div class="row" *ngFor="let cameras of camerasURL; let i = index">
+  <div class="col-md-4" *ngFor="let camera of cameras">
+    <div >
+      <div class="thumbnail">
+          <img [src]="camera" alt="Camera1" style="width:100%">
+          <div class="caption">
+            <p>Camera</p>
+          </div>
       </div>
     </div>
-    <div class="row">
-        <div class="col-md-4">
-          <div class="thumbnail">
-            <a href="#" target="_blank">
-              <img src="../assets/image/lights.jpg" alt="Lights" style="width:100%">
-              <div class="caption">
-                  <p>Camera 4</p>
-              </div>
-            </a>  
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="thumbnail">
-            <a href="#" target="_blank">
-              <img src="../assets/image/nature.jpg" alt="Nature" style="width:100%">
-              <div class="caption">
-                <p>Camera 5</p>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="thumbnail">
-            <a href="#" target="_blank">
-              <img src="../assets/image/fjords.jpg" alt="Fjords" style="width:100%">
-              <div class="caption">
-                <p>Camera 6</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
   </div>
+</div>
