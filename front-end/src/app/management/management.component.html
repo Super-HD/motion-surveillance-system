@@ -28,17 +28,17 @@
         <th scope="col">Camera ID</th>
         <th scope="col">Camera Location</th>
         <th scope="col">Camera Client</th>
-        <th scope="col">Detection Active Time</th>
+        <!-- <th scope="col">Detection Active Time</th> -->
         <th scope="col">Edit</th>
       </tr>
       </thead>
     <tbody>
     <tr *ngFor="let camera of filteredCameras | paginate: config; let i = index">
       <td>{{i+1}}</td>
-      <td>{{camera.cameraID}}</td>
+      <td>{{camera._id}}</td>
       <td>{{camera.cameraLocation}}</td>
-      <td>{{camera.cameraClient}}</td>
-      <td>{{camera.startTime['hour']}}:{{camera.startTime['minute']}} - {{camera.endTime['hour']}}:{{camera.endTime['minute']}}</td>
+      <td>{{camera.cameraClient.clientName}}</td>
+      <!-- <td>{{camera.startTime['hour']}}:{{camera.startTime['minute']}} - {{camera.endTime['hour']}}:{{camera.endTime['minute']}}</td> -->
       <!--Modal-->
       <td>
       <button type="button" class="btn btn-primary" (click)="onSelectUpdate(camera)">Edit</button>
@@ -65,10 +65,10 @@
 <hr>
 <form>
   <div *ngIf="camerasDB.length > 0">
-    <div class="form-group">
+    <!-- <div class="form-group">
         <label for="ID">Camera ID: {{cameraID}}</label>
-        <!-- <input type="number" class="form-control" id="ID" [(ngModel)]="cameraID" name="cameraID"> -->
-    </div>
+        <input type="number" class="form-control" id="ID" [(ngModel)]="cameraID" name="cameraID">
+    </div> -->
     <div class="form-group">
         <label for="Location">Camera Location</label>
         <input type="text" class="form-control" id="Location" [(ngModel)]="cameraLocation" name="cameraLocation">

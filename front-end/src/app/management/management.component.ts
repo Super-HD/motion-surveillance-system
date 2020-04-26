@@ -7,8 +7,8 @@ import { PaginationInstance} from 'ngx-pagination';
 // import { Camera } from './../_helpers/camera';
 // import { CameraService } from './../_services/camera.service';
 // import {NgbdSortableHeader, SortEvent} from '../_helpers/sortable.directive';
-import { Camera } from "../../../../back-end/models/Camera"
-import { CamerasService } from '../camerasservice/cameras.service'
+import { Camera } from "../../../../back-end/models/Camera";
+import { CamerasService } from '../camerasservice/cameras.service';
 import { NgbTimeStruct } from '../_helpers/ngb-time-struct';
 import { CustomTimeStruct } from './../_helpers/custom-time-struct';
 
@@ -20,9 +20,9 @@ import { CustomTimeStruct } from './../_helpers/custom-time-struct';
 
 export class ManagementComponent implements OnInit {
 
-  id: string;
-  cameraID: number;
-  cameraClient: string;
+  id: any;
+  //cameraID: number;
+  cameraClient: any;
   cameraLocation: string;
 
   startTime = {hour: 0, minute: 0};
@@ -95,30 +95,17 @@ export class ManagementComponent implements OnInit {
   doFilter(filterBy: string): Camera[] {
     filterBy = filterBy.toLocaleLowerCase();
     return this.camerasDB.filter((camera: Camera) =>
-        camera.cameraClient.toLocaleLowerCase().indexOf(filterBy) !== -1 ||
-        camera.cameraID.toString(10).toLocaleLowerCase().indexOf(filterBy) !== -1 ||
+        camera.cameraClient.clientName.toLocaleLowerCase().indexOf(filterBy) !== -1 ||
+        camera._id.toLocaleLowerCase().indexOf(filterBy) !== -1 ||
         camera.cameraLocation.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
-  // Search(filter) {
-  //   if (this.filter != "") {
-  //     this.camerasDB = this.camerasDB.filter(res => {
-  //       return res.cameraID.toString(10).toLocaleLowerCase().match(filter.toLocaleLowerCase())
-  //       || res.cameraLocation.toLocaleLowerCase().match(filter.toLocaleLowerCase())
-  //       || res.cameraClient.toLocaleLowerCase().match(filter.toLocaleLowerCase());
-  //    });
-  //   } else {
-  //     this.onGetCameras()
-  //   }
-    
-  // }
-
   onSelectUpdate(camera){
-    this.cameraID = camera.cameraID;
-    this.cameraClient = camera.cameraClient;
+    // this.cameraID = camera.cameraID;
+    this.cameraClient = camera.cameraClient.clientName;
     this.cameraLocation = camera.cameraLocation;
-    this.startTime = {hour: Number(camera.startTime.hour), minute: Number(camera.startTime.minute)};
-    this.endTime = {hour: Number(camera.endTime.hour), minute: Number(camera.endTime.minute)};
+    //this.startTime = {hour: Number(camera.startTime.hour), minute: Number(camera.startTime.minute)};
+    //this.endTime = {hour: Number(camera.endTime.hour), minute: Number(camera.endTime.minute)};
     this.id = camera._id;
   }
 
@@ -126,10 +113,10 @@ export class ManagementComponent implements OnInit {
     let obj = {
       // cameraID cannot be changed
       //cameraID: this.cameraID,
-      cameraClient: this.cameraClient,
+      //cameraClient: this.cameraClient,
       cameraLocation: this.cameraLocation,
-      startTime: this.toModel(this.startTime),
-      endTime: this.toModel(this.endTime)
+      //startTime: this.toModel(this.startTime),
+      //endTime: this.toModel(this.endTime)
     };
     this.cameraService.updateCamera(this.id, obj).subscribe(result => {
       this.onGetCameras();

@@ -16,14 +16,13 @@ const cameraSchema = new mongoose.Schema({
         reuqired: true
     },
     // stores the start and end time whenever a camera has started and ended
-    deployTimes: [{
-        startTime: {
-            type: Date
-        },
-        endTime: {
-            type: Date
-        }
-    }],
+    // do not modify start time and end time
+    startTime: {
+        type: Object
+    },
+    endTime: {
+        type: Object
+    },
     // LINK to MotionClip Model
     motionClips: [{
         type: mongoose.Schema.ObjectId,
