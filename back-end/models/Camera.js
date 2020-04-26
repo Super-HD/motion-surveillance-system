@@ -11,6 +11,10 @@ const cameraSchema = new mongoose.Schema({
         ref: 'Client',
         required: true
     },
+    cameraURL: {
+        type: String,
+        reuqired: true
+    },
     // stores the start and end time whenever a camera has started and ended
     deployTimes: [{
         startTime: {
