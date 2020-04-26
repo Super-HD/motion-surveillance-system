@@ -71,8 +71,9 @@ const updateOne = (req, res) => {
 
 const addCamera = (req, res) => {
   let { clientId, cameraId } = req.body
+  // check if exists already, if yes then return and do nothing
   Client.findByIdAndUpdate(clientId, {
-    $push: {
+    $addToSet: {
       "cameras": cameraId
     }
   }, { new: true, upsert: true }, (err, client) => {
