@@ -2,7 +2,7 @@ const Camera = require('../models/Camera')
 
 // TODOS: MAYBE IMPLEMENT an 'isOperating' type for Camera Schema so Server can always know from mongoDB which clients are currently ON and which are OFF.
 
-const getAll = (req, res) => Camera.find((err, cameras) => {
+const getAll = (req, res) => Camera.find().populate('cameraClient').exec((err, cameras) => {
     if (err) res.status(400).json(err);
     res.json(cameras);
 })
