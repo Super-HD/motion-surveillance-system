@@ -5,7 +5,7 @@ const clipSchema = new mongoose.Schema({
     camera: {
         type: mongoose.Schema.ObjectId,
         ref: 'Camera',
-        required: true
+        //required: true
     },
     recordingDate: {
         type: String,
