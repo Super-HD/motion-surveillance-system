@@ -10,7 +10,7 @@ const getAll = (req, res) => Camera.find().populate('cameraClient').exec((err, c
 const createOne = (req, res) => {
     let { cameraClient, cameraLocation, cameraURL } = req.body
     // check if exists already, if yes then return and do nothing
-    Camera.findOneAndUpdate({ cameraClient, cameraLocation, cameraURL}, { cameraClient, cameraLocation, cameraURL }, {
+    Camera.findOneAndUpdate({ cameraClient, cameraLocation, cameraURL}, req.body, {
         new: true,
         upsert: true
     }, (err, result) => {
