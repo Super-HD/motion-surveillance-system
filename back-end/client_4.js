@@ -23,10 +23,17 @@ const testClient = {
 }
 
 const testCameraOne = {
-  cameraLocation: "Building A",
+  cameraLocation: "Building D",
   cameraURL: "http://localhost:5400",
   // cameraClient: clientRes.data._id,
-  deployTimes: [],
+  startTime: {
+    hour: "00",
+    minute: "00"
+  },
+  endTime: {
+    hour: "00",
+    minute: "00"
+  },
   motionClips: []
 }
 
