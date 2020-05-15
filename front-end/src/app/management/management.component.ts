@@ -12,6 +12,8 @@ import { CamerasService } from '../camerasservice/cameras.service';
 import { NgbTimeStruct } from '../_helpers/ngb-time-struct';
 import { CustomTimeStruct } from './../_helpers/custom-time-struct';
 
+import { FormBuilder, Validators } from "@angular/forms";
+
 @Component({
   selector: 'app-management',
   templateUrl: './management.component.html',
@@ -21,7 +23,6 @@ import { CustomTimeStruct } from './../_helpers/custom-time-struct';
 export class ManagementComponent implements OnInit {
 
   id: any;
-  //cameraID: number;
   cameraClient: any;
   cameraLocation: string;
 
@@ -52,7 +53,9 @@ export class ManagementComponent implements OnInit {
   _listFilter = "";
   filteredCameras: Camera[] = []
 
-  constructor(private cameraService: CamerasService, private http: HttpClient){
+  constructor(private cameraService: CamerasService, 
+    private http: HttpClient,
+    public fb: FormBuilder){
   };
 
   ngOnInit() {
@@ -101,22 +104,18 @@ export class ManagementComponent implements OnInit {
   }
 
   onSelectUpdate(camera){
-    // this.cameraID = camera.cameraID;
     this.cameraClient = camera.cameraClient.clientName;
     this.cameraLocation = camera.cameraLocation;
-    //this.startTime = {hour: Number(camera.startTime.hour), minute: Number(camera.startTime.minute)};
-    //this.endTime = {hour: Number(camera.endTime.hour), minute: Number(camera.endTime.minute)};
+    this.startTime = {hour: Number(camera.startTime.hour), minute: Number(camera.startTime.minute)};
+    this.endTime = {hour: Number(camera.endTime.hour), minute: Number(camera.endTime.minute)};
     this.id = camera._id;
   }
 
   onUpdateCamera(){
     let obj = {
-      // cameraID cannot be changed
-      //cameraID: this.cameraID,
-      //cameraClient: this.cameraClient,
       cameraLocation: this.cameraLocation,
-      //startTime: this.toModel(this.startTime),
-      //endTime: this.toModel(this.endTime)
+      startTime: this.toModel(this.startTime),
+      endTime: this.toModel(this.endTime)
     };
     this.cameraService.updateCamera(this.id, obj).subscribe(result => {
       this.onGetCameras();
@@ -132,4 +131,39 @@ export class ManagementComponent implements OnInit {
         null;
   }
 
+
+  // /*########### Form ###########*/
+  // isSubmitted = false;
+
+  // // City Names
+  // City: any = ['Florida', 'South Dakota', 'Tennessee', 'Michigan']
+
+  // registrationForm = this.fb.group({
+  //   cityName: ['', [Validators.required]]
+  // })
+
+
+  // // Choose city using select dropdown
+  // changeCity(e) {
+  //   console.log(e.value)
+  //   this.cityName.setValue(e.target.value, {
+  //     onlySelf: true
+  //   })
+  // }
+
+  // // Getter method to access formcontrols
+  // get cityName() {
+  //   return this.registrationForm.get('cityName');
+  // }
+
+  // /*########### Template Driven Form ###########*/
+  // onSubmit() {
+  //   this.isSubmitted = true;
+  //   if (!this.registrationForm.valid) {
+  //     return false;
+  //   } else {
+  //     alert(JSON.stringify(this.registrationForm.value))
+  //   }
+
+  // }
 }

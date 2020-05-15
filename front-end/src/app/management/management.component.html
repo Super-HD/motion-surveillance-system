@@ -8,12 +8,12 @@
 <!--Pagination-->
 <div class="row">
   <div class="col">
-      <label class="control">Filter items:
+      <label class="control">Search Camera:
           <input type="text" class="input" placeholder="filter" [(ngModel)]="listFilter">
       </label>
   </div>
   <div class="col">
-      <label class="control">itemsPerPage:
+      <label class="control">Cameras Per Page:
           <input type="number" class="input" min="0" [(ngModel)]="config.itemsPerPage">
       </label>
   </div>
@@ -28,7 +28,7 @@
         <th scope="col">Camera ID</th>
         <th scope="col">Camera Location</th>
         <th scope="col">Camera Client</th>
-        <!-- <th scope="col">Detection Active Time</th> -->
+        <th scope="col">Detection Active Time</th>
         <th scope="col">Edit</th>
       </tr>
       </thead>
@@ -38,7 +38,7 @@
       <td>{{camera._id}}</td>
       <td>{{camera.cameraLocation}}</td>
       <td>{{camera.cameraClient.clientName}}</td>
-      <!-- <td>{{camera.startTime['hour']}}:{{camera.startTime['minute']}} - {{camera.endTime['hour']}}:{{camera.endTime['minute']}}</td> -->
+      <td>{{camera.startTime['hour']}}:{{camera.startTime['minute']}} - {{camera.endTime['hour']}}:{{camera.endTime['minute']}}</td>
       <!--Modal-->
       <td>
       <button type="button" class="btn btn-primary" (click)="onSelectUpdate(camera)">Edit</button>
@@ -65,18 +65,22 @@
 <hr>
 <form>
   <div *ngIf="camerasDB.length > 0">
+    <div class="form-group">
+      <label for="Location">Camera Location</label>
+      <input type="text" class="form-control" id="Location" [(ngModel)]="cameraLocation" name="cameraLocation">
+    </div>
     <!-- <div class="form-group">
         <label for="ID">Camera ID: {{cameraID}}</label>
         <input type="number" class="form-control" id="ID" [(ngModel)]="cameraID" name="cameraID">
     </div> -->
-    <div class="form-group">
+    <!-- <div class="form-group">
         <label for="Location">Camera Location</label>
         <input type="text" class="form-control" id="Location" [(ngModel)]="cameraLocation" name="cameraLocation">
     </div>
     <div class="form-group">
         <label for="Client">Camera Client</label>
         <input type="text" class="form-control" id="Client" [(ngModel)]="cameraClient" name="cameraClient">
-    </div>
+    </div> -->
     <div class="form-group">
         <label for="startTime">Start Time</label>
         <ngb-timepicker [(ngModel)]="startTime" name="startTime"></ngb-timepicker>
@@ -89,4 +93,28 @@
   </div>
 </form>
 
+
+
+<!-- <div class="container">
+  <div class="row custom-wrapper">
+     <div class="col-md-12">
+        <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+        <div class="group-gap">
+           <div class="d-block my-3">
+              <div class="mb-3">
+                 <select class="custom-select" (change)="changeCity($event)" formControlName="cityName">
+                    <option value="">Choose your client</option>
+                    <option *ngFor="let camera of camerasDB" [ngValue]="camera.cameraClient.clientName">{{camera.cameraClient.clientName}}</option>
+                 </select>
+                 <div class="invalid-feedback" *ngIf="isSubmitted && cityName.errors?.required">
+                    <sup>*</sup>Please enter your city name
+                 </div>
+              </div>
+           </div>
+        </div>
+        <button type="submit" class="btn btn-danger btn-lg btn-block">Submit</button>
+        </form>
+     </div>
+  </div>
+</div> -->
 
