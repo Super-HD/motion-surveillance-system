@@ -13,14 +13,18 @@ import { CompileMetadataResolver } from '@angular/compiler';
 export class LiveComponent implements OnInit {
   camerasDB: Camera[] = [];
   camerasObj = []
-  cameraObj = {}
+  cameraObj = {
+    URL: "", 
+    Client: "", 
+    Location: ""
+  }
 
   constructor(private streamingService: StreamingService, private cameraService: CamerasService) { }
 
   ngOnInit() {
     this.onGetStreams();
   }
-  // To-do: show camera info 
+  // To-do: hide cameras not running 
   onGetStreams() {
     this.cameraService.getCameras().subscribe((data:any[])=>{
       this.camerasDB = data;
@@ -28,11 +32,16 @@ export class LiveComponent implements OnInit {
         this.camerasObj.push([]);
       }
       for (let i = 0; i < this.camerasDB.length; i++) {
+        this.camerasObj[Math.floor(i/3)][i%3] = {
+          URL: "", 
+          Client: this.camerasDB[i].cameraClient.clientName, 
+          Location: this.camerasDB[i].cameraLocation
+        };
+      }
+      for (let i = 0; i < this.camerasDB.length; i++) {
         this.streamingService.getStream(this.camerasDB[i].cameraURL).subscribe(img => {
-          this.cameraObj = {URL: "data:image/jpeg;base64,"+ img, 
-                          Client: this.camerasDB[i].cameraClient.clientName, 
-                          Location: this.camerasDB[i].cameraLocation};
-          this.camerasObj[Math.floor(i/3)][i%3] = this.cameraObj;
+          // this.cameraObj.URL = "data:image/jpeg;base64,"+ img;
+          this.camerasObj[Math.floor(i/3)][i%3].URL = "data:image/jpeg;base64,"+ img;
         })
       }
     });
