@@ -8,12 +8,12 @@
 <!--Pagination-->
 <div class="row">
   <div class="col">
-      <label class="control">Filter items:
+      <label class="control">Search Clips:
           <input type="text" class="input" placeholder="filter" [(ngModel)]="listFilter">
       </label>
   </div>
   <div class="col">
-      <label class="control">itemsPerPage:
+      <label class="control">Clips Per Page:
           <input type="number" class="input" min="0" [(ngModel)]="config.itemsPerPage">
       </label>
   </div>
@@ -26,6 +26,8 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Camera ID</th>
+          <th scope="col">Camera Location</th>
+          <th scope="col">Camera Client</th>
           <th scope="col">Recording Date</th>
           <th scope="col">Clip</th>
         </tr>
@@ -33,7 +35,9 @@
       <tbody>
         <tr *ngFor="let clip of filteredClips | paginate: config; let i = index">
           <td>{{i+1}}</td>
-          <td>{{clip.cameraID}}</td>
+          <td>{{clip.camera._id}}</td>
+          <td>{{clip.camera.cameraLocation}}</td>
+          <td>{{clip.camera.cameraClient.clientName}}</td>
           <td>{{clip.recordingDate}}</td>
           <!--Modal-->
           <td><ngx-smart-modal identifier={{clip.cameraID+clip.recordingDate}}>

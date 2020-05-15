@@ -87,7 +87,9 @@ export class RecordingComponent implements OnInit {
   doFilter(filterBy: string): MotionClip[] {
     filterBy = filterBy.toLocaleLowerCase();
     return this.clipsDB.filter((clip: MotionClip) =>
-      //clip.cameraID.toString(10).toLocaleLowerCase().indexOf(filterBy) !== -1 ||
+      clip.camera._id.toLocaleLowerCase().indexOf(filterBy) !== -1 ||
+      clip.camera.cameraLocation.toLocaleLowerCase().indexOf(filterBy) !== -1 ||
+      clip.camera.cameraClient.clientName.toLocaleLowerCase().indexOf(filterBy) !== -1 ||
       clip.recordingDate.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
