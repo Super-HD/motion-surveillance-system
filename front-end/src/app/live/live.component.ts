@@ -12,7 +12,8 @@ import { CompileMetadataResolver } from '@angular/compiler';
 })
 export class LiveComponent implements OnInit {
   camerasDB: Camera[] = [];
-  camerasURL = [];
+  camerasObj = []
+  cameraObj = {}
 
   constructor(private streamingService: StreamingService, private cameraService: CamerasService) { }
 
@@ -23,18 +24,17 @@ export class LiveComponent implements OnInit {
   onGetStreams() {
     this.cameraService.getCameras().subscribe((data:any[])=>{
       this.camerasDB = data;
-      console.log(this.camerasDB);
       for (let i = 0; i <= this.camerasDB.length/3; i++){
-        this.camerasURL.push([])
+        this.camerasObj.push([]);
       }
-      // var temp = [];
       for (let i = 0; i < this.camerasDB.length; i++) {
-        console.log(i/3);
         this.streamingService.getStream(this.camerasDB[i].cameraURL).subscribe(img => {
-          this.camerasURL[Math.floor(i/3)][i%3] = "data:image/jpeg;base64,"+ img;
+          this.cameraObj = {URL: "data:image/jpeg;base64,"+ img, 
+                          Client: this.camerasDB[i].cameraClient.clientName, 
+                          Location: this.camerasDB[i].cameraLocation};
+          this.camerasObj[Math.floor(i/3)][i%3] = this.cameraObj;
         })
       }
     });
-    console.log(this.camerasURL);
   }
 }

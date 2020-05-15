@@ -6,13 +6,13 @@
 </div>
 <hr>
 <!--Live Preview-->
-<div class="row" *ngFor="let cameras of camerasURL; let i = index">
+<div class="row" *ngFor="let cameras of camerasObj; let i = index">
   <div class="col-md-4" *ngFor="let camera of cameras">
     <div >
       <div class="thumbnail">
-          <img [src]="camera" alt="Camera1" style="width:100%">
+          <img [src]="camera.URL" alt="Camera1" style="width:100%">
           <div class="caption">
-            <p>Camera</p>
+            <h5>{{camera.Client}}: {{camera.Location}}</h5>
           </div>
       </div>
     </div>
