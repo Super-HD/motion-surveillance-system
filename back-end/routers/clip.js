@@ -2,7 +2,13 @@ const Clip = require('../models/MotionClip');
 const mongoose = require('mongoose');
 
 module.exports = {
-    getAll: (req, res) => Clip.find((err, clips) => {
+    getAll: (req, res) => Clip.find().populate({
+        path: 'camera',
+        populate: {
+            path: 'cameraClient',
+            model: 'Client'
+        }
+    }).exec((err, clips) => {
         if (err) res.status(400).json(err);
         res.json(clips);
     }),
