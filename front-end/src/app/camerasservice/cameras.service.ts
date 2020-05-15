@@ -30,7 +30,7 @@ export class CamerasService {
 
   // update a camera
   updateCamera(id, data) {
-    let url = '/cameras/' + id;
+    let url = '/camera/' + id;
     return this.http.put(url, data, httpOptions);
   }
 }
