@@ -1,5 +1,14 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+
+#include<iostream>
+#include<WS2tcpip.h>
+#pragma comment (lib,"WS2_32.lib")
+
 #include <opencv2/opencv.hpp>
 #include <iostream>
+#include <ctime>
+#include <cstdio>
 #include <windows.h> 
 #include <Mmsystem.h>
 #include "stdio.h"
@@ -20,7 +29,6 @@ using namespace std;
 // video frame request : localhost:4200/:cameraid - send a frame
 
 // video recording request: localhost:4200/motion/:cameraid - send a video file + Time of clip and End of clip.
-
 
 //this function is a test functino of your camera
 void readCamera() {
@@ -58,14 +66,17 @@ void writeVideo(int timer, VideoCapture capture,int count) {
 	VideoWriter writer(video_name, CV_FOURCC('M', 'J', 'P', 'G'),15.0f, Size(640, 480));
 	
 	int64 t0 = getTickCount(); // start time
+	Mat frame, gray;
 	while (capture.isOpened()) {
-		Mat frame;
+
 		capture >> frame;
-		imshow("Camera", frame);
+		//cvtColor(frame, gray, COLOR_BGR2GRAY);
+		//GaussianBlur(gray, gray, Size(21, 21), 0);
+		//imshow("Camera", frame);
 		//read the current frame
 		writer << frame;
 		//save the read frame
-		int64 t1 = getTickCount();
+		int64 t1 = getTickCount(); 
 		double timeRunning = double(t1 - t0)/getTickFrequency();
 		if (timeRunning>=timer){
 			break;
@@ -116,7 +127,42 @@ int motion() {
 	return 0;
 }
 */
-int motion2() {
+string MatToString(Mat image) {
+	std::vector<uchar>buff;
+	cv::imencode(".bmp", image, buff);
+	std::string image_string(reinterpret_cast<char*>(&buff[0]), buff.size());
+	return image_string;
+}
+
+Mat StringToMat(string s) {
+	std::vector<char>vec_data(s.c_str(), s.c_str() + s.size());
+	cv::Mat dst = cv::imdecode(vec_data, CV_LOAD_IMAGE_UNCHANGED);
+	return dst;
+}
+
+int motion2(int start_time_hour = 0,int start_time_min = 30,int end_time_hour = 23,int end_time_min = 30) {
+
+	//
+	bool stop = false;
+	time_t rawtime;
+	struct tm* ptminfo;
+	time(&rawtime);
+	ptminfo = localtime(&rawtime);
+	printf("current: %02d-%02d-%02d %02d:%02d:%02d\n", ptminfo->tm_year + 1900, ptminfo->tm_mon + 1, ptminfo->tm_mday, ptminfo->tm_hour, ptminfo->tm_min, ptminfo->tm_sec);
+	if (start_time_hour < end_time_hour) {
+		if (ptminfo->tm_hour > start_time_hour&& ptminfo->tm_hour < end_time_hour) {
+			//stop == true;
+		}
+	}
+	else if (start_time_hour == end_time_hour) {
+		if (ptminfo->tm_hour == start_time_hour) {
+			//stop == true;
+		}
+	}
+	else {
+
+	}
+	//
 	bool writingVideo = false;  //a boolean to determine whether we are writing a video
 	int video_count = 0;   //the counter of the video
 	Mat frame, gray, frameDelta, thresh, firstFrame;
@@ -136,7 +182,7 @@ int motion2() {
 	cvtColor(frame, firstFrame, COLOR_BGR2GRAY);
 	GaussianBlur(firstFrame, firstFrame, Size(21, 21), 0);
 
-	while (camera.read(frame)) {
+	while (stop == false && camera.read(frame)) {
 		if (writingVideo == false) {
 			//convert to grayscale
 			cvtColor(frame, gray, COLOR_BGR2GRAY);
@@ -153,6 +199,9 @@ int motion2() {
 				writingVideo = true;
 				putText(frame, "Motion Detected", Point(10, 20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0, 0, 255), 2);
 			}
+			string s = MatToString(frame);
+			Mat m = StringToMat(s);
+			frame = m;
 			imshow("Camera", frame);
 			camera.read(frame);
 			//convert to grayscale and set the first frame
@@ -165,7 +214,7 @@ int motion2() {
 		}
 		else {
 			//set the length of record,camear and the count of the  video and write a video
-			writeVideo(6,camera,video_count);
+			writeVideo(10,camera,video_count);
 
 			video_count += 1;    //increase the count of the video
 
@@ -177,13 +226,90 @@ int motion2() {
 			cvtColor(frame, firstFrame, COLOR_BGR2GRAY);
 			GaussianBlur(firstFrame, firstFrame, Size(21, 21), 0);
 		}
+		ptminfo = localtime(&rawtime);
+
 	}
 	return 0;
 }
 
-int main(int argc, char** argv) {
+void main(int argc, char* argv[]) {
+	//VideoCapture camera(0);
+	//writeVideo(10, camera, 1);
+	int start_time_hour = 10;
+	int start_time_min = 30;
+	int end_time_hour = 20;
+	int end_time_min = 30;
 
-	motion2();
-	return 0;
+ //initialize winsock
+	WSADATA WSData;
+	WORD ver = MAKEWORD(2, 2);
+
+	int wsOk = WSAStartup(ver, &WSData);
+	if (wsOk != 0) {
+		cerr << "Can't initialize winsock!" << endl;
+		return;
+	}
+
+	//create a socket
+	SOCKET listening = socket(AF_INET, SOCK_STREAM, 0);
+	if (listening == INVALID_SOCKET) {
+		cerr << "Can't create a socket!" << endl;
+		return;
+	}
+
+	//bind the ip address and port to a socket
+	sockaddr_in hint;
+	hint.sin_family = AF_INET;
+	hint.sin_port = htons(4200);
+	hint.sin_addr.S_un.S_addr = INADDR_ANY;
+
+	bind(listening, SOMAXCONN);
+
+	listen(listening, SOMAXCONN);
+
+	//wait for a connection
+	sockaddr_in client;
+	int clientSzie = sizeof(client);
+
+	SOCKET clientSocket = accept(listening, (sockaddr*)&client, &clientSzie);
+
+	char host[NI_MAXHOST]; //client's remote name
+	char service[NI_MAXHOST]; //service the client is connect on
+
+	ZeroMemory(host, NI_MAXHOST);
+	ZeroMemory(service, NI_MAXHOST);
+
+	if (getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, service, NI_MAXSERV, 0)) {
+		cout << host << "connected on port" << service << endl;
+	}
+	else {
+		inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
+		cout << host << "connected on port " << ntohs(client.sin_port) << endl;
+	}
+
+	//close listening socket
+	closesocket(listening);
+
+	char buf[4096];
+	while (true) {
+		ZeroMemory(buf, 4096);
+		int bytesReceived = recv(clientSocket, buf, 4096, 0);
+		if (bytesReceived == SOCKET_ERROR) {
+			cerr << "Error in recv()." << endl;
+			break;
+		}
+		if (bytesReceived == 0) {
+			cout << "client disconnected" << endl;
+			break;
+		}
+	}
+	//echo message
+	//send(clientSocket, buf, bytesReceived + 1, 0);
+
+	closesocket(clientSocket);
+
+	WSACleanup();
+	//motion2();
+
 }
 
