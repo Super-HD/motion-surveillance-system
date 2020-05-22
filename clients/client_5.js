@@ -6,6 +6,7 @@ const cors = require("cors")
 const app = express();
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
+const fetch = require("node-fetch")
 // allow cross origin resource sharing
 app.use(cors());
 // dont need body parser anymore just do this
@@ -16,28 +17,33 @@ vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
 vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
 const FPS = 10;
 
-// do async call register API to make server store the new client & camera data
-const testClient = {
-  clientName: "Adelaide University",
-  cameras: []
-}
-
-const testCameraOne = {
-  cameraLocation: "Building E",
-  cameraURL: "http://localhost:5500",
-  // cameraClient: clientRes.data._id,
-  startTime: {
-    hour: "00",
-    minute: "00"
-  },
-  endTime: {
-    hour: "00",
-    minute: "00"
-  },
-  motionClips: []
-}
-
 async function doSetup() {
+
+  // do async call register API to make server store the new client & camera data
+  const testClient = {
+    clientName: "Adelaide University",
+    cameras: []
+  }
+
+  const ip = await fetch('https://api.ipify.org/?format=json')
+    .then(result => result.json())
+    .then(data => data.ip)
+
+  const testCameraOne = {
+    cameraLocation: "Building E",
+    cameraURL: `http://${ip}:5500`,
+    // cameraClient: clientRes.data._id,
+    startTime: {
+      hour: "00",
+      minute: "00"
+    },
+    endTime: {
+      hour: "00",
+      minute: "00"
+    },
+    motionClips: []
+  }
+
   const client = await axios.post('http://161.35.110.201:4200/client', testClient)
   console.log("Client Added: ", client.data._id)
 
