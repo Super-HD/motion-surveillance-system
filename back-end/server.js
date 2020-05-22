@@ -17,7 +17,7 @@ app.use(express.json());
 app.use('/', express.static(path.join(__dirname, '../front-end/dist/MotionSurveillanceSystem')))
 
 // Port Number for once server is deployed online - Ignore for now
-const PORT = process.env.PORT;
+// const PORT = process.env.PORT;
 
 // THERE IS NO REGISTER - We assume that we give clients their login details personally for them to login to upload webcam stream
 
@@ -80,8 +80,8 @@ app.get('/clip/:id', clip.getOne);
 app.put('/clip/:id', clip.updateOne);
 
 // Change to PORT constant once deployed online
-server.listen(PORT, () => {
-    console.log(`Server Successfully Started on Port ${PORT}`);
+server.listen(4200, () => {
+    console.log(`Server Successfully Started on Port ${4200}`);
 })
 
 //signin --> POST Request --> Success/Fail
