@@ -38,14 +38,14 @@ const testCameraOne = {
 }
 
 async function doSetup() {
-  const client = await axios.post('http://localhost:4200/client', testClient)
+  const client = await axios.post('http://161.35.110.201:4200/client', testClient)
   console.log("Client Added: ", client.data._id)
 
-  const cameraOne = await axios.post('http://localhost:4200/camera', { ...testCameraOne, cameraClient: client.data._id })
+  const cameraOne = await axios.post('http://161.35.110.201:4200/camera', { ...testCameraOne, cameraClient: client.data._id })
   console.log("Camera 1 Added: ", cameraOne.data._id)
 
   // add camera1 to client camera array
-  const camToClientOne = await axios.post('http://localhost:4200/addcamera', { clientId: client.data._id, cameraId: cameraOne.data._id })
+  const camToClientOne = await axios.post('http://161.35.110.201:4200/addcamera', { clientId: client.data._id, cameraId: cameraOne.data._id })
 
   console.log("Camera 1 Added to Client Camera Array ", camToClientOne.data.cameras)
 }

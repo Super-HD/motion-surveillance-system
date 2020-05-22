@@ -1,15 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cv = require('opencv4nodejs')
 const path = require('path');
 // cors for allowing cross origin resource sharing between different localhosts
 const cors = require("cors")
 const app = express();
-const fs = require('fs')
 const server = require('http').Server(app)
-const io = require('socket.io')(server)
-// bcrypt for hashing passwords
-const bcrypt = require("bcrypt-nodejs");
 // allow cross origin resource sharing
 app.use(cors());
 app.use(express.json());
@@ -50,15 +45,6 @@ mongoose.connect(mongoURI, mongoConfig, (err) => {
 app.get("/", (req, res) => {
     res.send("App is working!");
 });
-
-// TESTING LIVE STREAM ON A STATIC HTML PAGE
-app.get('/stream', (req, res) => {
-    fs.readFile("./livestream.html", (err, data) => {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.write(data);
-        res.end();
-    });
-})
 
 // Client RESTFul endpoints
 app.get('/clients', client.getAll);
