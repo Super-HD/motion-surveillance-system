@@ -16,6 +16,9 @@ vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
 vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
 const FPS = 10;
 
+
+
+
 // do async call register API to make server store the new client & camera data
 const testClient = {
   clientName: "Melbourne University",
@@ -24,7 +27,7 @@ const testClient = {
 
 const testCameraOne = {
   cameraLocation: "Building A",
-  cameraURL: "http://localhost:5100",
+  cameraURL: `http://${getIp()}:5100`,
   // cameraClient: clientRes.data._id,
   startTime: {
     hour: "00",
@@ -35,6 +38,13 @@ const testCameraOne = {
     minute: "00"
   },
   motionClips: []
+}
+
+async function getIp() {
+  const ip = await fetch('https://api.ipify.org/?format=json')
+    .then(result => result.json())
+    .then(data => data.ip)
+  return ip
 }
 
 async function doSetup() {
