@@ -5,7 +5,7 @@ This file defines Client schema. The client collection contains all client regis
 Client contains 3 entities: _id, cameraLocation, cameraClient, cameraURL, startTime, endTime and motionClips. 
 _id: ObjectID in mongoose. It is an identify of a client record.
 clientName: String. It is the client's name.
-cameras: An array of camera object in database. It contains all cameras that belong to the client.
+cameras: An array of Camera object's ID. It contains all cameras that belong to the client.
 */
 
 const mongoose = require('mongoose');
