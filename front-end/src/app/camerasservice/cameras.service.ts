@@ -1,6 +1,14 @@
+/*
+Created by Cheng Zeng
+Updated on 25/05/2020
+The camera service is responsible for the communication with the RESTFul server regarding Camera.
+All functions provided in this file are used to perform operation on 
+Camera data in the database.
+*/
 
 import { Injectable} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 const httpOptions = {
   headers: new HttpHeaders({"Content-Type": "application/json"}),
 };
@@ -8,8 +16,10 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class CamerasService {
 
+export class CamerasService {
+  
+  // HttpClient provides HTTP service
   constructor(private http: HttpClient) {}
 
   // get all cameras

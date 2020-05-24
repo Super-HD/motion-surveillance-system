@@ -1,6 +1,14 @@
+/*
+Created by Cheng Zeng
+Updated on 25/05/2020
+The clip service is responsible for the communication with the RESTFul server regarding Clip.
+All functions provided in this file are used to perform operation on 
+Client data in the database.
+*/
+
 import { Injectable} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { identifierModuleUrl } from '@angular/compiler';
+
 const httpOptions = {
   headers: new HttpHeaders({"Content-Type": "application/json"}),
 };
@@ -10,6 +18,7 @@ const httpOptions = {
 })
 export class ClipsService {
 
+  // HttpClient provides HTTP service
   constructor(private http: HttpClient) { }
 
   // get all clips
