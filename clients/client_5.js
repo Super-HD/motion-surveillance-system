@@ -30,7 +30,7 @@ async function doSetup() {
 
   const testCameraOne = {
     cameraLocation: "Building E",
-    cameraURL: `http://${ip}:5500`,
+    cameraURL: `http://192.168.1.104:5500`,
     // cameraClient: clientRes.data._id,
     startTime: {
       hour: "00",
