@@ -14,8 +14,8 @@ export class LiveComponent implements OnInit {
   camerasDB: Camera[] = [];
   camerasObj = []
   cameraObj = {
-    URL: "", 
-    Client: "", 
+    URL: "",
+    Client: "",
     Location: ""
   }
 
@@ -24,24 +24,26 @@ export class LiveComponent implements OnInit {
   ngOnInit() {
     this.onGetStreams();
   }
-  // To-do: hide cameras not running 
+  // To-do: hide cameras not running
   onGetStreams() {
-    this.cameraService.getCameras().subscribe((data:any[])=>{
+    this.cameraService.getCameras().subscribe((data: any[]) => {
       this.camerasDB = data;
-      for (let i = 0; i <= this.camerasDB.length/3; i++){
+      for (let i = 0; i <= this.camerasDB.length / 3; i++) {
         this.camerasObj.push([]);
       }
       for (let i = 0; i < this.camerasDB.length; i++) {
-        this.camerasObj[Math.floor(i/3)][i%3] = {
-          URL: "", 
-          Client: this.camerasDB[i].cameraClient.clientName, 
+        this.camerasObj[Math.floor(i / 3)][i % 3] = {
+          URL: "",
+          Client: this.camerasDB[i].cameraClient.clientName,
           Location: this.camerasDB[i].cameraLocation
         };
       }
       for (let i = 0; i < this.camerasDB.length; i++) {
+
+        // this.camerasDB[i].cameraURL
         this.streamingService.getStream(this.camerasDB[i].cameraURL).subscribe(img => {
           // this.cameraObj.URL = "data:image/jpeg;base64,"+ img;
-          this.camerasObj[Math.floor(i/3)][i%3].URL = "data:image/jpeg;base64,"+ img;
+          this.camerasObj[Math.floor(i / 3)][i % 3].URL = "data:image/jpeg;base64," + img;
         })
       }
     });
