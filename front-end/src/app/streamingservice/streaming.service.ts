@@ -1,3 +1,9 @@
+/*
+Created by Cheng Zeng
+Updated on 25/05/2020
+The streaming service is responsible for listenning on the streaming source.
+*/
+
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import * as io from "socket.io-client";

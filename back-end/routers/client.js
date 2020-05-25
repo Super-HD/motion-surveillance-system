@@ -1,3 +1,10 @@
+/*
+Created by Cheng Zeng
+Modified by Terence
+Updated on 25/05/2020
+In this file, operations of the Client collection are implemented.
+*/
+
 const validate = require("../form-validation");
 const Client = require('../models/Client')
 
@@ -28,6 +35,8 @@ const handleSignIn = (bcrypt) => (req, res) => {
   })
 }
 
+// A function retrieves all the documents from the Client collection and sens them back as a response.
+// Populate replaces each ID in the array 'cameras' with its camera document.
 const getAll = (req, res) => {
   Client.find({})
     .populate('cameras')
@@ -38,6 +47,8 @@ const getAll = (req, res) => {
     })
 }
 
+// A function that creates a new document and save it in Client collection if the parsed data in 'req.body' does not exists
+// otherwise update the client
 const createOne = (req, res) => {
   let { clientName } = req.body
   // check if exists already, if yes then return and do nothing
@@ -51,6 +62,7 @@ const createOne = (req, res) => {
   })
 }
 
+// A function finds one Client document by an ID
 const getOne = (req, res) => {
   Client.findOne({ _id: req.params.id })
     .populate('cameras')
@@ -61,6 +73,7 @@ const getOne = (req, res) => {
     })
 }
 
+// A function finds a Client document by its ID and update its content using data retrieved from 'req.body'
 const updateOne = (req, res) => {
   Client.findOneAndUpdate({ _id: req.params.id }, req.body, (err, client) => {
     if (err) return res.status(400).json(err);
@@ -69,6 +82,7 @@ const updateOne = (req, res) => {
   });
 }
 
+// A function add a Camera document to Client document's 'cameras' array
 const addCamera = (req, res) => {
   let { clientId, cameraId } = req.body
   // check if exists already, if yes then return and do nothing
