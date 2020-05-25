@@ -64,6 +64,7 @@ server.listen(5100, () => {
   // this code runs and tests a client webcam and uses socket.io to send frame data to server with a fake id
   setInterval(() => {
     // vCap.read returns a mat file
+    // instead of IO maybe we need to start using POST request to send frames to server.
     const frame = vCap.read();
     const image = cv.imencode('.jpg', frame).toString('base64')
     io.emit('buildingAFrame', image)
