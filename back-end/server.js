@@ -27,7 +27,7 @@ const MotionClip = require('./models/MotionClip')
 const Camera = require('./models/Camera')
 
 // change once we deploy ONLINE
-const mongoURI = "mongodb+srv://Terence:ktinHaJUO9rgcXON@cluster0-hllvg.mongodb.net/test?retryWrites=true&w=majority";
+const mongoURI = "mongodb+srv://Terence:v9nzSDSVtkA1USXO@cluster0-hllvg.mongodb.net/test?retryWrites=true&w=majority";
 mongoConfig = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
