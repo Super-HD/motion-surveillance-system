@@ -69,18 +69,6 @@
       <label for="Location">Camera Location</label>
       <input type="text" class="form-control" id="Location" [(ngModel)]="cameraLocation" name="cameraLocation">
     </div>
-    <!-- <div class="form-group">
-        <label for="ID">Camera ID: {{cameraID}}</label>
-        <input type="number" class="form-control" id="ID" [(ngModel)]="cameraID" name="cameraID">
-    </div> -->
-    <!-- <div class="form-group">
-        <label for="Location">Camera Location</label>
-        <input type="text" class="form-control" id="Location" [(ngModel)]="cameraLocation" name="cameraLocation">
-    </div>
-    <div class="form-group">
-        <label for="Client">Camera Client</label>
-        <input type="text" class="form-control" id="Client" [(ngModel)]="cameraClient" name="cameraClient">
-    </div> -->
     <div class="form-group">
         <label for="startTime">Start Time</label>
         <ngb-timepicker [(ngModel)]="startTime" name="startTime"></ngb-timepicker>
@@ -92,29 +80,4 @@
     <button type="submit" class="btn btn-primary" (click)="onUpdateCamera()">Update Camera</button>
   </div>
 </form>
-
-
-
-<!-- <div class="container">
-  <div class="row custom-wrapper">
-     <div class="col-md-12">
-        <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-        <div class="group-gap">
-           <div class="d-block my-3">
-              <div class="mb-3">
-                 <select class="custom-select" (change)="changeCity($event)" formControlName="cityName">
-                    <option value="">Choose your client</option>
-                    <option *ngFor="let camera of camerasDB" [ngValue]="camera.cameraClient.clientName">{{camera.cameraClient.clientName}}</option>
-                 </select>
-                 <div class="invalid-feedback" *ngIf="isSubmitted && cityName.errors?.required">
-                    <sup>*</sup>Please enter your city name
-                 </div>
-              </div>
-           </div>
-        </div>
-        <button type="submit" class="btn btn-danger btn-lg btn-block">Submit</button>
-        </form>
-     </div>
-  </div>
-</div> -->
 
