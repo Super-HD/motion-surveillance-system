@@ -24,10 +24,11 @@ function uploadToS3(videoFile, axios, cameraId) {
       console.log(err);
     }
     console.log('success')
-    console.log('The URL is', url);
+
+    console.log(cameraId, url)
 
     const newClip = {
-      camera: "testingcamera",//cameraId,
+      camera: cameraId,
       recordingDate: "testing",
       clipLink: url
     }

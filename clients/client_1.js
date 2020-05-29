@@ -66,7 +66,7 @@ async function doSetup() {
   // test uploading to AWS
   console.log("Uploading file to S3")
 
-  aws.uploadToS3(file, axios, cameraOne)
+  aws.uploadToS3(file, axios, cameraOne.data._id)
 }
 
 // Change to PORT constant once deployed online
