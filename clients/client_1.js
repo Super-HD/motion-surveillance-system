@@ -12,6 +12,7 @@ const io = require('socket.io')(server)
 const fetch = require("node-fetch")
 const getIp = require("./network");
 const aws = require('./s3-file-upload')
+const motionDetection = require('./motionDetection');
 
 
 app.use(busboy())

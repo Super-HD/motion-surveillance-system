@@ -1,3 +1,4 @@
+const cv = require('opencv4nodejs')
 const vCap = new cv.VideoCapture(0)
 vCap.set(3, 300);
 vCap.set(4, 300);
