@@ -23,6 +23,7 @@ vCap.get(cv.CAP_PROP_FRAME_HEIGHT);
 
 const FPS = 10;
 
+
 function writeVedio(time,count){
 
   var video_name = "motion";
