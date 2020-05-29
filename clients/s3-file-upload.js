@@ -11,7 +11,7 @@ function uploadToS3(videoFile, axios, cameraId) {
 
   const fileContent = fs.readFileSync(videoFile)
   const params = {
-    Bucket: BUCKET_NAME,
+    Bucket: process.env.BUCKET_NAME,
     Key: 'testvideo.mp4',
     Body: fileContent
   }
