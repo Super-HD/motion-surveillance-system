@@ -48,6 +48,7 @@ function writeVedio(time,count){
         stop = true;
       }
   }
+  
 }
 }
 
@@ -61,14 +62,14 @@ function algorithm(){
   //convert to grayscale
   firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
   firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21),0);
-  
+
 
   interval = setInterval(function() {
     if(write == false){
           frame = vCap.read();
           gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
           gray = gray.gaussianBlur(new cv.Size(21, 21),0);
-  
+
           //compute difference between first frame and current frame
           frameDelta = firstFrame.absdiff(gray);
           thresh = frameDelta.threshold(25,255, cv.THRESH_BINARY);
@@ -76,7 +77,7 @@ function algorithm(){
 
           var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
           for(i = 0; i < cnts.length; i++) {
-  
+
               if(cnts[i].area < 500) {
                   continue;
               }
@@ -104,8 +105,8 @@ function algorithm(){
 
       }
            //   clearInterval(interval);
-          
-  
+
+
   }, 20);
 
 }
