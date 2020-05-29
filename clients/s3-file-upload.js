@@ -2,6 +2,8 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 require('dotenv').config();
 
+console.log(process.env)
+
 let s3bucket = new AWS.S3({
   accessKeyId: process.env.IAM_USER_KEY,
   secretAccessKey: process.env.IAM_USER_SECRET,
