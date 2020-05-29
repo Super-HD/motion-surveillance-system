@@ -34,7 +34,7 @@ function writeVedio(time,count){
   var end_time;
   var stop = false;
   var frame,gray;
-  var writer =new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('MJPG'),24.0,new cv.Size(352,288));
+  var writer =new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('MJPG'),24.0,new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH),vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
    {
      while(stop == false){
       frame = vCap.read()
