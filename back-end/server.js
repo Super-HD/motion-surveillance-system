@@ -12,14 +12,11 @@ app.use(express.json());
 
 app.use('/', express.static(path.join(__dirname, '../front-end/dist/MotionSurveillanceSystem')))
 
-const BUCKET_NAME = 'terencenghan-bucket';
-const IAM_USER_KEY = 'AKIAJ3TN3GAGU5DQGHFA';
-const IAM_USER_SECRET = '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';
 
 let s3bucket = new AWS.S3({
-    accessKeyId: IAM_USER_KEY,
-    secretAccessKey: IAM_USER_SECRET,
-    Bucket: BUCKET_NAME
+    accessKeyId: process.env.IAM_USER_KEY,
+    secretAccessKey: process.env.IAM_USER_SECRET,
+    Bucket: process.env.BUCKET_NAME
 });
 
 //const Camera = require('./models/camera');
@@ -88,7 +85,7 @@ app.post('/motion/:id')
 
 function getClip(clipName) {
     s3.getObject(
-        { Bucket: BUCKET_NAME, Key: clipName },
+        { Bucket: process.env.BUCKET_NAME, Key: clipName },
         function (error, data) {
             if (error != null) {
                 alert("Failed to retrieve an object: " + error);

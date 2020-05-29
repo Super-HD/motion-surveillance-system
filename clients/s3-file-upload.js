@@ -1,21 +1,17 @@
 const AWS = require('aws-sdk');
 const fs = require('fs');
 
-const BUCKET_NAME = 'terencenghan-bucket';
-const IAM_USER_KEY = 'AKIAJ3TN3GAGU5DQGHFA';
-const IAM_USER_SECRET = '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';
-
 let s3bucket = new AWS.S3({
-  accessKeyId: IAM_USER_KEY,
-  secretAccessKey: IAM_USER_SECRET,
-  Bucket: BUCKET_NAME
+  accessKeyId: process.env.IAM_USER_KEY,
+  secretAccessKey: process.env.IAM_USER_SECRET,
+  Bucket: process.env.BUCKET_NAME
 });
 
 function uploadToS3(videoFile, axios, cameraId) {
 
   const fileContent = fs.readFileSync(videoFile)
   const params = {
-    Bucket: BUCKET_NAME,
+    Bucket: process.env.BUCKET_NAME,
     Key: 'testvideo.mp4',
     Body: fileContent
   }
@@ -31,7 +27,11 @@ function uploadToS3(videoFile, axios, cameraId) {
     const newClip = {
       camera: cameraId,
       recordingDate: "testing",
+<<<<<<< HEAD
       clipLink: url
+=======
+      clipName: data.Key
+>>>>>>> 9aded6f9788fa896629fbf5f272a2dac9e6437f5
     }
 
     // POST Request to DigitalOcean Server to store in MongoDB
