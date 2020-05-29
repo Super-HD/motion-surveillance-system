@@ -30,7 +30,7 @@ function uploadToS3(videoFile, axios, cameraId) {
       const newClip = {
         camera: cameraId,
         recordingDate: "testing",
-        clipName: url
+        clipLink: url
       }
       // POST Request to DigitalOcean Server to store in MongoDB
       axios.post('http://161.35.110.201:4200/clip', { ...newClip })
