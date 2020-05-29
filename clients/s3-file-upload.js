@@ -19,23 +19,42 @@ function uploadToS3(videoFile, axios, cameraId) {
     Key: 'testvideo.mp4',
     Body: fileContent
   }
-  s3bucket.upload(params, (err, data) => {
+
+  s3bucket.getSignedUrl('putObject', params, function (err, url) {
     if (err) {
       console.log('error in callback');
       console.log(err);
     }
     console.log('success')
-    console.log(data)
-    console.log(data.Location)
+    console.log('The URL is', url);
 
     const newClip = {
       camera: cameraId,
       recordingDate: "testing",
-      clipLink: data.Key
+      clipLink: url
     }
+
     // POST Request to DigitalOcean Server to store in MongoDB
     axios.post('http://161.35.110.201:4200/clip', { ...newClip })
   })
+
+  // s3bucket.upload(params, (err, data) => {
+  //   if (err) {
+  //     console.log('error in callback');
+  //     console.log(err);
+  //   }
+  //   console.log('success')
+  //   console.log(data)
+  //   console.log(data.Location)
+
+  //   const newClip = {
+  //     camera: cameraId,
+  //     recordingDate: "testing",
+  //     clipLink: data.Key
+  //   }
+  //   // POST Request to DigitalOcean Server to store in MongoDB
+  //   axios.post('http://161.35.110.201:4200/clip', { ...newClip })
+  // })
 }
 
 module.exports = {
