@@ -26,9 +26,6 @@ vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
 vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
 const FPS = 10;
 
-let client;
-let cameraOne;
-
 async function doSetup() {
   const testClient = {
     clientName: "Melbourne University",
@@ -54,16 +51,22 @@ async function doSetup() {
     motionClips: []
   }
 
-  client = await axios.post('http://161.35.110.201:4200/client', testClient)
+  const client = await axios.post('http://161.35.110.201:4200/client', testClient)
   console.log("Client Added: ", client.data._id)
 
-  cameraOne = await axios.post('http://161.35.110.201:4200/camera', { ...testCameraOne, cameraClient: client.data._id })
+  const cameraOne = await axios.post('http://161.35.110.201:4200/camera', { ...testCameraOne, cameraClient: client.data._id })
   console.log("Camera 1 Added: ", cameraOne.data._id)
 
   // add camera1 to client camera array
   const camToClientOne = await axios.post('http://161.35.110.201:4200/addcamera', { clientId: client.data._id, cameraId: cameraOne.data._id })
 
   console.log("Camera 1 Added to Client Camera Array ", camToClientOne.data.cameras)
+
+  let file = '../front-end/src/assets/video/recording.mp4'
+  // test uploading to AWS
+  console.log("Uploading file to S3")
+
+  aws.uploadToS3(file, axios, cameraOne)
 }
 
 // Change to PORT constant once deployed online
