@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const AWS = require('aws-sdk')
 // cors for allowing cross origin resource sharing between different localhosts
 const cors = require("cors")
 const app = express();
@@ -12,8 +13,8 @@ app.use(express.json());
 app.use('/', express.static(path.join(__dirname, '../front-end/dist/MotionSurveillanceSystem')))
 
 const BUCKET_NAME = 'terencenghan-bucket';
-const IAM_USER_KEY = 'AKIAJ4MHIRQ3R3NJPN6Q';
-const IAM_USER_SECRET = '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';
+const IAM_USER_KEY = 'AKIAJ3TN3GAGU5DQGHFA';
+const IAM_USER_SECRET = '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';
 
 let s3bucket = new AWS.S3({
     accessKeyId: IAM_USER_KEY,
