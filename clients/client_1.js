@@ -21,6 +21,8 @@ app.use(cors());
 // dont need body parser anymore just do this
 app.use(express.json());
 
+console.log(process.env)
+
 const vCap = new cv.VideoCapture(0)
 vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
 vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
