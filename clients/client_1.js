@@ -73,7 +73,7 @@ server.listen(5100, () => {
   // run function to setup adding cameras and clients to mongoDB
   doSetup()
   // deploy motion detection algorithm which records video files
-  algorithm()
+  // algorithm()
 
   // this code runs and tests a client webcam and uses socket.io to send frame data to server with a fake id
   setInterval(() => {
@@ -86,7 +86,7 @@ server.listen(5100, () => {
 })
 
 
-function writeVedio(time, count) {
+function writeVideo(time, count) {
 
   var video_name = "motion";
   video_name += count.toString();
@@ -113,7 +113,7 @@ function writeVedio(time, count) {
     // upload video file to S3
     // test uploading to AWS
     console.log("Uploading file to S3")
-    aws.uploadToS3(writer, axios, cameraOne.data._id)
+    aws.uploadToS3(writer, axios) //cameraOne.data._id)
 
   }
 }
@@ -157,7 +157,7 @@ function algorithm() {
       firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
     }
     else {
-      writeVedio(10, video_count);
+      writeVideo(10, video_count);
       video_count += 1;
       write = false;
 

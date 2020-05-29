@@ -9,6 +9,8 @@ let s3bucket = new AWS.S3({
 
 function uploadToS3(videoFile, axios, cameraId) {
 
+  console.log(videoFile)
+
   const fileContent = fs.readFileSync(videoFile)
   const params = {
     Bucket: process.env.BUCKET_NAME,
@@ -25,7 +27,7 @@ function uploadToS3(videoFile, axios, cameraId) {
     console.log(data.Location)
 
     const newClip = {
-      camera: cameraId,
+      camera: "testingcamera",//cameraId,
       recordingDate: "testing",
       clipName: data.Key
     }
