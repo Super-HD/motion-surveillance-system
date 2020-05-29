@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const busboy = require('connect-busboy')
 const busboyBodyParser = require('busboy-body-parser')
 // cors for allowing cross origin resource sharing between different localhosts
