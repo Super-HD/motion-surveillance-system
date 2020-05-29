@@ -2,17 +2,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PaginationInstance} from 'ngx-pagination';
-// import {Observable} from 'rxjs';
-
-// import { Camera } from './../_helpers/camera';
-// import { CameraService } from './../_services/camera.service';
-// import {NgbdSortableHeader, SortEvent} from '../_helpers/sortable.directive';
 import { Camera } from "../../../../back-end/models/Camera";
 import { CamerasService } from '../camerasservice/cameras.service';
 import { NgbTimeStruct } from '../_helpers/ngb-time-struct';
 import { CustomTimeStruct } from './../_helpers/custom-time-struct';
 
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-management',
@@ -62,7 +57,8 @@ export class ManagementComponent implements OnInit {
     this.onGetCameras();
     this.listFilter = '';
   }
-
+  
+  // Get all cameras' data from mongodb using camera service
   onGetCameras() {
     this.cameraService.getCameras().subscribe((data:any[])=>{
       this.camerasDB = data;
@@ -70,6 +66,7 @@ export class ManagementComponent implements OnInit {
       console.log(this.camerasDB);
     });
   }
+
   // Pagination functions
   onPageChange(number: number) {
     this.logEvent(`pageChange(${number})`);
@@ -103,67 +100,34 @@ export class ManagementComponent implements OnInit {
         camera.cameraLocation.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
+  // Pre-fill text field for updating
   onSelectUpdate(camera){
-    this.cameraClient = camera.cameraClient.clientName;
+    //this.cameraClient = camera.cameraClient.clientName;
     this.cameraLocation = camera.cameraLocation;
     this.startTime = {hour: Number(camera.startTime.hour), minute: Number(camera.startTime.minute)};
     this.endTime = {hour: Number(camera.endTime.hour), minute: Number(camera.endTime.minute)};
-    this.id = camera._id;
+    //this.id = camera._id;
   }
 
+  // Update camera info in the database
   onUpdateCamera(){
+    // Prepare the new camera obj which will be sent to database
     let obj = {
       cameraLocation: this.cameraLocation,
       startTime: this.toModel(this.startTime),
       endTime: this.toModel(this.endTime)
     };
+    // Call updateCamera function in camera service
     this.cameraService.updateCamera(this.id, obj).subscribe(result => {
       this.onGetCameras();
     });
   }
 
-  /**
-   * Converts a NgbTimeStruct value into CustomTimeStruct value
-   */
+  
+  // Converts a NgbTimeStruct value into CustomTimeStruct value in order to store time info
   toModel(time: NgbTimeStruct | null): CustomTimeStruct | null {
     return (time && Number.isInteger(time.hour) && Number.isInteger(time.minute)) ?
         {hour: ("0" + time.hour).slice(-2), minute: ("0" + time.minute).slice(-2)} :
         null;
   }
-
-
-  // /*########### Form ###########*/
-  // isSubmitted = false;
-
-  // // City Names
-  // City: any = ['Florida', 'South Dakota', 'Tennessee', 'Michigan']
-
-  // registrationForm = this.fb.group({
-  //   cityName: ['', [Validators.required]]
-  // })
-
-
-  // // Choose city using select dropdown
-  // changeCity(e) {
-  //   console.log(e.value)
-  //   this.cityName.setValue(e.target.value, {
-  //     onlySelf: true
-  //   })
-  // }
-
-  // // Getter method to access formcontrols
-  // get cityName() {
-  //   return this.registrationForm.get('cityName');
-  // }
-
-  // /*########### Template Driven Form ###########*/
-  // onSubmit() {
-  //   this.isSubmitted = true;
-  //   if (!this.registrationForm.valid) {
-  //     return false;
-  //   } else {
-  //     alert(JSON.stringify(this.registrationForm.value))
-  //   }
-
-  // }
 }

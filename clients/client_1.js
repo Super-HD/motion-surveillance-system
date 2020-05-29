@@ -1,4 +1,7 @@
 const express = require('express');
+require('dotenv').config();
+const busboy = require('connect-busboy')
+const busboyBodyParser = require('busboy-body-parser')
 // cors for allowing cross origin resource sharing between different localhosts
 const cv = require('opencv4nodejs')
 const axios = require('axios')
@@ -8,6 +11,10 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const fetch = require("node-fetch")
 const getIp = require("./network");
+const aws = require('./s3-file-upload')
+
+app.use(busboy())
+app.use(busboyBodyParser());
 
 // allow cross origin resource sharing
 app.use(cors());
@@ -54,6 +61,14 @@ async function doSetup() {
   const camToClientOne = await axios.post('http://161.35.110.201:4200/addcamera', { clientId: client.data._id, cameraId: cameraOne.data._id })
 
   console.log("Camera 1 Added to Client Camera Array ", camToClientOne.data.cameras)
+
+
+  let file = '../front-end/src/assets/video/recording.mp4'
+
+  // test uploading to AWS
+  aws.uploadToS3(file, axios, cameraOne.data._id)
+
+
 }
 
 // Change to PORT constant once deployed online
@@ -62,7 +77,6 @@ server.listen(5100, () => {
 
   // run function to setup adding cameras and clients to mongoDB
   doSetup()
-
   // this code runs and tests a client webcam and uses socket.io to send frame data to server with a fake id
   setInterval(() => {
     // vCap.read returns a mat file

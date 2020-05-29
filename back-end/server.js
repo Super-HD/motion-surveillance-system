@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const AWS = require('aws-sdk')
 // cors for allowing cross origin resource sharing between different localhosts
 const cors = require("cors")
 const app = express();
@@ -11,10 +12,12 @@ app.use(express.json());
 
 app.use('/', express.static(path.join(__dirname, '../front-end/dist/MotionSurveillanceSystem')))
 
-// Port Number for once server is deployed online - Ignore for now
-// const PORT = process.env.PORT;
 
-// THERE IS NO REGISTER - We assume that we give clients their login details personally for them to login to upload webcam stream
+let s3bucket = new AWS.S3({
+    accessKeyId: process.env.IAM_USER_KEY,
+    secretAccessKey: process.env.IAM_USER_SECRET,
+    Bucket: process.env.BUCKET_NAME
+});
 
 //const Camera = require('./models/camera');
 const client = require("./routers/client")
@@ -79,3 +82,17 @@ server.listen(4200, () => {
 app.post('/motion/:id')
 
 // server will store live stream data every 30 minutes into the file storage server (localhost at first then digitalOcean)
+
+function getClip(clipName) {
+    s3.getObject(
+        { Bucket: process.env.BUCKET_NAME, Key: clipName },
+        function (error, data) {
+            if (error != null) {
+                alert("Failed to retrieve an object: " + error);
+            } else {
+                console.log(data.body)
+                // do something with data.Body
+            }
+        }
+    );
+}

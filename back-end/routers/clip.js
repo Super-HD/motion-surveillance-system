@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 
 module.exports = {
     // A function retrieves all the documents from the Clip collection and sens them back as a response.
-    // Populate replaces ID in the 'camera' with its camera document 
+    // Populate replaces ID in the 'camera' with its camera document
     // Populate replaces ID in the 'cameraClient' with its client document
     getAll: (req, res) => Clip.find().populate({
         path: 'camera',

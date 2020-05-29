@@ -1,16 +1,10 @@
 
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-// import {Observable} from 'rxjs';
+import { Component, OnInit} from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { ClipsService} from '../clipsservice/clips.service';
 import { PaginationInstance} from 'ngx-pagination';
 
 import { MotionClip } from "../../../../back-end/models/MotionClip"
-
-// import {Clip} from '../_helpers/clip';
-// import {ClipService} from '../_services/clip.service';
-// import {NgbdSortableHeader, SortEvent} from '../_helpers/sortable.directive';
-
 
 @Component({
   selector: 'app-recording',
@@ -20,6 +14,7 @@ import { MotionClip } from "../../../../back-end/models/MotionClip"
 export class RecordingComponent implements OnInit {
 
   public clipsDB: MotionClip[] = [];
+
   // variables for pagination
   public maxSize: number = 7;
   public directionLinks: boolean = true;
@@ -51,6 +46,7 @@ export class RecordingComponent implements OnInit {
     this.listFilter = '';
   }
 
+  // Get all recording clips' data from mongodb using camera service
   onGetClips() {
     this.clipService.getClips().subscribe((data:any[])=>{
       this.clipsDB = data;
