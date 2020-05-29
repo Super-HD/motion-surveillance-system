@@ -2,8 +2,8 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 
 const BUCKET_NAME = 'terencenghan-bucket';
-const IAM_USER_KEY = 'AKIAJ4MHIRQ3R3NJPN6Q';
-const IAM_USER_SECRET = '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';
+const IAM_USER_KEY = 'AKIAJ3TN3GAGU5DQGHFA';
+const IAM_USER_SECRET = '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';
 
 let s3bucket = new AWS.S3({
   accessKeyId: IAM_USER_KEY,
@@ -25,6 +25,7 @@ function uploadToS3(videoFile, axios, cameraId) {
       console.log(err);
     }
     console.log('success')
+    console.log(data)
     console.log(data.Location)
 
     const newClip = {
