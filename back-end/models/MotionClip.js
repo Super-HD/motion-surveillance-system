@@ -22,7 +22,7 @@ const clipSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    clipLink: {
+    clipName: {
         type: String,
         required: true
     }
