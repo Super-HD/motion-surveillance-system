@@ -1,15 +1,9 @@
-const express = require('express');
+const aws = require('./s3-file-upload')
 // cors for allowing cross origin resource sharing between different localhosts
 const cv = require('opencv4nodejs')
-const aws = require('./s3-file-upload')
 
-const vCap = new cv.VideoCapture(0)
-vCap.set(3, 300);
-vCap.set(4, 300);
-vCap.get(cv.CAP_PROP_FRAME_WIDTH);
-vCap.get(cv.CAP_PROP_FRAME_HEIGHT);
 
-function writeVideo(time, count, axios, cameraId) {
+function writeVideo(time, count, axios, cameraId, vCap) {
 
   var video_name = "motion";
   video_name += count.toString();
@@ -38,11 +32,12 @@ function writeVideo(time, count, axios, cameraId) {
   let file = `./${video_name}`
   // test uploading to AWS
   console.log("Uploading file to S3")
+  console.log(file)
   aws.uploadToS3(file, axios, cameraId)
 
 }
 
-function motionAlgorithm(axios, cameraId) {
+function motionAlgorithm(axios, cameraId, vCap) {
 
   var start_time, end_time, start_time_hr, start_time_min, end_time_hr, end_time_min;
   var today = new Date();
@@ -82,8 +77,6 @@ function motionAlgorithm(axios, cameraId) {
   else {
     current_time = Number(today.getHours().toString() + today.getMinutes().toString());
   }
-
-
   console.log(start_time)
   console.log(end_time)
   console.log(current_time)
@@ -128,7 +121,7 @@ function motionAlgorithm(axios, cameraId) {
         firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
       }
       else {
-        writeVideo(10, video_count, axios, cameraId);
+        writeVideo(10, video_count, axios, cameraId, vCap);
         video_count += 1;
         write = false;
         frame = vCap.read();
@@ -161,7 +154,7 @@ function motionAlgorithm(axios, cameraId) {
           firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
         }
         else {
-          writeVideo(10, video_count, axios, cameraId);
+          writeVideo(10, video_count, axios, cameraId, vCap);
           video_count += 1;
           write = false;
           frame = vCap.read();
@@ -194,7 +187,7 @@ function motionAlgorithm(axios, cameraId) {
           firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
         }
         else {
-          writeVideo(10, video_count, axios, cameraId);
+          writeVideo(10, video_count, axios, cameraId, vCap);
           video_count += 1;
           write = false;
           frame = vCap.read();

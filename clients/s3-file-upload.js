@@ -12,7 +12,7 @@ function uploadToS3(videoFile, axios, cameraId) {
   const fileContent = fs.readFileSync(videoFile)
   const params = {
     Bucket: process.env.BUCKET_NAME,
-    Key: 'testvideo.mp4',
+    Key: videoFile.slice(2, videoFile.length),
     // 1 Week
     Expires: 604800
   }

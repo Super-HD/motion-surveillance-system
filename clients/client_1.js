@@ -64,10 +64,12 @@ async function doSetup() {
 
   console.log("Camera 1 Added to Client Camera Array ", camToClientOne.data.cameras)
 
+  // deploy motion detection algorithm which records video files
+  motionDetection.motionAlgorithm(axios, cameraOne.data._id, vCap);
+
   // let file = '../front-end/src/assets/video/recording.mp4'
   // // test uploading to AWS
   // console.log("Uploading file to S3")
-
   // aws.uploadToS3(file, axios, cameraOne.data._id)
 }
 
@@ -77,8 +79,6 @@ server.listen(5100, () => {
 
   // run function to setup adding cameras and clients to mongoDB
   doSetup()
-  // deploy motion detection algorithm which records video files
-  motionDetection.motionAlgorithm(axios, cameraOne.data._id);
 
   // this code runs and tests a client webcam and uses socket.io to send frame data to server with a fake id
   setInterval(() => {
