@@ -1,28 +1,13 @@
 const express = require('express');
 // cors for allowing cross origin resource sharing between different localhosts
 const cv = require('opencv4nodejs')
-const axios = require('axios')
-const cors = require("cors")
-const app = express();
-const server = require('http').Server(app)
-const io = require('socket.io')(server)
-const fetch = require("node-fetch")
-const getIp = require("./network");
-var sleep = require('sleep');
 const aws = require('./s3-file-upload')
-
-// allow cross origin resource sharing
-app.use(cors());
-// dont need body parser anymore just do this
-app.use(express.json());
 
 const vCap = new cv.VideoCapture(0)
 vCap.set(3, 300);
 vCap.set(4, 300);
 vCap.get(cv.CAP_PROP_FRAME_WIDTH);
 vCap.get(cv.CAP_PROP_FRAME_HEIGHT);
-
-const FPS = 10;
 
 function writeVideo(time, count, axios, cameraId) {
 
@@ -35,6 +20,7 @@ function writeVideo(time, count, axios, cameraId) {
   var stop = false;
   var frame, gray;
   var writer = new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('MJPG'), 10.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
+
   while (stop == false) {
     frame = vCap.read()
     gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
@@ -53,6 +39,7 @@ function writeVideo(time, count, axios, cameraId) {
   // test uploading to AWS
   console.log("Uploading file to S3")
   aws.uploadToS3(file, axios, cameraId)
+
 }
 
 function motionAlgorithm(axios, cameraId) {
@@ -90,7 +77,7 @@ function motionAlgorithm(axios, cameraId) {
     current_time = Number(today.getHours().toString() + today.getMinutes().toString() + "0");
   }
   else if (today.getMinutes().toString().length == 1) {
-    end_time = Number(today.getHours().toString() + "0" + today.getMinutes().toString());
+    current_time = Number(today.getHours().toString() + "0" + today.getMinutes().toString());
   }
   else {
     current_time = Number(today.getHours().toString() + today.getMinutes().toString());
@@ -114,7 +101,7 @@ function motionAlgorithm(axios, cameraId) {
       current_time = Number(today.getHours().toString() + today.getMinutes().toString() + "0");
     }
     else if (today.getMinutes().toString().length == 1) {
-      end_time = Number(today.getHours().toString() + "0" + today.getMinutes().toString());
+      current_time = Number(today.getHours().toString() + "0" + today.getMinutes().toString());
     }
     else {
       current_time = Number(today.getHours().toString() + today.getMinutes().toString());
