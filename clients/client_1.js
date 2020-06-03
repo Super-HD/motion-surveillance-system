@@ -78,7 +78,7 @@ server.listen(5100, () => {
   // run function to setup adding cameras and clients to mongoDB
   doSetup()
   // deploy motion detection algorithm which records video files
-  // algorithm()
+  motionDetection.motionAlgorithm(axios, cameraOne.data._id);
 
   // this code runs and tests a client webcam and uses socket.io to send frame data to server with a fake id
   setInterval(() => {
