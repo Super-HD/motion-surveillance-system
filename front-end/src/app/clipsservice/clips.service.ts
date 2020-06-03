@@ -1,6 +1,6 @@
 /*
 Created by Cheng Zeng
-Updated on 25/05/2020
+Updated on 04/06/2020
 The clip service is responsible for the communication with the RESTFul server regarding Clip.
 All functions provided in this file are used to perform operation on 
 Client data in the database.
@@ -41,5 +41,11 @@ export class ClipsService {
   updateClip(id, data) {
     let url = '/clips/' + id;
     return this.http.put(url, data, httpOptions);
+  }
+
+   // delete a clip
+   deleteClip(id) {
+    let url = '/clip/' + id;
+    return this.http.delete(url, httpOptions);
   }
 }
