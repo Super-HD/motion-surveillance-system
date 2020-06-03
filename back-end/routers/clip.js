@@ -27,7 +27,10 @@ module.exports = {
         let newClipDetails = req.body;
         newClipDetails._id = new mongoose.Types.ObjectId();
         Clip.create(newClipDetails, (err, clip) => {
-            if (err) return res.status(400).json(err);
+            if (err) {
+                console.log("error detected" + err)
+                return res.status(400).json(err);
+            }
             res.json(clip);
         });
     },
