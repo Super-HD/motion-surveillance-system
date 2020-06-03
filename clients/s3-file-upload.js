@@ -18,6 +18,9 @@ function uploadToS3(videoFile, axios, cameraId) {
   }
   // upload video file to S3 first
   s3bucket.upload({ ...params, Body: fileContent }, (err, data) => {
+    // Get current date 
+    // var today = new Date();
+    // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate() + " " + today.getHours() + ":" + today.getMinutes()+":"+today.getSeconds();
     if (err) {
       console.log('error in callback');
       console.log(err);
@@ -29,7 +32,7 @@ function uploadToS3(videoFile, axios, cameraId) {
         console.log(err);
       }
       console.log('successfully generated download URL.')
-
+  
       const newClip = {
         camera: cameraId,
         recordingDate: "testing",
