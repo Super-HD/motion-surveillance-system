@@ -1,7 +1,7 @@
 /*
 Created by Cheng Zeng
 Modified by Terence
-Updated on 25/05/2020
+Updated on 04/06/2020
 In this file, operations of the Camera collection are implemented.
 */
 
@@ -44,9 +44,16 @@ const updateOne = (req, res) => Camera.findOneAndUpdate({ _id: req.params.id }, 
     res.json(camera);
 })
 
+// A function delete a Camera document by an ID
+const deleteOne = (req, res) => Camera.findOneAndRemove({_id: req.params.id}, (err) => {
+    if (err) res.status(400).json(err);
+    res.json();
+})
+
 module.exports = {
     getAll,
     createOne,
     getOne,
-    updateOne
+    updateOne,
+    deleteOne
 };
