@@ -27,9 +27,7 @@ async function doSetup() {
     cameras: []
   }
 
-  const ip = await fetch('https://api.ipify.org/?format=json')
-    .then(result => result.json())
-    .then(data => data.ip)
+  const ip = getIp.getPrivateIPs()[0]
 
   const testCameraOne = {
     cameraLocation: "Building B",
