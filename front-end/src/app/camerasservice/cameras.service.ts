@@ -1,6 +1,6 @@
 /*
 Created by Cheng Zeng
-Updated on 25/05/2020
+Updated on 04/06/2020
 The camera service is responsible for the communication with the RESTFul server regarding Camera.
 All functions provided in this file are used to perform operation on 
 Camera data in the database.
@@ -42,5 +42,11 @@ export class CamerasService {
   updateCamera(id, data) {
     let url = '/camera/' + id;
     return this.http.put(url, data, httpOptions);
+  }
+
+  // delete a camera
+  deleteCamera(id) {
+    let url = '/camera/' + id;
+    return this.http.delete(url, httpOptions);
   }
 }
