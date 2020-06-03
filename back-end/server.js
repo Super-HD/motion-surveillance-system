@@ -61,12 +61,14 @@ app.get('/cameras', camera.getAll);
 app.post('/camera', camera.createOne);
 app.get('/camera/:id', camera.getOne);
 app.put('/camera/:id', camera.updateOne);
+app.delete('/camera/:id', camera.deleteOne);
 
 // Clip RESTFul endpoints
 app.get('/clips', clip.getAll);
 app.post('/clip', clip.createOne);
 app.get('/clip/:id', clip.getOne);
 app.put('/clip/:id', clip.updateOne);
+app.delete('/clip/:id', clip.deleteOne);
 
 // Change to PORT constant once deployed online
 server.listen(4200, () => {
