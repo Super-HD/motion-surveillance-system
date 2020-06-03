@@ -15,6 +15,12 @@ export class RecordingComponent implements OnInit {
 
   public clipsDB: MotionClip[] = [];
 
+  // Confirmation popover setting
+  popoverTitle: string = "Clip Delete Confirmation";
+  popoverMessage: string = "Do you want to delete?";
+  confirmClicked: boolean = false;
+  cancelClicked: boolean = false;
+
   // variables for pagination
   public maxSize: number = 7;
   public directionLinks: boolean = true;
@@ -53,6 +59,13 @@ export class RecordingComponent implements OnInit {
       this.filteredClips = this.clipsDB
       console.log(this.clipsDB);
     });
+  }
+
+  // Delete clips from database
+  onDeleteClip(clipID) {
+    this.clipService.deleteClip(clipID).subscribe(result => {
+      this.onGetClips();
+    })
   }
 
   // Pagination functions
