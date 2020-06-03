@@ -87,7 +87,7 @@ function algorithm(){
     current_time = Number(today.getHours().toString() + today.getMinutes().toString() + "0");
   }
   else if(today.getMinutes().toString().length == 1){
-    end_time = Number(today.getHours().toString() +"0" +today.getMinutes().toString());
+    current_time = Number(today.getHours().toString() +"0" +today.getMinutes().toString());
   }
   else{
     current_time = Number(today.getHours().toString() + today.getMinutes().toString());
@@ -111,7 +111,7 @@ function algorithm(){
       current_time = Number(today.getHours().toString() + today.getMinutes().toString() + "0");
     }
     else if(today.getMinutes().toString().length == 1){
-      end_time = Number(today.getHours().toString() +"0" +today.getMinutes().toString());
+      current_time = Number(today.getHours().toString() +"0" +today.getMinutes().toString());
     }
     else{
       current_time = Number(today.getHours().toString() + today.getMinutes().toString());
