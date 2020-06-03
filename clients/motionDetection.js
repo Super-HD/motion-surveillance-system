@@ -1,4 +1,5 @@
 const cv = require('opencv4nodejs')
+const aws = require('./s3-file-upload')
 const vCap = new cv.VideoCapture(0)
 vCap.set(3, 300);
 vCap.set(4, 300);
@@ -7,7 +8,7 @@ vCap.get(cv.CAP_PROP_FRAME_HEIGHT);
 
 const FPS = 10;
 
-function writeVideo(time, count) {
+function writeVideo(time, count, axios, cameraId) {
 
   var video_name = "motion";
   video_name += count.toString();
@@ -18,24 +19,28 @@ function writeVideo(time, count) {
   var stop = false;
   var frame, gray;
   var writer = new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('MJPG'), 24.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
-  {
-    while (stop == false) {
-      frame = vCap.read()
-      gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
-      gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
-      //console.log(vCap.CAP_PROP_FRAME_HEIGHT)
-      writer.write(frame);
-      end_time = new Date();
-      if ((end_time - start_time) > time * 1000) {
-
-        stop = true;
-      }
+  while (stop == false) {
+    frame = vCap.read()
+    gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
+    gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
+    //console.log(vCap.CAP_PROP_FRAME_HEIGHT)
+    writer.write(frame);
+    end_time = new Date();
+    if ((end_time - start_time) > time * 1000) {
+      stop = true;
     }
-
   }
+
+  // writer file is done here
+  // call upload to s3 here using video file, axios + cameraId
+  let file = `./${video_name}`
+  // test uploading to AWS
+  console.log("Uploading file to S3")
+  aws.uploadToS3(file, axios, cameraId)
+
 }
 
-function motionAlgorithm() {
+function motionAlgorithm(axios, cameraId) {
   var firstFrame, frameDelta, gray, thresh;
 
   var write = false;
@@ -74,7 +79,7 @@ function motionAlgorithm() {
       firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
     }
     else {
-      writeVideo(10, video_count);
+      writeVideo(10, video_count, axios, cameraId);
       video_count += 1;
       write = false;
 
