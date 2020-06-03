@@ -1,6 +1,6 @@
 /*
 Created by Cheng Zeng
-Updated on 25/05/2020
+Updated on 04/06/2020
 In this file, operations of the Clip collection are implemented.
 */
 
@@ -47,5 +47,11 @@ module.exports = {
         if (err) res.status(400).json(err);
         if (!clip) return res.status(400).json();
         res.json(clip);
+    }),
+
+    // A function delete a Camera document by an ID
+    deleteOne: (req, res) => Clip.findOneAndRemove({_id: req.params.id}, (err) => {
+        if (err) res.status(400).json(err);
+        res.json();
     })
 };
