@@ -13,6 +13,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatVideoModule } from 'mat-video';
 // import ngx-pagination
 import { NgxPaginationModule} from 'ngx-pagination'
+// import confirmation popover
+import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,7 +41,10 @@ import { ManagementComponent } from './management/management.component';
     BrowserAnimationsModule,
     MatVideoModule,
     HttpClientModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ConfirmationPopoverModule.forRoot({
+      confirmButtonType: 'danger', // set defaults here
+    })
   ],
   providers: [DecimalPipe],
   bootstrap: [AppComponent]
