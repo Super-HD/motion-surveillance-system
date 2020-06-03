@@ -106,7 +106,7 @@ export class ManagementComponent implements OnInit {
     this.cameraLocation = camera.cameraLocation;
     this.startTime = {hour: Number(camera.startTime.hour), minute: Number(camera.startTime.minute)};
     this.endTime = {hour: Number(camera.endTime.hour), minute: Number(camera.endTime.minute)};
-    //this.id = camera._id;
+    this.id = camera._id;
   }
 
   // Update camera info in the database
