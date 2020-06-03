@@ -34,9 +34,9 @@ async function doSetup() {
     cameras: []
   }
 
-  const ip = await fetch('https://api.ipify.org/?format=json')
-    .then(result => result.json())
-    .then(data => data.ip)
+  const ip = getIp.getPrivateIPs()[0]
+
+  console.log(ip);
 
   const testCameraOne = {
     cameraLocation: "Building A",
@@ -64,11 +64,11 @@ async function doSetup() {
 
   console.log("Camera 1 Added to Client Camera Array ", camToClientOne.data.cameras)
 
-  let file = '../front-end/src/assets/video/recording.mp4'
-  // test uploading to AWS
-  console.log("Uploading file to S3")
+  // let file = '../front-end/src/assets/video/recording.mp4'
+  // // test uploading to AWS
+  // console.log("Uploading file to S3")
 
-  aws.uploadToS3(file, axios, cameraOne.data._id)
+  // aws.uploadToS3(file, axios, cameraOne.data._id)
 }
 
 // Change to PORT constant once deployed online
