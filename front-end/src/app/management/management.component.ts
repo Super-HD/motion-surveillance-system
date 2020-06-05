@@ -129,14 +129,6 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  // Delete camera from database
-  onDeleteCamera(cameraID) {
-    this.cameraService.deleteCamera(cameraID).subscribe(result => {
-      this.onGetCameras();
-    })
-  }
-
-
   // Converts a NgbTimeStruct value into CustomTimeStruct value in order to store time info
   toModel(time: NgbTimeStruct | null): CustomTimeStruct | null {
     return (time && Number.isInteger(time.hour) && Number.isInteger(time.minute)) ?
