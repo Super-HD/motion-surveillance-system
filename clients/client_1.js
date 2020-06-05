@@ -23,6 +23,10 @@ app.use(cors());
 // dont need body parser anymore just do this
 app.use(express.json());
 
+// get camera location from input arguments
+var myArgs = process.argv.slice(2);
+cameraLocation = myArgs[0];
+
 const vCap = new cv.VideoCapture(0)
 vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
 vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
@@ -30,7 +34,7 @@ const FPS = 10;
 
 async function doSetup() {
   const testClient = {
-    clientName: "Melbourne University",
+    clientName: "Monash University",
     cameras: []
   }
 
@@ -39,7 +43,7 @@ async function doSetup() {
   console.log(ip);
 
   const testCameraOne = {
-    cameraLocation: "Building A",
+    cameraLocation: cameraLocation,
     cameraURL: `http://${ip}:5100`,
     // cameraClient: clientRes.data._id,
     startTime: {
