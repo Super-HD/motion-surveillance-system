@@ -25,7 +25,12 @@ app.use(express.json());
 
 // get camera location from input arguments
 var myArgs = process.argv.slice(2);
-cameraLocation = myArgs[0];
+if (myArgs.length == 0) {
+  cameraLocation = "None"
+} else {
+  cameraLocation = myArgs[0];
+}
+
 
 const vCap = new cv.VideoCapture(0)
 vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
