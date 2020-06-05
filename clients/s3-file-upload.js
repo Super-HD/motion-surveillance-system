@@ -9,9 +9,6 @@ let s3bucket = new AWS.S3({
 // fix s3 url to never expire
 function uploadToS3(videoFile, axios, cameraId) {
   const fileContent = fs.readFileSync(videoFile)
-  console.log(process.env.IAM_USER_KEY)
-  console.log(process.env.IAM_USER_SECRET)
-  console.log(process.env.BUCKET_NAME)
   const params = {
     Bucket: process.env.BUCKET_NAME,
     Key: videoFile.slice(2, videoFile.length),
