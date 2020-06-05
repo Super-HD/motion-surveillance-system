@@ -23,12 +23,6 @@ export class ManagementComponent implements OnInit {
 
   startTime = {hour: 0, minute: 0};
   endTime = {hour: 0, minute: 0};
-  
-  // Confirmation popover setting
-  popoverTitle: string = "Camera Delete Confirmation";
-  popoverMessage: string = "Do you want to delete?";
-  confirmClicked: boolean = false;
-  cancelClicked: boolean = false;
 
   public camerasDB: Camera[] = [];
   // variables for pagination
