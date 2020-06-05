@@ -43,7 +43,11 @@
           <!--Modal-->
           <td><ngx-smart-modal identifier={{clip.cameraID+clip.recordingDate}}>
               <h1>RecordingDate: {{clip.recordingDate}}</h1>
-              <mat-video src="{{clip.clipLink}}"></mat-video><P>{{clip.clipLink}}</P>
+              <!-- <mat-video src="{{clip.clipLink}}"></mat-video><P>{{clip.clipLink}}</P> -->
+              <mat-video>
+                <source matVideoSource src="{{clip.clipLink}}" type="video/avi">
+              </mat-video>
+              <P>{{clip.clipLink}}</P>
               <!-- <button (click)="myModal.close()">Close</button> -->
             </ngx-smart-modal>
           <button type="button" class="btn btn-primary" (click)="ngxSmartModalService.getModal(clip.cameraID+clip.recordingDate).open()">Watch</button></td>
