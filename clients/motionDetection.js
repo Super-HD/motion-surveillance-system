@@ -1,7 +1,6 @@
 const aws = require('./s3-file-upload')
 // cors for allowing cross origin resource sharing between different localhosts
 const cv = require('opencv4nodejs')
-// const axios = require('axios')
 
 
 function writeVideo(time, count, axios, cameraId, vCap) {
@@ -58,7 +57,7 @@ function motionAlgorithm(axios, cameraId, vCap) {
   // start_time_min = 29
   // end_time_hr = 12
   // end_time_min = 0
-  
+
   // if (start_time_min == 0) {
   //   start_time = Number(start_time_hr.toString() + start_time_min.toString() + "0");
   // }
