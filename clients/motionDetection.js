@@ -5,16 +5,14 @@ function writeVideo(time, count, axios, cameraId, vCap) {
 
   var video_name = cameraId;
   var today = new Date();
-  //var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + "-" + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
-  video_name = video_name + date + ".avi";
-  // video_name = `${cameraId}.avi`
+  var date = today.getFullYear()+(today.getMonth()+1)+today.getDate() +today.getHours() + today.getMinutes()+today.getSeconds();
+  video_name = video_name + date +".mp4";
 
   var start_time = new Date();
   var end_time;
   var stop = false;
   var frame, gray;
-  var writer = new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('MJPG'), 24.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
+  var writer = new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('MP4V'), 24.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
 
   while (stop == false) {
     frame = vCap.read()
@@ -50,36 +48,38 @@ function motionAlgorithm(axios, cameraId, vCap) {
   var current_time = Number(today.getHours().toString() + today.getMinutes().toString());
   var firstFrame, frameDelta, gray, thresh;
   var start_time, end_time;
-
+  start_time;
+  end_time;
+    
   var write = false;
   var video_count = 0;
   var video_len = 5;
-  let frame = vCap.read();
+  frame = vCap.read();
   firstFrame = frame;
   //convert to grayscale
   firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
   firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
-  let url = 'http://161.35.110.201:4200/camera/' + cameraId;
+  url = 'http://161.35.110.201:4200/camera/' + cameraId;
 
   interval = setInterval(function () {
 
     axios.get(url)
-      .then(function (response) {
-        // handle success
-        // console.log(response.data)
-        // console.log(response.startTime)
-        // console.log(response.endTime)
-        start_time = generateTime(response.data.startTime)
-        end_time = generateTime(response.data.endTime)
-      })
-      .catch(function (error) {
-        // handle error
-        //console.log(error);
-      })
-      .finally(function () {
-        // console.log(start_time)
-        // console.log(end_time)
-      });
+    .then(function (response) {
+      // handle success
+      // console.log(response.data)
+      // console.log(response.startTime)
+      // console.log(response.endTime)
+      start_time = generateTime(response.data.startTime)
+      end_time = generateTime(response.data.endTime)
+    })
+    .catch(function (error) {
+      // handle error
+      //console.log(error);
+    })
+    .finally(function () {
+      // console.log(start_time)
+      // console.log(end_time)
+    });
 
     if (today.getMinutes() == 0) {
       current_time = Number(today.getHours().toString() + today.getMinutes().toString() + "0");
@@ -146,9 +146,6 @@ function motionAlgorithm(axios, cameraId, vCap) {
             write = true;
             console.log("motion detected");
           }
-          // frame = vCap.read();
-          // const image = cv.imencode('.jpg', frame).toString('base64')
-          // io.emit('buildingAFrame', image)
           firstFrame = frame;
           //convert to grayscale
           firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
@@ -159,8 +156,6 @@ function motionAlgorithm(axios, cameraId, vCap) {
           video_count += 1;
           write = false;
           frame = vCap.read();
-          // const image = cv.imencode('.jpg', frame).toString('base64')
-          // io.emit('buildingAFrame', image)
           firstFrame = frame;
           //convert to grayscale
           firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
@@ -171,8 +166,6 @@ function motionAlgorithm(axios, cameraId, vCap) {
       if ((current_time > start_time) || (current_time < end_time)) {
         if (write == false) {
           frame = vCap.read();
-          // const image = cv.imencode('.jpg', frame).toString('base64')
-          // io.emit('buildingAFrame', image)
           gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
           gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
           //compute difference between first frame and current frame
@@ -185,9 +178,6 @@ function motionAlgorithm(axios, cameraId, vCap) {
             write = true;
             console.log("motion detected");
           }
-          // frame = vCap.read();
-          // const image = cv.imencode('.jpg', frame).toString('base64')
-          // io.emit('buildingAFrame', image)
           firstFrame = frame;
           //convert to grayscale
           firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
