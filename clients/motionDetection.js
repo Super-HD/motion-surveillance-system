@@ -5,8 +5,8 @@ function writeVideo(time, count, axios, cameraId, vCap) {
 
   var video_name = cameraId;
   var today = new Date();
-  var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + " " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  video_name = video_name + "-" + date + ".avi";
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate() + " " + today.getHours() + ":" + today.getMinutes()+":" + today.getSeconds();
+  video_name = video_name + "-" + date +".avi";
 
   var start_time = new Date();
   var end_time;
@@ -50,7 +50,7 @@ function motionAlgorithm(axios, cameraId, vCap) {
   var start_time, end_time;
   start_time;
   end_time;
-
+    
   var write = false;
   var video_count = 0;
   var video_len = 5;
@@ -64,22 +64,22 @@ function motionAlgorithm(axios, cameraId, vCap) {
   interval = setInterval(function () {
 
     axios.get(url)
-      .then(function (response) {
-        // handle success
-        // console.log(response.data)
-        // console.log(response.startTime)
-        // console.log(response.endTime)
-        start_time = generateTime(response.data.startTime)
-        end_time = generateTime(response.data.endTime)
-      })
-      .catch(function (error) {
-        // handle error
-        //console.log(error);
-      })
-      .finally(function () {
-        // console.log(start_time)
-        // console.log(end_time)
-      });
+    .then(function (response) {
+      // handle success
+      // console.log(response.data)
+      // console.log(response.startTime)
+      // console.log(response.endTime)
+      start_time = generateTime(response.data.startTime)
+      end_time = generateTime(response.data.endTime)
+    })
+    .catch(function (error) {
+      // handle error
+      //console.log(error);
+    })
+    .finally(function () {
+      // console.log(start_time)
+      // console.log(end_time)
+    });
 
     if (today.getMinutes() == 0) {
       current_time = Number(today.getHours().toString() + today.getMinutes().toString() + "0");

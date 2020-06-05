@@ -7,9 +7,17 @@ let s3bucket = new AWS.S3({
   Bucket: process.env.BUCKET_NAME
 });
 
+console.log(process.env.IAM_USER_KEY)
+console.log(process.env.IAM_USER_SECRET)
+console.log(process.env.BUCKET_NAME)
 
+
+// fix s3 url to never expire
 function uploadToS3(videoFile, axios, cameraId) {
   const fileContent = fs.readFileSync(videoFile)
+  console.log(process.env.IAM_USER_KEY)
+  console.log(process.env.IAM_USER_SECRET)
+  console.log(process.env.BUCKET_NAME)
   const params = {
     Bucket: process.env.BUCKET_NAME,
     Key: videoFile.slice(2, videoFile.length),
@@ -18,7 +26,7 @@ function uploadToS3(videoFile, axios, cameraId) {
   }
   // upload video file to S3 first
   s3bucket.upload({ ...params, Body: fileContent }, (err, data) => {
-    // Get current date
+    // Get current date 
     // var today = new Date();
     // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate() + " " + today.getHours() + ":" + today.getMinutes()+":"+today.getSeconds();
     if (err) {
@@ -32,10 +40,11 @@ function uploadToS3(videoFile, axios, cameraId) {
         console.log(err);
       }
       console.log('successfully generated download URL.')
-
+      var today = new Date();
+      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate() + " " + today.getHours() + ":" + today.getMinutes()+":" + today.getSeconds();
       const newClip = {
         camera: cameraId,
-        recordingDate: "testing",
+        recordingDate: date,
         clipLink: url
       }
       // POST Request to DigitalOcean Server to store in MongoDB
