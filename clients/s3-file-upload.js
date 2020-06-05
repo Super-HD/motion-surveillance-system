@@ -31,6 +31,10 @@ function uploadToS3(videoFile, axios, cameraId) {
         console.log(err);
       }
       console.log('successfully generated download URL.')
+
+      // delete local file at client side
+      fs.unlinkSync(videoFile.slice(2, videoFile.length))
+
       var today = new Date();
       var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + " " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       const newClip = {
