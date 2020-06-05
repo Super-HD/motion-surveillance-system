@@ -5,14 +5,16 @@ function writeVideo(time, count, axios, cameraId, vCap) {
 
   var video_name = cameraId;
   var today = new Date();
-  var date = today.getFullYear()+(today.getMonth()+1)+today.getDate() +today.getHours() + today.getMinutes()+today.getSeconds();
-  video_name = video_name + date +".mp4";
-
+  var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
+  video_name = video_name + date + ".avi";
+  // video_name = video_name + date + ".mp4";
   var start_time = new Date();
   var end_time;
   var stop = false;
   var frame, gray;
-  var writer = new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('MP4V'), 24.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
+  // var writer = new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('mp4v'), 24.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
+
+  var writer = new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('MJPG'), 24.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
 
   while (stop == false) {
     frame = vCap.read()
@@ -25,15 +27,13 @@ function writeVideo(time, count, axios, cameraId, vCap) {
       stop = true;
     }
   }
-
   // writer file is done here
   // call upload to s3 here using video file, axios + cameraId
   let file = `./${video_name}`
   // test uploading to AWS
-  console.log("Uploading file to S3")
+  console.log(`Uploading ${file} to S3`)
   console.log(file)
   aws.uploadToS3(file, axios, cameraId)
-
 }
 
 function generateTime(timeObj) {
@@ -50,7 +50,7 @@ function motionAlgorithm(axios, cameraId, vCap) {
   var start_time, end_time;
   start_time;
   end_time;
-    
+
   var write = false;
   var video_count = 0;
   var video_len = 5;
@@ -64,22 +64,22 @@ function motionAlgorithm(axios, cameraId, vCap) {
   interval = setInterval(function () {
 
     axios.get(url)
-    .then(function (response) {
-      // handle success
-      // console.log(response.data)
-      // console.log(response.startTime)
-      // console.log(response.endTime)
-      start_time = generateTime(response.data.startTime)
-      end_time = generateTime(response.data.endTime)
-    })
-    .catch(function (error) {
-      // handle error
-      //console.log(error);
-    })
-    .finally(function () {
-      // console.log(start_time)
-      // console.log(end_time)
-    });
+      .then(function (response) {
+        // handle success
+        // console.log(response.data)
+        // console.log(response.startTime)
+        // console.log(response.endTime)
+        start_time = generateTime(response.data.startTime)
+        end_time = generateTime(response.data.endTime)
+      })
+      .catch(function (error) {
+        // handle error
+        //console.log(error);
+      })
+      .finally(function () {
+        // console.log(start_time)
+        // console.log(end_time)
+      });
 
     if (today.getMinutes() == 0) {
       current_time = Number(today.getHours().toString() + today.getMinutes().toString() + "0");
