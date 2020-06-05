@@ -30,7 +30,6 @@
         <th scope="col">Camera Client</th>
         <th scope="col">Detection Active Time</th>
         <th scope="col">Edit</th>
-        <th scope="col">Delete</th>
       </tr>
       </thead>
     <tbody>
@@ -43,15 +42,6 @@
       <!--Modal-->
       <td>
       <button type="button" class="btn btn-primary" (click)="onSelectUpdate(camera)">Edit</button>
-      </td>
-      <td>
-        <button class="btn btn-danger"
-        mwlConfirmationPopover
-        [popoverTitle]="popoverTitle"
-        [popoverMessage]="popoverMessage"
-        placement="top"
-        (confirm)="onDeleteCamera(camera._id)"
-        (cancel)="cancelClicked=true">Delete</button>
       </td>
     </tr>
     </tbody>

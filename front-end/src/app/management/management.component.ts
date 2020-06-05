@@ -24,12 +24,6 @@ export class ManagementComponent implements OnInit {
   startTime = {hour: 0, minute: 0};
   endTime = {hour: 0, minute: 0};
   
-  // Confirmation popover setting
-  popoverTitle: string = "Camera Delete Confirmation";
-  popoverMessage: string = "Do you want to delete?";
-  confirmClicked: boolean = false;
-  cancelClicked: boolean = false;
-
   public camerasDB: Camera[] = [];
   // variables for pagination
   public maxSize: number = 7;
@@ -128,14 +122,6 @@ export class ManagementComponent implements OnInit {
       this.onGetCameras();
     });
   }
-
-  // Delete camera from database
-  onDeleteCamera(cameraID) {
-    this.cameraService.deleteCamera(cameraID).subscribe(result => {
-      this.onGetCameras();
-    })
-  }
-
 
   // Converts a NgbTimeStruct value into CustomTimeStruct value in order to store time info
   toModel(time: NgbTimeStruct | null): CustomTimeStruct | null {
