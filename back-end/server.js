@@ -61,7 +61,6 @@ app.get('/cameras', camera.getAll);
 app.post('/camera', camera.createOne);
 app.get('/camera/:id', camera.getOne);
 app.put('/camera/:id', camera.updateOne);
-app.delete('/camera/:id', camera.deleteOne);
 
 // Clip RESTFul endpoints
 app.get('/clips', clip.getAll);
