@@ -1,9 +1,5 @@
 const aws = require('./s3-file-upload')
 const cv = require('opencv4nodejs')
-<<<<<<< HEAD
-
-=======
->>>>>>> 80b971a68d33012ee730fdaa60d61997fa022f94
 
 function writeVideo(time, count, axios, cameraId, vCap) {
 
@@ -29,6 +25,7 @@ function writeVideo(time, count, axios, cameraId, vCap) {
       stop = true;
     }
   }
+
   // writer file is done here
   // call upload to s3 here using video file, axios + cameraId
   let file = `./${video_name}`
