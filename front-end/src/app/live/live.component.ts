@@ -10,8 +10,9 @@ import { Camera } from "../../../../back-end/models/Camera";
   styleUrls: ['./live.component.css']
 })
 export class LiveComponent implements OnInit {
-  camerasDB: Camera[] = [];
-  camerasObj = []
+
+  camerasDB: Camera[] = [];  // An array stores obtained cameras from database
+  camerasObj = []  // An array of length 3, it is used to store three camera object that will be diplayed in a row
   cameraObj = {
     URL: "",
     Client: "",
@@ -23,6 +24,7 @@ export class LiveComponent implements OnInit {
   ngOnInit() {
     this.onGetStreams();
   }
+
   // To-do: hide cameras not running
   onGetStreams() {
     this.cameraService.getCameras().subscribe((data: any[]) => {

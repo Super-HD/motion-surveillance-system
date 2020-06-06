@@ -13,7 +13,7 @@ import { MotionClip } from "../../../../back-end/models/MotionClip"
 })
 export class RecordingComponent implements OnInit {
 
-  public clipsDB: MotionClip[] = [];
+  public clipsDB: MotionClip[] = [];  // An array stores obtained clips from database
 
   // Confirmation popover setting
   popoverTitle: string = "Clip Delete Confirmation";

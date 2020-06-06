@@ -17,14 +17,14 @@ import { FormBuilder} from "@angular/forms";
 
 export class ManagementComponent implements OnInit {
 
-  id: any;
-  cameraClient: any;
-  cameraLocation: string;
+  id: any;  // A variable that stores camera's id temporarily
+  cameraClient: any;  // A variable that stores camera's client temporarily
+  cameraLocation: string; // A variable that stores camera's location temporarily
+  startTime = {hour: 0, minute: 0};  // An object that sotres camera motion active start time temporarily
+  endTime = {hour: 0, minute: 0};  // An object that stores camera motion active end time temporarily
 
-  startTime = {hour: 0, minute: 0};
-  endTime = {hour: 0, minute: 0};
+  public camerasDB: Camera[] = [];  // An array stores obtained cameras from database
 
-  public camerasDB: Camera[] = [];
   // variables for pagination
   public maxSize: number = 7;
   public directionLinks: boolean = true;
