@@ -75,11 +75,6 @@ async function doSetup() {
 
   // deploy motion detection algorithm which records video files
   motionDetection.motionAlgorithm(axios, cameraOne.data._id, vCap);
-
-  // let file = '../front-end/src/assets/video/recording.mp4'
-  // // test uploading to AWS
-  // console.log("Uploading file to S3")
-  // aws.uploadToS3(file, axios, cameraOne.data._id)
 }
 
 // Change to PORT constant once deployed online
@@ -89,11 +84,11 @@ server.listen(5100, () => {
   // run function to setup adding cameras and clients to mongoDB
   doSetup()
 
-  // this code runs and tests a client webcam and uses socket.io to send frame data to server with a fake id
+  // define the interval to continuously send frame data to server
   setInterval(() => {
     // vCap.read returns a mat file
-    // instead of IO maybe we need to start using POST request to send frames to server.
     const frame = vCap.read();
+    console.log(frame)
     const image = cv.imencode('.jpg', frame).toString('base64')
     io.emit('buildingAFrame', image)
   }, 1000 / FPS)
