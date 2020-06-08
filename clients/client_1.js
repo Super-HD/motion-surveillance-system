@@ -13,6 +13,7 @@ const fetch = require("node-fetch")
 const getIp = require("./network");
 const aws = require('./s3-file-upload')
 const motionDetection = require('./motionDetection');
+const internalIp = require('internal-ip');
 
 
 app.use(busboy())
@@ -43,9 +44,11 @@ async function doSetup() {
     cameras: []
   }
 
-  const ip = getIp.getPrivateIPs()[0]
+  // const ip = getIp.getPrivateIPs()[0]
 
-  console.log(ip);
+  // console.log(ip);
+
+  const ip = internalIp.v4.sync()
 
   const testCameraOne = {
     cameraLocation: cameraLocation,
