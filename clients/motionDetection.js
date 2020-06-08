@@ -1,10 +1,18 @@
 const aws = require('./s3-file-upload')
 const cv = require('opencv4nodejs')
 
+
+//function header comment: This function is to write a fixed-length video and upload onto the server
+//parameter1: time - the length of the video, it is an interger
+//parameter2: count - The count of all the videos
+//parameter3: axios - to upload the file onto server
+//parameter4: cameraId - The ID of the camera 
+//parameter5: vCap - the camera that we get frames from
 function writeVideo(time, count, axios, cameraId, vCap) {
 
   //video_name will be a genarated string to make sure there are no files with same names.
   var video_name = cameraId;
+  count += 1
   var today = new Date();
   var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
   video_name = video_name + date + ".avi";
@@ -43,11 +51,18 @@ function writeVideo(time, count, axios, cameraId, vCap) {
   aws.uploadToS3(file, axios, cameraId)
 }
 
+
+//function header comment: To tranfer the time from string into integer
+//parameter 1: timeObj: The time object including 2 strings: hour and minute
 function generateTime(timeObj) {
   time = timeObj.hour + timeObj.minute
   return Number(time)
 }
 
+////function header comment: The algorithm todetect motion and call the function above to write videos
+//parameter 1: axios - To achieve functions of uploading video onto server
+//parameter 2: cameraId - The ID number of the  camera
+//parameter 3: vCap - The camera that we get frames from
 function motionAlgorithm(axios, cameraId, vCap) {
 
   // var start_time, end_time, start_time_hr, start_time_min, end_time_hr, end_time_min;
