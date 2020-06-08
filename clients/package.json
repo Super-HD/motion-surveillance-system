@@ -18,6 +18,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "http": "0.0.1-security",
+    "internal-ip": "^6.0.0",
     "node-fetch": "^2.6.0",
     "opencv4nodejs": "^5.6.0",
     "request": "^2.88.2",
