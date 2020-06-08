@@ -63,15 +63,20 @@ const createOne = (req, res) => {
 }
 
 // A function finds one Client document by an ID
-const getOne = (req, res) => {
-  Client.findOne({ _id: req.params.id })
-    .populate('cameras')
-    .exec((err, client) => {
-      if (err) { return res.json(err) }
-      if (!actor) { return res.json() }
-      res.json(client)
-    })
-}
+// const getOne = (req, res) => {
+//   Client.findOne({ _id: req.params.id })
+//     .populate('cameras')
+//     .exec((err, clients) => {
+//       if (err) { return res.json(err) }
+//       if (!clients) { return res.json() }
+//       res.json(clients)
+//     })
+// }
+const getOne = (req, res) => Client.findOne({ _id: req.params.id }, (err, client) => {
+  if (err) res.status(400).json(err);
+  if (!client) return res.status(400).json();
+  res.json(client);
+})
 
 // A function finds a Client document by its ID and update its content using data retrieved from 'req.body'
 const updateOne = (req, res) => {
