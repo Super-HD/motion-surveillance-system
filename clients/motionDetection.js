@@ -53,8 +53,12 @@ function motionAlgorithm(axios, cameraId, vCap) {
   // var start_time, end_time, start_time_hr, start_time_min, end_time_hr, end_time_min;
   var today = new Date();
   //The current_time, start_time, end_time variables will be used to determine whether we should stop/start the motion detecting progress based on the time the users put in
-  var current_time = Number(today.getHours().toString() + today.getMinutes().toString());
-
+  
+  var current_time ;
+  try{ current_time = Number(today.getHours().toString() + today.getMinutes().toString());
+  }catch(error){
+    console.log("Initialising current time failed")
+  }
   //The firstframe and frameDelta will be used to be compared to determine whether a motion is detected, between 2 frames
   var firstFrame, frameDelta, gray, thresh;
   var start_time, end_time;
