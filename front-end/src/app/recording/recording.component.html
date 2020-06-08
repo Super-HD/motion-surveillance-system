@@ -40,13 +40,18 @@
           <td>{{clip.camera.cameraLocation}}</td>
           <td>{{clip.camera.cameraClient.clientName}}</td>
           <td>{{clip.recordingDate}}</td>
+          <td>
+            <a [href]="../../assets/Video/recording.mp4" [download]="recording.mp4">
+              <button type="button" class="btn btn-primary">Download</button>
+            </a>
+          </td>
           <!--Modal-->
-          <td><ngx-smart-modal identifier={{clip.cameraID+clip.recordingDate}}>
+          <!-- <td><ngx-smart-modal identifier={{clip.cameraID+clip.recordingDate}}>
               <h1>RecordingDate: {{clip.recordingDate}}</h1>
-              <mat-video src="{{clip.clipLink}}"></mat-video><P>{{clip.clipLink}}</P>
+              <mat-video src="{{clip.clipLink}}"></mat-video><P>{{clip.clipLink}}</P> -->
               <!-- <button (click)="myModal.close()">Close</button> -->
-            </ngx-smart-modal>
-          <button type="button" class="btn btn-primary" (click)="ngxSmartModalService.getModal(clip.cameraID+clip.recordingDate).open()">Watch</button></td>
+            <!-- </ngx-smart-modal>
+          <button type="button" class="btn btn-primary" (click)="ngxSmartModalService.getModal(clip.cameraID+clip.recordingDate).open()">Watch</button></td> -->
           <td>
             <button class="btn btn-danger"
             mwlConfirmationPopover
