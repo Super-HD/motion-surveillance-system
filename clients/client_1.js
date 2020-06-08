@@ -1,22 +1,35 @@
 const express = require('express');
+
 require('dotenv').config();
+
 const busboy = require('connect-busboy')
+
 const busboyBodyParser = require('busboy-body-parser')
 // cors for allowing cross origin resource sharing between different localhosts
 const cv = require('opencv4nodejs')
+
 const axios = require('axios')
+
 const cors = require("cors")
+
 const app = express();
+
 const server = require('http').Server(app)
+
 const io = require('socket.io')(server)
+
 const fetch = require("node-fetch")
+
 const getIp = require("./network");
+
 const aws = require('./s3-file-upload')
+
 const motionDetection = require('./motionDetection');
 const internalIp = require('internal-ip');
 
 
 app.use(busboy())
+
 app.use(busboyBodyParser());
 
 // allow cross origin resource sharing
@@ -26,22 +39,34 @@ app.use(express.json());
 
 // get camera location from input arguments
 var myArgs = process.argv.slice(2);
+
 if (myArgs.length == 0) {
+
   cameraLocation = "None"
+
 } else {
+
   cameraLocation = myArgs[0];
+
 }
 
-
 const vCap = new cv.VideoCapture(0)
+
+
 vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
+
 vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
+
 const FPS = 10;
 
 async function doSetup() {
+
   const testClient = {
+
     clientName: "Monash University",
+
     cameras: []
+
   }
 
   // const ip = getIp.getPrivateIPs()[0]
@@ -51,24 +76,37 @@ async function doSetup() {
   const ip = internalIp.v4.sync()
 
   const testCameraOne = {
+
     cameraLocation: cameraLocation,
+
     cameraURL: `http://${ip}:5100`,
     // cameraClient: clientRes.data._id,
     startTime: {
+
       hour: "00",
+
       minute: "00"
+
     },
+
     endTime: {
+
       hour: "00",
+
       minute: "00"
+
     },
+
     motionClips: []
+
   }
 
   const client = await axios.post('http://161.35.110.201:4200/client', testClient)
+
   console.log("Client Added: ", client.data._id)
 
   const cameraOne = await axios.post('http://161.35.110.201:4200/camera', { ...testCameraOne, cameraClient: client.data._id })
+
   console.log("Camera 1 Added: ", cameraOne.data._id)
 
   // add camera1 to client camera array
@@ -82,6 +120,7 @@ async function doSetup() {
 
 // Change to PORT constant once deployed online
 server.listen(5100, () => {
+
   console.log(`Client Server Successfully Started on Port ${5100}`);
 
   // run function to setup adding cameras and clients to mongoDB
@@ -91,8 +130,10 @@ server.listen(5100, () => {
   setInterval(() => {
     // vCap.read returns a mat file
     const frame = vCap.read();
-    console.log(frame)
+
     const image = cv.imencode('.jpg', frame).toString('base64')
+
     io.emit('buildingAFrame', image)
+    
   }, 1000 / FPS)
 })
