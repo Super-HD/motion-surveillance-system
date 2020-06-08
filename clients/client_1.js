@@ -31,8 +31,9 @@ if (myArgs.length == 0) {
   cameraLocation = myArgs[0];
 }
 
-
 const vCap = new cv.VideoCapture(0)
+
+
 vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
 vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
 const FPS = 10;
@@ -88,7 +89,6 @@ server.listen(5100, () => {
   setInterval(() => {
     // vCap.read returns a mat file
     const frame = vCap.read();
-    console.log(frame)
     const image = cv.imencode('.jpg', frame).toString('base64')
     io.emit('buildingAFrame', image)
   }, 1000 / FPS)
