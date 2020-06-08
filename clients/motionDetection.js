@@ -3,6 +3,7 @@ const cv = require('opencv4nodejs')
 
 function writeVideo(time, count, axios, cameraId, vCap) {
 
+  //video_name will be a genarated string to make sure there are no files with same names.
   var video_name = cameraId;
   var today = new Date();
   var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
@@ -14,8 +15,13 @@ function writeVideo(time, count, axios, cameraId, vCap) {
   var frame, gray;
   // var writer = new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('mp4v'), 24.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
 
+
+  //VideoWriter (const String &filename, int fourcc, double fps, Size frameSize, bool isColor=true)
+  // fourcc is the format of forming/editing the videos
   var writer = new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('MJPG'), 24.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
 
+
+  //this loop write frames into the videowriter to write a video, the video has a length, if the video reaches the length, we will stop the  recording 
   while (stop == false) {
     frame = vCap.read()
     gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
@@ -33,6 +39,7 @@ function writeVideo(time, count, axios, cameraId, vCap) {
   // test uploading to AWS
   console.log(`Uploading ${file} to S3`)
   console.log(file)
+  //upload the video onto server
   aws.uploadToS3(file, axios, cameraId)
 }
 
@@ -45,18 +52,22 @@ function motionAlgorithm(axios, cameraId, vCap) {
 
   // var start_time, end_time, start_time_hr, start_time_min, end_time_hr, end_time_min;
   var today = new Date();
+  //The current_time, start_time, end_time variables will be used to determine whether we should stop/start the motion detecting progress based on the time the users put in
   var current_time = Number(today.getHours().toString() + today.getMinutes().toString());
+
+  //The firstframe and frameDelta will be used to be compared to determine whether a motion is detected, between 2 frames
   var firstFrame, frameDelta, gray, thresh;
   var start_time, end_time;
   start_time;
   end_time;
 
-  var write = false;
+  var write = false; //a boolean to determine whether we are writing a video
+
   var video_count = 0;
   var video_len = 5;
   frame = vCap.read();
   firstFrame = frame;
-  //convert to grayscale
+  //convert to grayscale and set the first frame
   firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
   firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
   url = 'http://161.35.110.201:4200/camera/' + cameraId;
@@ -103,6 +114,8 @@ function motionAlgorithm(axios, cameraId, vCap) {
         thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
         var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
         for (i = 0; i < cnts.length; i++) {
+          //if there are 500 pixels different from the first frame in a single contour, this will be seen as a "motion"
+          //We set the switch - write to be true  to write and upload a video
           if (cnts[i].area < 500) { continue; }
           write = true;
           console.log("motion detected");
@@ -111,7 +124,7 @@ function motionAlgorithm(axios, cameraId, vCap) {
         // const image = cv.imencode('.jpg', frame).toString('base64')
         // io.emit('buildingAFrame', image)
         firstFrame = frame;
-        //convert to grayscale
+        //reset the first frame to the current frame  
         firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
         firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
       }
@@ -136,7 +149,6 @@ function motionAlgorithm(axios, cameraId, vCap) {
           // io.emit('buildingAFrame', image)
           gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
           gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
-          //compute difference between first frame and current frame
           frameDelta = firstFrame.absdiff(gray);
           thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
           thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
@@ -147,7 +159,6 @@ function motionAlgorithm(axios, cameraId, vCap) {
             console.log("motion detected");
           }
           firstFrame = frame;
-          //convert to grayscale
           firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
           firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
         }
@@ -157,7 +168,6 @@ function motionAlgorithm(axios, cameraId, vCap) {
           write = false;
           frame = vCap.read();
           firstFrame = frame;
-          //convert to grayscale
           firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
           firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
         }
@@ -168,7 +178,6 @@ function motionAlgorithm(axios, cameraId, vCap) {
           frame = vCap.read();
           gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
           gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
-          //compute difference between first frame and current frame
           frameDelta = firstFrame.absdiff(gray);
           thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
           thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
@@ -179,7 +188,6 @@ function motionAlgorithm(axios, cameraId, vCap) {
             console.log("motion detected");
           }
           firstFrame = frame;
-          //convert to grayscale
           firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
           firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
         }
@@ -191,7 +199,6 @@ function motionAlgorithm(axios, cameraId, vCap) {
           // const image = cv.imencode('.jpg', frame).toString('base64')
           // io.emit('buildingAFrame', image)
           firstFrame = frame;
-          //convert to grayscale
           firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
           firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
         }
