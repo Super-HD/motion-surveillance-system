@@ -71,23 +71,21 @@ async function doSetup() {
 
     //The firstframe and frameDelta will be used to be compared to determine whether a motion is detected, between 2 frames
     var firstFrame, frameDelta, gray, thresh;
-    var write = false; //a boolean to determine whether we are writing a video
-    var video_len = 5;
-
+    var writing = false; //a boolean to determine whether we are writing a video
+    var videoLength = 100;
+    // time to write when writing a motion clip
+    var currentWrittenTime = 0;
+    // writerFile for when motion is detected
+    var writerObject;
+    // videoName of motion clip file.
+    var videoName;
     // define the interval to continuously send frame data to server
     setInterval(() => {
-      console.log("interval1")
       // vCap.read returns a mat file
       let frame = vCap.read();
       const image = cv.imencode('.jpg', frame).toString('base64')
       io.emit('buildingAFrame', image)
-    }, 1000 / FPS)
 
-    // define the interval for motion detection
-    setInterval(() => {
-      console.log("interval2")
-      // vCap.read returns a mat file
-      let frame = vCap.read();
       // perform motion detection algorithm
       // set up variables for motion Detection algorithm
       var today = new Date();
@@ -108,91 +106,101 @@ async function doSetup() {
         start_time = generateTime(res.data.startTime)
         end_time = generateTime(res.data.endTime)
         current_time = modifyCurrentDate(today)
-        if (start_time == end_time) {
-          if (write == false) {
-            gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
-            gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
-            //compute difference between first frame and current frame
-            frameDelta = firstFrame.absdiff(gray);
-            thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
-            thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
-            var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-            for (i = 0; i < cnts.length; i++) {
-              //if there are 500 pixels different from the first frame in a single contour, this will be seen as a "motion"
-              //We set the switch - write to be true  to write and upload a video
-              if (cnts[i].area < 500) { continue; }
-              write = true;
-              console.log("motion detected");
-            }
-            firstFrame = frame;
-            //reset the first frame to the current frame
-            firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
-            firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
-          }
-          else {
-            writeVideo(video_len, axios, cameraOne.data._id, vCap);
-            console.log("finished writing")
-            write = false;
-            firstFrame = frame;
-            //convert to grayscale
-            firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
-            firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
-          }
-        }
-        else if (start_time < end_time) {
-          if (current_time > start_time && current_time < end_time) {
-            if (write == false) {
-              gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
-              gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
-              frameDelta = firstFrame.absdiff(gray);
-              thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
-              thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
-              var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-              for (i = 0; i < cnts.length; i++) {
-                if (cnts[i].area < 500) { continue; }
-                write = true;
-                console.log("motion detected");
-              }
-              firstFrame = frame;
-              firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
-              firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
-            }
-            else {
-              writeVideo(video_len, axios, cameraOne.data._id, vCap);
-              console.log("finished writing")
-              write = false;
-              firstFrame = frame;
-              firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
-              firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
-            }
-          }
-        }
-        else if (start_time > end_time) {
-          if ((current_time > start_time) || (current_time < end_time)) {
-            if (write == false) {
-              gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
-              gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
-              frameDelta = firstFrame.absdiff(gray);
-              thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
-              thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
-              var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
+        // check if previously motion was detected then keep writing
+        if (writing) {
+          writeFrame(writerObject, frame)
+          currentWrittenTime++;
+          if (currentWrittenTime == videoLength) {
+            // // writer file is done here
+            // reset variables
+            let clipName = videoName
+            writing = false;
+            videoName = undefined;
+            writerObject = undefined;
+            currentWrittenTime = 0;
+
+            // call upload to s3 here using video file, axios + cameraId
+            let file = `./${clipName}`
+            // test uploading to AWS
+            console.log(`Uploading ${file} to S3`)
+            console.log(file)
+            //upload the video onto server
+            aws.uploadToS3(file, axios, cameraOne.data._id)
+
+          }
+        }
+        else {
+          if (start_time == end_time) {
+            if (writing == false) {
+              gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
+              gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
+              //compute difference between first frame and current frame
+              frameDelta = firstFrame.absdiff(gray);
+              thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
+              thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
+              var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
               for (i = 0; i < cnts.length; i++) {
+                //if there are 500 pixels different from the first frame in a single contour, this will be seen as a "motion"
+                //We set the switch - write to be true  to write and upload a video
                 if (cnts[i].area < 500) { continue; }
-                write = true;
                 console.log("motion detected");
+                writing = true
+                var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
+                videoName = cameraOne.data._id + date + ".avi";
+                writerObject = new cv.VideoWriter(videoName, cv.VideoWriter.fourcc('MJPG'), 10.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
               }
               firstFrame = frame;
+              //reset the first frame to the current frame
               firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
               firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
             }
-            else {
-              writeVideo(video_len, axios, cameraOne.data._id, vCap);
-              console.log("finished writing")
-              write = false;
-              firstFrame = frame;
-              firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
-              firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
+          }
+          else if (start_time < end_time) {
+            if (current_time > start_time && current_time < end_time) {
+              if (writing == false) {
+                gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
+                gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
+                frameDelta = firstFrame.absdiff(gray);
+                thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
+                thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
+                var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+                for (i = 0; i < cnts.length; i++) {
+                  if (cnts[i].area < 500) { continue; }
+                  console.log("motion detected");
+                  writing = true
+                  var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
+                  videoName = cameraOne.data._id + date + ".avi";
+                  writerObject = new cv.VideoWriter(videoName, cv.VideoWriter.fourcc('MJPG'), 10.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
+                }
+                firstFrame = frame;
+                firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
+                firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
+              }
+            }
+          }
+          else if (start_time > end_time) {
+            if ((current_time > start_time) || (current_time < end_time)) {
+              if (writing == false) {
+                gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
+                gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
+                frameDelta = firstFrame.absdiff(gray);
+                thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
+                thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
+                var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+
+                for (i = 0; i < cnts.length; i++) {
+                  if (cnts[i].area < 500) { continue; }
+                  console.log("motion detected");
+                  writing = true
+                  var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
+                  videoName = cameraOne.data._id + date + ".avi";
+                  writerObject = new cv.VideoWriter(videoName, cv.VideoWriter.fourcc('MJPG'), 10.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
+                }
+                firstFrame = frame;
+                firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
+                firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
+              }
             }
           }
         }
@@ -200,50 +208,8 @@ async function doSetup() {
     }, 1000 / FPS)
   })
 }
-
-
-// run writeVideo asynchronously in the background to write a video to upload to s3 upon motion detection.
-//function header comment: This function is to write a fixed-length video and upload onto the server
-//parameter1: time - the length of the video, it is an interger
-//parameter2: count - The count of all the videos
-//parameter3: axios - to upload the file onto server
-//parameter4: cameraId - The ID of the camera
-//parameter5: vCap - the camera that we get frames from
-function writeVideo(time, axios, cameraId, motionCap) {
-  //video_name will be a genarated string to make sure there are no files with same names.
-  var video_name = cameraId;
-  var today = new Date();
-  var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
-  video_name = video_name + date + ".avi";
-  // video_name = video_name + date + ".mp4";
-  var start_time = new Date();
-  var end_time;
-  var stop = false;
-  var frame, gray;
-  //VideoWriter (const String &filename, int fourcc, double fps, Size frameSize, bool isColor=true)
-  // fourcc is the format of forming/editing the videos
-  var writer = new cv.VideoWriter(video_name, cv.VideoWriter.fourcc('MJPG'), 24.0, new cv.Size(motionCap.get(cv.CAP_PROP_FRAME_WIDTH), motionCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
-  //this loop write frames into the videowriter to write a video, the video has a length, if the video reaches the length, we will stop the  recording
-  while (stop == false) {
-    // frame = motionCap.read()
-    // gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
-    // gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
-    // //console.log(vCap.CAP_PROP_FRAME_HEIGHT)
-    // cv.waitKey(1)
-    writer.write(frame)
-    end_time = new Date();
-    if ((end_time - start_time) > time * 1000) {
-      stop = true;
-    }
-  }
-  // writer file is done here
-  // call upload to s3 here using video file, axios + cameraId
-  let file = `./${video_name}`
-  // test uploading to AWS
-  console.log(`Uploading ${file} to S3`)
-  console.log(file)
-  //upload the video onto server
-  aws.uploadToS3(file, axios, cameraId)
+function writeFrame(writerObject, frame) {
+  writerObject.write(frame)
 }
 
 function modifyCurrentDate(today) {
