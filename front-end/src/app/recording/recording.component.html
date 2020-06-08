@@ -41,7 +41,7 @@
           <td>{{clip.camera.cameraClient.clientName}}</td>
           <td>{{clip.recordingDate}}</td>
           <td>
-            <a [href]="../../assets/Video/recording.mp4" [download]="recording.mp4">
+            <a href="{{clip.clipLink}}" download="{{clip.recordingDate}}">
               <button type="button" class="btn btn-primary">Download</button>
             </a>
           </td>
