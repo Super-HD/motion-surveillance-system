@@ -45,7 +45,7 @@ async function doSetup() {
   console.log(internalIp.v4.sync())
   const testCameraOne = {
     cameraLocation: cameraLocation,
-    cameraURL: `http://118.138.38.149:5100`,
+    cameraURL: `http://${ip}:5100`,
     // cameraClient: clientRes.data._id,
     startTime: {
       hour: "18",
@@ -134,7 +134,7 @@ async function doSetup() {
         else {
           if (start_time == end_time) {
             if (writing == false) {
-              if (Motion_detected(frame, firstFrame, gray, frameDelta)) {
+              if (motionDetected(frame, firstFrame, gray, frameDelta)) {
                 console.log("motion detected");
                 writing = true
                 var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
@@ -148,7 +148,7 @@ async function doSetup() {
           else if (start_time < end_time) {
             if (current_time > start_time && current_time < end_time) {
               if (writing == false) {
-                if (Motion_detected(frame, firstFrame, gray, frameDelta)) {
+                if (motionDetected(frame, firstFrame, gray, frameDelta)) {
                   console.log("motion detected");
                   writing = true
                   var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
@@ -162,7 +162,7 @@ async function doSetup() {
           else if (start_time > end_time) {
             if ((current_time > start_time) || (current_time < end_time)) {
               if (writing == false) {
-                if (Motion_detected(frame, firstFrame, gray, frameDelta)) {
+                if (motionDetected(frame, firstFrame, gray, frameDelta)) {
                   console.log("motion detected");
                   writing = true
                   var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
@@ -201,7 +201,7 @@ function generateTime(timeObj) {
   return Number(time)
 }
 
-function Motion_detected(frame, firstFrame, gray, frameDelta) {
+function motionDetected(frame, firstFrame, gray, frameDelta) {
   gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
   gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
   frameDelta = firstFrame.absdiff(gray);
@@ -216,8 +216,5 @@ function Motion_detected(frame, firstFrame, gray, frameDelta) {
 }
 
 function resetFirstFrame(frame) {
-  var firstFrame
-  firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
-  firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
-  return firstFrame
+  return frame.cvtColor(cv.COLOR_BGR2GRAY).gaussianBlur(new cv.Size(21, 21), 0);
 }
