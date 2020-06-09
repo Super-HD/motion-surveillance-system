@@ -141,10 +141,8 @@ async function doSetup() {
                 videoName = cameraOne.data._id + date + ".avi";
                 writerObject = new cv.VideoWriter(videoName, cv.VideoWriter.fourcc('MJPG'), 10.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
               }
-              firstFrame = frame;
               //reset the first frame to the current frame
-              firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
-              firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
+              firstFrame = resetFirstFrame(frame);
             }
           }
           else if (start_time < end_time) {
@@ -157,9 +155,7 @@ async function doSetup() {
                   videoName = cameraOne.data._id + date + ".avi";
                   writerObject = new cv.VideoWriter(videoName, cv.VideoWriter.fourcc('MJPG'), 10.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
                 }
-                firstFrame = frame;
-                firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
-                firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
+                firstFrame = resetFirstFrame(frame);
               }
             }
           }
@@ -173,9 +169,7 @@ async function doSetup() {
                   videoName = cameraOne.data._id + date + ".avi";
                   writerObject = new cv.VideoWriter(videoName, cv.VideoWriter.fourcc('MJPG'), 10.0, new cv.Size(vCap.get(cv.CAP_PROP_FRAME_WIDTH), vCap.get(cv.CAP_PROP_FRAME_HEIGHT)));
                 }
-                firstFrame = frame;
-                firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
-                firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
+                firstFrame = resetFirstFrame(frame);
               }
             }
           }
@@ -219,4 +213,11 @@ function Motion_detected(frame,firstFrame,gray,frameDelta){
     return true
   }
   return false
+}
+
+function resetFirstFrame(frame){
+  var firstFrame 
+  firstFrame = frame.cvtColor(cv.COLOR_BGR2GRAY);
+  firstFrame = firstFrame.gaussianBlur(new cv.Size(21, 21), 0);
+  return firstFrame
 }
