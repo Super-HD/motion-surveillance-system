@@ -19,9 +19,10 @@ const getAll = (req, res) => Camera.find().populate('cameraClient').exec((err, c
 // A function that creates a new document and save it in Camera collection if the parsed data in 'req.body' does not exists
 // otherwise update the camera
 const createOne = (req, res) => {
-    let { cameraClient, cameraLocation } = req.body
+    // change cameraLocation to cameraURL
+    let { cameraClient, cameraURL } = req.body
     // check if exists already, if yes then return and do nothing
-    Camera.findOneAndUpdate({ cameraClient, cameraLocation }, req.body, {
+    Camera.findOneAndUpdate({ cameraClient, cameraURL }, req.body, {
         new: true,
         upsert: true
     }, (err, result) => {
