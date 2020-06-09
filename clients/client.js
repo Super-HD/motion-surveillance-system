@@ -47,12 +47,12 @@ async function doSetup() {
     cameraURL: `http://${ip}:5100`,
     // cameraClient: clientRes.data._id,
     startTime: {
-      hour: "00",
-      minute: "00"
+      hour: "18",
+      minute: "10"
     },
     endTime: {
-      hour: "00",
-      minute: "00"
+      hour: "22",
+      minute: "30"
     },
     motionClips: []
   }
