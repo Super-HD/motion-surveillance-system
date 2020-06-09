@@ -42,16 +42,17 @@ async function doSetup() {
   // const ip = getIp.getPrivateIPs()[0]
   // console.log(ip);
   const ip = internalIp.v4.sync()
+  console.log(internalIp.v4.sync())
   const testCameraOne = {
     cameraLocation: cameraLocation,
-    cameraURL: `http://${ip}:5100`,
+    cameraURL: `http://118.138.38.149:5100`,
     // cameraClient: clientRes.data._id,
     startTime: {
-      hour: "00",
+      hour: "12",
       minute: "00"
     },
     endTime: {
-      hour: "00",
+      hour: "20",
       minute: "00"
     },
     motionClips: []
@@ -133,17 +134,7 @@ async function doSetup() {
         else {
           if (start_time == end_time) {
             if (writing == false) {
-              gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
-              gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
-              //compute difference between first frame and current frame
-              frameDelta = firstFrame.absdiff(gray);
-              thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
-              thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
-              var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-              for (i = 0; i < cnts.length; i++) {
-                //if there are 500 pixels different from the first frame in a single contour, this will be seen as a "motion"
-                //We set the switch - write to be true  to write and upload a video
-                if (cnts[i].area < 500) { continue; }
+                if(Motion_detected(frame,firstFrame,gray,frameDelta)){
                 console.log("motion detected");
                 writing = true
                 var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
@@ -159,14 +150,7 @@ async function doSetup() {
           else if (start_time < end_time) {
             if (current_time > start_time && current_time < end_time) {
               if (writing == false) {
-                gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
-                gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
-                frameDelta = firstFrame.absdiff(gray);
-                thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
-                thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
-                var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-                for (i = 0; i < cnts.length; i++) {
-                  if (cnts[i].area < 500) { continue; }
+                if(Motion_detected(frame,firstFrame,gray,frameDelta)){
                   console.log("motion detected");
                   writing = true
                   var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
@@ -182,15 +166,7 @@ async function doSetup() {
           else if (start_time > end_time) {
             if ((current_time > start_time) || (current_time < end_time)) {
               if (writing == false) {
-                gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
-                gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
-                frameDelta = firstFrame.absdiff(gray);
-                thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
-                thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
-                var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-
-                for (i = 0; i < cnts.length; i++) {
-                  if (cnts[i].area < 500) { continue; }
+                if(Motion_detected(frame,firstFrame,gray,frameDelta)){
                   console.log("motion detected");
                   writing = true
                   var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
@@ -229,4 +205,18 @@ function modifyCurrentDate(today) {
 function generateTime(timeObj) {
   time = timeObj.hour + timeObj.minute
   return Number(time)
+}
+
+function Motion_detected(frame,firstFrame,gray,frameDelta){
+  gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
+  gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
+  frameDelta = firstFrame.absdiff(gray);
+  thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
+  thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
+  var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+  for (i = 0; i < cnts.length; i++) {
+    if (cnts[i].area < 500) { continue }
+    return true
+  }
+  return false
 }
