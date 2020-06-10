@@ -11,20 +11,29 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const aws = require('./s3-file-upload')
 const internalIp = require('internal-ip');
+var assert = require('assert');
 app.use(busboy())
 app.use(busboyBodyParser());
 // allow cross origin resource sharing
 app.use(cors());
 // dont need body parser anymore just do this
 app.use(express.json());
+
 // get camera location from input arguments
 var myArgs = process.argv.slice(2);
-if (myArgs.length == 0) {
-  cameraLocation = "None"
-} else {
-  cameraLocation = myArgs[0];
+// Assert camera location is provided, otherwise an error is report
+assert(cameraLocation = myArgs[0], "Please provide the camera's location")
+
+
+let vCap
+// Try to open capture from webcam
+try {
+  vCap = new cv.VideoCapture(2)
 }
-const vCap = new cv.VideoCapture(0)
+catch (err) {
+  console.log("Camera is not avaiable")
+}
+
 vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
 vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
 const FPS = 10;
