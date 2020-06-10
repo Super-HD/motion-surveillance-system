@@ -36,8 +36,6 @@ async function doSetup() {
     clientName: "Monash University",
     cameras: []
   }
-  // const ip = getIp.getPrivateIPs()[0]
-  // console.log(ip);
   const ip = internalIp.v4.sync()
   console.log(internalIp.v4.sync())
   const testCameraOne = {
