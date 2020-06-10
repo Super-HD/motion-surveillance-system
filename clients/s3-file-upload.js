@@ -25,6 +25,7 @@ function uploadToS3(videoFile, axios, cameraId) {
       console.log(err);
     }
     console.log('successfully uploaded video.')
+    console.log(data)
     s3bucket.getSignedUrl('getObject', params, function (err, url) {
       if (err) {
         console.log('error in callback');

@@ -48,8 +48,8 @@ async function doSetup() {
     cameraURL: `http://${ip}:5100`,
     // cameraClient: clientRes.data._id,
     startTime: {
-      hour: "18",
-      minute: "20"
+      hour: "20",
+      minute: "30"
     },
     endTime: {
       hour: "22",
