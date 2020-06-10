@@ -28,10 +28,11 @@ assert(cameraLocation = myArgs[0], "Please provide the camera's location")
 let vCap
 // Try to open capture from webcam
 try {
-  vCap = new cv.VideoCapture(2)
+  vCap = new cv.VideoCapture(0)
 }
 catch (err) {
   console.log("Camera is not avaiable")
+  return
 }
 
 vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
