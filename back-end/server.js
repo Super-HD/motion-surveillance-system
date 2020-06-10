@@ -12,13 +12,6 @@ app.use(express.json());
 
 app.use('/', express.static(path.join(__dirname, '../front-end/dist/MotionSurveillanceSystem')))
 
-
-let s3bucket = new AWS.S3({
-    accessKeyId: process.env.IAM_USER_KEY,
-    secretAccessKey: process.env.IAM_USER_SECRET,
-    Bucket: process.env.BUCKET_NAME
-});
-
 //const Camera = require('./models/camera');
 const client = require("./routers/client")
 const camera = require('./routers/camera');
@@ -30,7 +23,7 @@ const MotionClip = require('./models/MotionClip')
 const Camera = require('./models/Camera')
 
 // change once we deploy ONLINE
-const mongoURI = "mongodb+srv://Terence:v9nzSDSVtkA1USXO@cluster0-hllvg.mongodb.net/test?retryWrites=true&w=majority";
+const mongoURI = process.env.MONGO_URI;
 mongoConfig = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -73,7 +66,6 @@ app.delete('/clip/:id', clip.deleteOne);
 server.listen(4200, () => {
     console.log(`Server Successfully Started on Port ${4200}`);
 })
-
 //signin --> POST Request --> Success/Fail
 // Signin for checking if user is supervisor in login page.
 // temporarily dont do first.
@@ -81,19 +73,3 @@ server.listen(4200, () => {
 
 // retrieve motion snapshot video clip mp4 by specific camera id
 app.post('/motion/:id')
-
-// server will store live stream data every 30 minutes into the file storage server (localhost at first then digitalOcean)
-
-function getClip(clipName) {
-    s3.getObject(
-        { Bucket: process.env.BUCKET_NAME, Key: clipName },
-        function (error, data) {
-            if (error != null) {
-                alert("Failed to retrieve an object: " + error);
-            } else {
-                console.log(data.body)
-                // do something with data.Body
-            }
-        }
-    );
-}
