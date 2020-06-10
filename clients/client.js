@@ -9,10 +9,7 @@ const cors = require("cors")
 const app = express();
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
-const fetch = require("node-fetch")
-const getIp = require("./network");
 const aws = require('./s3-file-upload')
-const motionDetection = require('./motionDetection');
 const internalIp = require('internal-ip');
 app.use(busboy())
 app.use(busboyBodyParser());
