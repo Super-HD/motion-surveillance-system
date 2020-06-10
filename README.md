@@ -1,15 +1,22 @@
-# Welcome to Face Recognition App
+# Welcome to our Motion Surveillance System App
 
-> Full Stack App developed primarily using React.js, Redux, Node.js, Express.js, PostgreSQL. State Management is handled using Redux. This app identifies & detects faces in any image supplied. Data is stored securely using PostgreSQL, with passwords being hashed.
+> Our Project is a Motion Surveillance System. The Premise is that there will be a central server, and multiple client video cameras. Client Cameras will send their live stream data to the central server, and the server will be able to monitor all live streams from all cameras. If any motion has been detected from any of these cameras, a motion-snapshot clip will be recorded upon time of detection, which will be uplodaded to the server for checking.
+
+## Architecture
+
+> The Project is split up into Four Modules. Firstly, is the Front-End Web App which the user interacts with as the central server. This is created using a MEAN Stack model utilizing MongoDB, Express.js, Angular.js & Node.js. Secondly, is the Video Capture + Video File Creation Module. We used a popular real-time image-processing library called OpenCV for this module. Thirdly, is the Database Module. We developed a Database Model via MongoDB for storing all required information the server requires of its clients, and also hosted an AWS S3 Bucket for storing motion-snapshot clips. Lastly is the server. The server is powered using Node.js, and connects with the front-end app using RESTFul endpoints. To enable our app to be deployed online, we used AWS S3 bucket for storing motion clips on the cloud, DigitalOcean Virtual Server for hosting our web application online, and a MongoDB Atlas Cluster for storing database-related information online. These technologies have all integrated and connected as one.
 
 ## Instructions
 
-> The App is split into two components, the React Front-End and Server Back-End. This repo hosts the Front-End React App. To simulate a client-server environment, please go to my Back-End API Repo https://github.com/terencehh/face-recognition-app-api and follow the instructions there. Note that you will need to specify different port numbers on the client & server.
+The Project is split into three components, the back-end folder, front-end folder, & the client-folder (where the client will initiate their camera for live stream). Each folder contains a separate node_modules folder which you will have to call npm install in order to install all the required packages.
 
+To simulate a client-server environment locally, You will need to configure your HTTP endpoints into localhost, Otherwise, you can perform the same integration steps we used and instead deploy a DigitalOcean server online, alongside an AWS S3 Bucket for storing video Clips, & a MongoDB Atlas Cluster for storing database information.
+
+Note that there are several environmental variables you will have to configure if you are following our integration methodology. These are shown in the .env files you can fill out.
 
 ## Demo
 
-> https://face-detect-react-app.herokuapp.com/
+> http://161.35.110.201:4200/
 
 ## Install
 
@@ -23,7 +30,7 @@ npm install
 npm start
 ```
 
-## Author
+## Authors
 
 👤 **Terence Ng**
 
@@ -31,4 +38,10 @@ npm start
 * Github: [@terencehh](https://github.com/terencehh)
 * LinkedIn: [@terencenghh](https://linkedin.com/in/terencenghh)
 
-Motion Surveillance System that will utilize webcams to provide live streaming functionality alongside motion detection video snapshots. Front-End will be Developed using the MEAN Stack, & Back-End using C++. Server + Storage Solution will utilize AWS.
+👤 **Cheng Zeng**
+
+* Github: [@czen0002](https://github.com/czen0002)
+
+👤 **Peisong Yang**
+
+* Github: [@ShawnYPS](https://github.com/ShawnYPS)
