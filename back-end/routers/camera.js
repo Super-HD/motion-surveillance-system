@@ -1,27 +1,32 @@
 /*
 Created by Cheng Zeng
 Modified by Terence
-Updated on 05/06/2020
+Updated on 11/06/2020
 In this file, operations of the Camera collection are implemented.
 */
 
 const Camera = require('../models/Camera')
 
-// TODOS: MAYBE IMPLEMENT an 'isOperating' type for Camera Schema so Server can always know from mongoDB which clients are currently ON and which are OFF.
-
-// A function retrieves all the documents from the Camera collection and sends them back as a response.
-// Populate replaces the ID in 'cameraClient' with its client document.
+/**
+ * Retrieve all camera documents from the Camera collection
+ * The 'cameraClient' is populated from its ID to its document
+ * @param {*} req The HTTP request
+ * @param {*} res The HTTP respond, it will either contain an error statement or an array of camera json objects
+ */
 const getAll = (req, res) => Camera.find().populate('cameraClient').exec((err, cameras) => {
     if (err) res.status(400).json(err);
     res.json(cameras);
 })
 
-// A function that creates a new document and save it in Camera collection if the parsed data in 'req.body' does not exists
-// otherwise update the camera
+/**
+ * Create a new Camera document
+ * @param {*} req The HTTP request, it contains a camera json object
+ * @param {*} res The HTTP respond, it will contain either an error statement or the result
+ */
 const createOne = (req, res) => {
-    // change cameraLocation to cameraURL
     let { cameraClient, cameraURL } = req.body
-    // check if exists already, if yes then return and do nothing
+    // Search for a camera using cameraClient and cameraURL
+    // Create a new one if not exists otherwise update the camera
     Camera.findOneAndUpdate({ cameraClient, cameraURL }, req.body, {
         new: true,
         upsert: true
@@ -31,14 +36,22 @@ const createOne = (req, res) => {
     })
 }
 
-// A function finds one Camera document by an ID
+/**
+ * Search for a Camera document
+ * @param {*} req The HTTP request, it contains a parameter which is a camera ID
+ * @param {*} res The HTTP respond, it will contain either an error statement or a camera json object
+ */
 const getOne = (req, res) => Camera.findOne({ _id: req.params.id }, (err, camera) => {
     if (err) res.status(400).json(err);
     if (!camera) return res.status(400).json();
     res.json(camera);
 })
 
-// A function finds a Camera document by its ID and update its content using data retrieved from 'req.body'
+/**
+ * Find a Camera document and update its content
+ * @param {*} req The HTTP request, it contains a parameter which is a camera ID, and a camera json object
+ * @param {*} res The HTTP respond, it will contain either an error statement or a camera json object
+ */
 const updateOne = (req, res) => Camera.findOneAndUpdate({ _id: req.params.id }, req.body, (err, camera) => {
     if (err) res.status(400).json(err);
     if (!camera) return res.status(400).json();
