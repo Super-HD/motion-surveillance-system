@@ -24,7 +24,7 @@ export class CamerasService {
   
   /**
    * Get camera objects from MongoDB database
-   * @return An array of camera json objects or nothing
+   * @return An Observable of the response with an array of camera json objects
    */
   getCameras() {
     return this.http.get('/cameras');
@@ -33,7 +33,7 @@ export class CamerasService {
   /**
    * Get a single camera object from MongoDB database
    * @param id Camera ID used to search for a camera
-   * @return A camera json object or nothing
+   * @return An Observable of the response with a camera json object
    */
   getCamera(id: string) {
     let url = '/camera/' + id;
@@ -42,8 +42,8 @@ export class CamerasService {
 
   /**
    * Create a new camera document in MongoDB database
-   * @param data A camera json objec
-   * @return An array of camera json objects after creating
+   * @param data A camera json object
+   * @return An Observable of the response 
    */
   createCamera(data) {
     return this.http.post('/camera', data, httpOptions);
@@ -53,7 +53,7 @@ export class CamerasService {
    * Update a camera document in MongoDB database
    * @param id Camera ID used to search for a camera
    * @param data A json object used to update the camera
-   * @return The updated camera json object
+   * @return An Observable of the response
    */
   updateCamera(id, data) {
     let url = '/camera/' + id;
