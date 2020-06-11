@@ -28,7 +28,9 @@ npm install
 
 ## Usage
 
-On the client-folder, run ng-build command to build the web application, then proceed to back-end folder and run
+1. On the front-end folder, run ng-build command to build the web application.
+2. On the client folder (multiple client camera's can run this), simply execute node client.js <your-camera-location> to initiate the live stream 
+3. then proceed to back-end folder and run node server.js to initiate the server.
 
 ```sh
 node server.js
