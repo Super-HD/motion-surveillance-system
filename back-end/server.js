@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-const AWS = require('aws-sdk')
 // cors for allowing cross origin resource sharing between different localhosts
 const cors = require("cors")
 const app = express();
@@ -37,11 +36,6 @@ mongoose.connect(mongoURI, mongoConfig, (err) => {
     console.log("Database connected successfully");
 })
 
-// Configuring Endpoints
-app.get("/", (req, res) => {
-    res.send("App is working!");
-});
-
 // Client RESTFul endpoints
 app.get('/clients', client.getAll);
 app.post('/client', client.createOne);
@@ -70,6 +64,3 @@ server.listen(4200, () => {
 // Signin for checking if user is supervisor in login page.
 // temporarily dont do first.
 // app.post("/signin", signin.handleSignIn(bcrypt));
-
-// retrieve motion snapshot video clip mp4 by specific camera id
-app.post('/motion/:id')

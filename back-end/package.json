@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.686.0",
     "busboy": "^0.3.1",
     "busboy-body-parser": "^0.3.2",
     "connect-busboy": "0.0.2",
