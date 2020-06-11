@@ -7,6 +7,7 @@ import { RecordingComponent } from './recording/recording.component';
 import { ManagementComponent } from './management/management.component';
 import { LiveComponent } from './live/live.component';
 
+// Routes for three main components in the web application
 const routes: Routes = [
   {
     path: '',
