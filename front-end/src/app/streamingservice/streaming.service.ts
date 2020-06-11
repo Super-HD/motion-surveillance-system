@@ -1,6 +1,6 @@
 /*
 Created by Cheng Zeng
-Updated on 25/05/2020
+Updated on 11/06/2020
 The streaming service is responsible for listenning on the streaming source.
 */
 
@@ -15,7 +15,11 @@ export class StreamingService {
 
   constructor() { }
 
-  // this may need to change to be a HTTP get request which continually ask server for frames.
+  /**
+   * Get Streming frame image
+   * @param url The url of socket server who publish frame image
+   * @return An Observable of the frame image
+   */
   public getStream(url: string) {
     return Observable.create((observable) => {
       var socket = io.connect(url);
