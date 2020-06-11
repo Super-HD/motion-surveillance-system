@@ -18,7 +18,9 @@ Note that there are several environmental variables you will have to configure i
 
 > http://161.35.110.201:4200/
 
-## Install
+## Installation
+
+For each folder (back-end, clients, & front-end), perform npm install to download all required packages.
 
 ```sh
 npm install
@@ -26,8 +28,10 @@ npm install
 
 ## Usage
 
+On the client-folder, run ng-build command to build the web application, then proceed to back-end folder and run
+
 ```sh
-npm start
+node server.js
 ```
 
 ## Authors
