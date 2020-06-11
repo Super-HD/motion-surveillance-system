@@ -1,9 +1,8 @@
 /*
 Created by Cheng Zeng
-Updated on 04/06/2020
+Updated on 11/06/2020
 The clip service is responsible for the communication with the RESTFul server regarding Clip.
-All functions provided in this file are used to perform operation on 
-Client data in the database.
+All functions provided in this file are used to perform operation on Client document in the database.
 */
 
 import { Injectable} from '@angular/core';
@@ -21,31 +20,52 @@ export class ClipsService {
   // HttpClient provides HTTP service
   constructor(private http: HttpClient) { }
 
-  // get all clips
+  /**
+   * Get clip objects from MongoDB database
+   * @return An Observable of the response with an array of clip json objects
+   */
   getClips() {
     return this.http.get('/clips');
   }
 
-  // get single clip
+  /**
+   * Get a single clip object from MongoDB database
+   * @param id Clip ID used to search for a clip
+   * @return An Observable of the response with a clip json object
+   */
   getClip(id) {
-    let url = '/clips/' + id;
+    let url = '/clip/' + id;
     return this.http.get(url);
   }
 
-  // create a new clip
+  /**
+   * Create a new clip document in MongoDB database
+   * @param data A clip json object
+   * @return An Observable of the response
+   */
   createClip(data) {
-    return this.http.post('/clips', data, httpOptions);
+    return this.http.post('/clip', data, httpOptions);
   }
 
-  // update a clip
+  /**
+   * Update a clip document in MongoDB database
+   * @param id Clip ID used to search for a clip
+   * @param data A json object used to update the clip
+   * @return An Observable of the response
+   */
   updateClip(id, data) {
-    let url = '/clips/' + id;
+    let url = '/clip/' + id;
     return this.http.put(url, data, httpOptions);
   }
 
-   // delete a clip
-   deleteClip(id) {
+   /**
+    * Delete a clip document in MongoDB database
+    * @param id Clip ID used to find a clip
+    * @return An Observable of the response
+    */
+  deleteClip(id) {
     let url = '/clip/' + id;
     return this.http.delete(url, httpOptions);
   }
 }
+
