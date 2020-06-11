@@ -11,15 +11,9 @@ app.use(express.json());
 
 app.use('/', express.static(path.join(__dirname, '../front-end/dist/MotionSurveillanceSystem')))
 
-//const Camera = require('./models/camera');
 const client = require("./routers/client")
 const camera = require('./routers/camera');
 const clip = require('./routers/clip');
-
-// testing models for initial add
-const Client = require('./models/Client')
-const MotionClip = require('./models/MotionClip')
-const Camera = require('./models/Camera')
 
 // change once we deploy ONLINE
 const mongoURI = process.env.MONGO_URI;
@@ -56,7 +50,7 @@ app.get('/clip/:id', clip.getOne);
 app.put('/clip/:id', clip.updateOne);
 app.delete('/clip/:id', clip.deleteOne);
 
-// Change to PORT constant once deployed online
+// Starts the server and listen on port 4200
 server.listen(4200, () => {
     console.log(`Server Successfully Started on Port ${4200}`);
 })
