@@ -36,7 +36,7 @@ export class CamerasService {
    * @return A camera json object or nothing
    */
   getCamera(id: string) {
-    let url = '/cameras/' + id;
+    let url = '/camera/' + id;
     return this.http.get(url);
   }
 
@@ -46,7 +46,7 @@ export class CamerasService {
    * @return An array of camera json objects after creating
    */
   createCamera(data) {
-    return this.http.post('/cameras', data, httpOptions);
+    return this.http.post('/camera', data, httpOptions);
   }
 
   /**
