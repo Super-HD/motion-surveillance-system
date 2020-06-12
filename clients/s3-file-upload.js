@@ -1,12 +1,26 @@
+/*
+Created by Terence Ng
+Updated on 12/06/2020
+This file defines the AWS Logic when uploading video files to AWS. Environment variables are
+configured here to access and store videos to an S3 Bucket.
+*/
+
 const AWS = require('aws-sdk');
 const fs = require('fs');
 
+// define an AWS S3 Bucket using configured environment variables
 let s3bucket = new AWS.S3({
   accessKeyId: process.env.IAM_USER_KEY,
   secretAccessKey: process.env.IAM_USER_SECRET,
   Bucket: process.env.BUCKET_NAME
 });
-// fix s3 url to never expire
+
+/**
+ * Performs the action of uploading a motion video file to AWS
+ * @param {*} videoFile The name of the video currently stored in local directory
+ * @param {*} axios The HTTP Client which performs requests to the web server
+ * @param {*} cameraId The camera ID who is performing the video upload
+ */
 function uploadToS3(videoFile, axios, cameraId) {
   const fileContent = fs.readFileSync(videoFile)
   const params = {

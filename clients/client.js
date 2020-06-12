@@ -1,3 +1,9 @@
+/*
+Created by Terence Ng
+Updated on 12/06/2020
+This main file defines execution program that all client cameras must run in order to toggle live streaming and motion detection of their video cameras.
+*/
+
 const express = require('express');
 require('dotenv').config();
 const busboy = require('connect-busboy')
@@ -40,6 +46,12 @@ vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
 const FPS = 10;
 doSetup();
 
+/**
+ * Performs the action of setting up the video camera asynchronously.
+ * Firstly sets up client object and camera object, which uploads to the database server, then proceeding to toggle live streaming and motion detection algorithm.
+ * Upon motion detected, a video object will be written then stored onto AWS S3
+ * Bucket, with the video file being deleted shortly thereafter
+ */
 async function doSetup() {
 
   const testClient = {
@@ -183,10 +195,23 @@ async function doSetup() {
     }, 1000 / FPS)
   })
 }
+
+
+/**
+ * write the current frame into a writerObject
+ * @param {*} writerObject writerObject which the video file is being made from
+ * @param {*} frame a single image frame
+ */
 function writeFrame(writerObject, frame) {
   writerObject.write(frame)
 }
 
+
+/**
+ * Changes the current date object into a number version
+ * @param {*} today a Date Object
+ * @return {Number} frame a single image frame
+ */
 function modifyCurrentDate(today) {
   if (today.getMinutes() == 0) {
     return Number(today.getHours().toString() + today.getMinutes().toString() + "0");
@@ -199,13 +224,24 @@ function modifyCurrentDate(today) {
   }
 }
 
-//function header comment: To tranfer the time from string into integer
-//parameter 1: timeObj: The time object including 2 strings: hour and minute
+/**
+ * Convert the time from string into integer
+ * @param {*} timeObj timeObj: The time object including 2 strings: hour and minute
+ * @return {Number} Returns number version of the Date Object
+ */
 function generateTime(timeObj) {
   time = timeObj.hour + timeObj.minute
   return Number(time)
 }
 
+/**
+ * Compares two frames to detect if motion has been detected.
+ * @param {*} frame
+ * @param {*} firstFrame
+ * @param {*} gray
+ * @param {*} frameDelta
+ * @return {boolean} Returns true or false if motion has been detected
+ */
 function motionDetected(frame, firstFrame, gray, frameDelta) {
   gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
   gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
@@ -220,6 +256,12 @@ function motionDetected(frame, firstFrame, gray, frameDelta) {
   return false
 }
 
+
+/**
+ * resets an image frame to the original
+ * @param {*} frame frame to be reset from
+ * @return {} Returns resetted image frame
+ */
 function resetFirstFrame(frame) {
   return frame.cvtColor(cv.COLOR_BGR2GRAY).gaussianBlur(new cv.Size(21, 21), 0);
 }
