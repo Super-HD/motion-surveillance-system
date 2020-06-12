@@ -1,3 +1,13 @@
+/*
+Created by Terence & Shawn
+Updated on 12/06/2020
+This file runs the back-end server for our web application.
+Server is an Express HTTP Server which uses a RESTFul Architecture for handling client
+endpoints.
+Database is created using MongoDB which connection URL hidden as an env variable.
+RESTFul Endpoints can be seen and are handled via respective functions defined at the bottom.
+*/
+
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');

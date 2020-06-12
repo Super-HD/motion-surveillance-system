@@ -1,5 +1,13 @@
-// creating instant validation
+/*
+Created by Terence Ng
+Updated on 11/06/2020
+This file performs input validation checking for login details.
+As login functionality has not yet been implemented in the app, we leave it off for now.
+And hence this file will not be used yet.
+*/
 
+
+// creating instant validation
 const checkSignIn = (email, password) => {
   if (!email || !password) {
     return "Please fill in all fields and try again.";
