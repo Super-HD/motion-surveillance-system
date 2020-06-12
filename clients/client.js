@@ -236,10 +236,10 @@ function generateTime(timeObj) {
 
 /**
  * Compares two frames to detect if motion has been detected.
- * @param {*} frame
- * @param {*} firstFrame
- * @param {*} gray
- * @param {*} frameDelta
+ * @param {Mat} frame the current frame that we captured from the camera
+ * @param {Mat} firstFrame the first frame that we recorded, this will be the comparison object with the current frame 
+ * @param {Mat} gray the frame that is convetred to the graysclae
+ * @param {Mat} frameDelta The frame to store the computed contour after comparing the difference between the 2 frames
  * @return {boolean} Returns true or false if motion has been detected
  */
 function motionDetected(frame, firstFrame, gray, frameDelta) {
@@ -259,8 +259,8 @@ function motionDetected(frame, firstFrame, gray, frameDelta) {
 
 /**
  * resets an image frame to the original
- * @param {*} frame frame to be reset from
- * @return {} Returns resetted image frame
+ * @param {Mat} frame frame to be reset from
+ * @return {Mat} Returns resetted image frame
  */
 function resetFirstFrame(frame) {
   return frame.cvtColor(cv.COLOR_BGR2GRAY).gaussianBlur(new cv.Size(21, 21), 0);
