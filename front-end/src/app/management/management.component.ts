@@ -103,7 +103,7 @@ export class ManagementComponent implements OnInit {
   
   /**
    * Filter Cameras using keyword 
-   * @param filterBy Filter keyword
+   * @param {string} filterBy Filter keyword
    * @return The cameras of an array that meet the condition specified in a callback function
    */
   doFilter(filterBy: string): Camera[] {
@@ -116,7 +116,7 @@ export class ManagementComponent implements OnInit {
 
   /**
    * Assign values to defined values regarding camera
-   * @param camera A camera json object
+   * @param {JSON Objec} camera A camera json object
    */
   onSelectUpdate(camera){
     this.cameraLocation = camera.cameraLocation;
@@ -143,7 +143,7 @@ export class ManagementComponent implements OnInit {
 
   /**
    * Convert a NgbTimeStruct value into CustomTimeStruct value in order to store time info
-   * @param time A time NgbTimeStruct
+   * @param {NgbTimeStruct} time A time NgbTimeStruct
    * @return The CustomTimeStruct converted from input param
    */
   toModel(time: NgbTimeStruct | null): CustomTimeStruct | null {

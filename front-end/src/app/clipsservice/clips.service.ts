@@ -30,7 +30,7 @@ export class ClipsService {
 
   /**
    * Get a single clip object from MongoDB database
-   * @param id Clip ID used to search for a clip
+   * @param {string} id Clip ID used to search for a clip
    * @return An Observable of the response with a clip json object
    */
   getClip(id) {
@@ -40,7 +40,7 @@ export class ClipsService {
 
   /**
    * Create a new clip document in MongoDB database
-   * @param data A clip json object
+   * @param {JSON Object} data A clip json object
    * @return An Observable of the response
    */
   createClip(data) {
@@ -49,8 +49,8 @@ export class ClipsService {
 
   /**
    * Update a clip document in MongoDB database
-   * @param id Clip ID used to search for a clip
-   * @param data A json object used to update the clip
+   * @param {string} id Clip ID used to search for a clip
+   * @param {JSON Object} data A json object used to update the clip
    * @return An Observable of the response
    */
   updateClip(id, data) {
@@ -60,7 +60,7 @@ export class ClipsService {
 
    /**
     * Delete a clip document in MongoDB database
-    * @param id Clip ID used to find a clip
+    * @param {string} id Clip ID used to find a clip
     * @return An Observable of the response
     */
   deleteClip(id) {
