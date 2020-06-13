@@ -7,25 +7,28 @@ endpoints.
 Database is created using MongoDB which connection URL hidden as an env variable.
 RESTFul Endpoints can be seen and are handled via respective functions defined at the bottom.
 */
-
+// express server
 const express = require('express');
+// mongoose data modelling
 const mongoose = require('mongoose');
 const path = require('path');
 // cors for allowing cross origin resource sharing between different localhosts
 const cors = require("cors")
+// initiate server instance
 const app = express();
 const server = require('http').Server(app)
 // allow cross origin resource sharing
 app.use(cors());
 app.use(express.json());
-
+// join static directory with the server front-end
 app.use('/', express.static(path.join(__dirname, '../front-end/dist/MotionSurveillanceSystem')))
 
+// retrieve router endpoint functions from router folder
 const client = require("./routers/client")
 const camera = require('./routers/camera');
 const clip = require('./routers/clip');
 
-// change once we deploy ONLINE
+// configure mongo database URL
 const mongoURI = process.env.MONGO_URI;
 mongoConfig = {
     useNewUrlParser: true,

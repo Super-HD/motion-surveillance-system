@@ -46,7 +46,7 @@ const getAll = (req, res) => {
   Client.find({})
     .populate('cameras')
     .exec((err, clients) => {
-      if (err) res.json(err) 
+      if (err) res.json(err)
       res.json(clients)
     })
 }
@@ -74,11 +74,14 @@ const createOne = (req, res) => {
  * @param {HTTP Request} req The HTTP request, it contains a parameter which is a client ID
  * @param {HTTP Response} res The HTTP respond, it will contain either an error statement or a client json object
  */
-const getOne = (req, res) => Client.findOne({ _id: req.params.id }, (err, client) => {
-  if (err) res.status(400).json(err);
-  if (!client) return res.status(400).json();
-  res.json(client);
-})
+const getOne = (req, res) => {
+  Client.findOne({ _id: req.params.id }, (err, client) => {
+    if (err) res.status(400).json(err);
+    if (!client) return res.status(400).json();
+    res.json(client);
+  })
+}
+
 
 /**
  * Find a client document and update its content

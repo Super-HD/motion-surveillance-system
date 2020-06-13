@@ -13,10 +13,12 @@ const Camera = require('../models/Camera')
  * @param {HTTP Request} req The HTTP request
  * @param {HTTP Response} res The HTTP respond, it will either contain an error statement or an array of camera json objects
  */
-const getAll = (req, res) => Camera.find().populate('cameraClient').exec((err, cameras) => {
-    if (err) res.status(400).json(err);
-    res.json(cameras);
-})
+const getAll = (req, res) => {
+    Camera.find().populate('cameraClient').exec((err, cameras) => {
+        if (err) res.status(400).json(err);
+        res.json(cameras);
+    })
+}
 
 /**
  * Create a new Camera document
@@ -41,22 +43,26 @@ const createOne = (req, res) => {
  * @param {HTTP Request} req The HTTP request, it contains a parameter which is a camera ID
  * @param {HTTP Response} res The HTTP respond, it will contain either an error statement or a camera json object
  */
-const getOne = (req, res) => Camera.findOne({ _id: req.params.id }, (err, camera) => {
-    if (err) res.status(400).json(err);
-    if (!camera) return res.status(400).json();
-    res.json(camera);
-})
+const getOne = (req, res) => {
+    Camera.findOne({ _id: req.params.id }, (err, camera) => {
+        if (err) res.status(400).json(err);
+        if (!camera) return res.status(400).json();
+        res.json(camera);
+    })
+}
 
 /**
  * Find a Camera document and update its content
  * @param {HTTP Request} req The HTTP request, it contains a parameter which is a camera ID, and a camera json object
  * @param {HTTP Response} res The HTTP respond, it will contain either an error statement or a camera json object
  */
-const updateOne = (req, res) => Camera.findOneAndUpdate({ _id: req.params.id }, req.body, (err, camera) => {
-    if (err) res.status(400).json(err);
-    if (!camera) return res.status(400).json();
-    res.json(camera);
-})
+const updateOne = (req, res) => {
+    Camera.findOneAndUpdate({ _id: req.params.id }, req.body, (err, camera) => {
+        if (err) res.status(400).json(err);
+        if (!camera) return res.status(400).json();
+        res.json(camera);
+    })
+}
 
 module.exports = {
     getAll,

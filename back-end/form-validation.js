@@ -6,7 +6,6 @@ As login functionality has not yet been implemented in the app, we leave it off 
 And hence this file will not be used yet.
 */
 
-
 // creating instant validation
 const checkSignIn = (email, password) => {
   if (!email || !password) {
