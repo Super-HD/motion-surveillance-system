@@ -1,5 +1,5 @@
 /*
-Created by Terence & Shawn
+Created by Terence & Jason
 Updated on 12/06/2020
 This file runs the back-end server for our web application.
 Server is an Express HTTP Server which uses a RESTFul Architecture for handling client
