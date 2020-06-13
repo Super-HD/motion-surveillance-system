@@ -12,8 +12,8 @@ module.exports = {
      * Retrieve all clip documents from the Clip collection
      * The 'camera' is populated from its ID to its document
      * The 'cameraClient' is populated from its ID to its document
-     * @param {*} req The HTTP request
-     * @param {*} res The HTTP respond, it will either contain an error statement or an array of clip json object
+     * @param {HTTP Request} req The HTTP request
+     * @param {HTTP Response} res The HTTP respond, it will either contain an error statement or an array of clip json object
      */
     getAll: (req, res) => Clip.find().populate({
         path: 'camera',
@@ -29,8 +29,8 @@ module.exports = {
     // A function that creates a new document and save it in Clip collection
     /**
      * Create a new Clip document
-     * @param {*} req The HTTP request, it contains a clip json object
-     * @param {*} res The HTTP respond, it will contain either an error statement or the result 
+     * @param {HTTP Request} req The HTTP request, it contains a clip json object
+     * @param {HTTP Response} res The HTTP respond, it will contain either an error statement or the result 
      */
     createOne: (req, res) => {
         let newClipDetails = req.body;
@@ -43,8 +43,8 @@ module.exports = {
 
     /**
      * Search for a Clip document
-     * @param {*} req The HTTP request, it contains a parameter which is a clip ID
-     * @param {*} res The HTTP respond, it will contain either an error statement or a clip json object 
+     * @param {HTTP Request} req The HTTP request, it contains a parameter which is a clip ID
+     * @param {HTTP Response} res The HTTP respond, it will contain either an error statement or a clip json object 
      */
     getOne: (req, res) => Clip.findOne({ _id: req.params.id }, (err, clip) => {
         if (err) res.status(400).json(err);
@@ -54,8 +54,8 @@ module.exports = {
 
     /**
      * Find a Clip document and update its content
-     * @param {*} req The HTTP request, it contains a parameter which is a clip ID, and a clip json object
-     * @param {*} res The HTTP respond, it will contain either an error statement or a clip json object 
+     * @param {HTTP Request} req The HTTP request, it contains a parameter which is a clip ID, and a clip json object
+     * @param {HTTP Response} res The HTTP respond, it will contain either an error statement or a clip json object 
      */
     updateOne: (req, res) => Clip.findOneAndUpdate({ _id: req.params.id }, req.body, (err, clip) => {
         if (err) res.status(400).json(err);
@@ -65,8 +65,8 @@ module.exports = {
 
     /**
      * Delete a Clip document
-     * @param {*} req The HTTP request, it contains a parameter which is a clip ID
-     * @param {*} res The HTTP respond, it will contain either an error statement or nothing
+     * @param {HTTP Request} req The HTTP request, it contains a parameter which is a clip ID
+     * @param {HTTP Response} res The HTTP respond, it will contain either an error statement or nothing
      */
     deleteOne: (req, res) => Clip.findOneAndRemove({_id: req.params.id}, (err) => {
         if (err) res.status(400).json(err);
