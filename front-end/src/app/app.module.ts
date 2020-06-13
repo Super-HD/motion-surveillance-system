@@ -7,9 +7,10 @@ import { DecimalPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http'; 
 
 // import ngx-smart-modal
+// Keep these package that may be used in future to implement watching motion-detection video online
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 // import for mat-video
-// Keep these package that may be used in future
+// Keep these package that may be used in future to implement watching motion-detection video online
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatVideoModule } from 'mat-video';
 // import ngx-pagination
