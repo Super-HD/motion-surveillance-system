@@ -47,13 +47,12 @@ const FPS = 10;
 doSetup();
 
 /**
- * Performs the action of setting up the video camera asynchronously.
+ * Performs the action of setting up the video camera and clients asynchronously into MongoDB.
  * Firstly sets up client object and camera object, which uploads to the database server, then proceeding to toggle live streaming and motion detection algorithm.
  * Upon motion detected, a video object will be written then stored onto AWS S3
  * Bucket, with the video file being deleted shortly thereafter
  */
 async function doSetup() {
-
   const testClient = {
     clientName: "Monash University",
     cameras: []
@@ -63,7 +62,6 @@ async function doSetup() {
   const testCameraOne = {
     cameraLocation: cameraLocation,
     cameraURL: `http://${ip}:5100`,
-    // cameraClient: clientRes.data._id,
     startTime: {
       hour: "00",
       minute: "00"
@@ -75,21 +73,24 @@ async function doSetup() {
     motionClips: []
   }
 
+  // POST request to create a new client
   const client = await axios.post('http://161.35.110.201:4200/client', testClient)
   console.log("Client Added: ", client.data._id)
+  // POST request to create a new Camera
   const cameraOne = await axios.post('http://161.35.110.201:4200/camera', { ...testCameraOne, cameraClient: client.data._id })
   console.log("Camera Added: ", cameraOne.data._id)
-  // add camera1 to client camera array
+  // add the camera to client camera array
   const camToClientOne = await axios.post('http://161.35.110.201:4200/addcamera', { clientId: client.data._id, cameraId: cameraOne.data._id })
   console.log("Camera Added to Client Camera Array ")
 
   server.listen(5100, () => {
     console.log(`Client Server Successfully Started on Port ${5100}`);
-    // run function to setup adding cameras and clients to mongoDB
 
     //The firstframe and frameDelta will be used to be compared to determine whether a motion is detected, between 2 frames
     var firstFrame, frameDelta, gray, thresh;
-    var writing = false; //a boolean to determine whether we are writing a video
+    //a boolean to determine whether we are writing a video
+    var writing = false;
+    // the length of the video upon motion detection. Can be adjusted.
     var videoLength = 100;
     // time to write when writing a motion clip
     var currentWrittenTime = 0;
@@ -97,6 +98,7 @@ async function doSetup() {
     var writerObject;
     // videoName of motion clip file.
     var videoName;
+
     // define the interval to continuously send frame data to server
     setInterval(() => {
       // vCap.read returns a mat file
