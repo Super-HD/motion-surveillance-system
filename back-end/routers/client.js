@@ -1,7 +1,7 @@
 /*
 Created by Cheng Zeng
 Modified by Terence
-Updated on 11/06/2020
+Updated on 13/06/2020
 In this file, operations of the Client collection are implemented.
 */
 
@@ -39,8 +39,8 @@ const handleSignIn = (bcrypt) => (req, res) => {
 /**
  * Retrieves all documents from the Client collection
  * The 'cameras' is populated from their ID to their document
- * @param {*} req The HTTP request
- * @param {*} res The HTTP respond, it will either contain an error statement or an array of client json objects
+ * @param {HTTP Request} req The HTTP request
+ * @param {HTTP Response} res The HTTP respond, it will either contain an error statement or an array of client json objects
  */
 const getAll = (req, res) => {
   Client.find({})
@@ -53,8 +53,8 @@ const getAll = (req, res) => {
 
 /**
  * Create a new Client document
- * @param {*} req The HTTP request, it contains a client json object
- * @param {*} res The HTTP respond, it will contain either an error statement or the result
+ * @param {HTTP Request} req The HTTP request, it contains a client json object
+ * @param {HTTP Response} res The HTTP respond, it will contain either an error statement or the result
  */
 const createOne = (req, res) => {
   let { clientName } = req.body
@@ -71,8 +71,8 @@ const createOne = (req, res) => {
 
 /**
  * Search for a Client document
- * @param {*} req The HTTP request, it contains a parameter which is a client ID
- * @param {*} res The HTTP respond, it will contain either an error statement or a client json object
+ * @param {HTTP Request} req The HTTP request, it contains a parameter which is a client ID
+ * @param {HTTP Response} res The HTTP respond, it will contain either an error statement or a client json object
  */
 const getOne = (req, res) => Client.findOne({ _id: req.params.id }, (err, client) => {
   if (err) res.status(400).json(err);
@@ -82,8 +82,8 @@ const getOne = (req, res) => Client.findOne({ _id: req.params.id }, (err, client
 
 /**
  * Find a client document and update its content
- * @param {*} req The HTTP request, it contains a parameter which is a client ID, and a client json object
- * @param {*} res The HTTP respond, it will contain either an error statement or a client json object
+ * @param {HTTP Request} req The HTTP request, it contains a parameter which is a client ID, and a client json object
+ * @param {HTTP Response} res The HTTP respond, it will contain either an error statement or a client json object
  */
 const updateOne = (req, res) => {
   Client.findOneAndUpdate({ _id: req.params.id }, req.body, (err, client) => {
@@ -95,8 +95,8 @@ const updateOne = (req, res) => {
 
 /**
  * Add a camera object to a client document
- * @param {*} req The HTTP request, it contains a client json object including clientId and cameraId
- * @param {*} res The HTTP respond, it will contain either an error statement or a clinet json object
+ * @param {HTTP Request} req The HTTP request, it contains a client json object including clientId and cameraId
+ * @param {HTTP Response} res The HTTP respond, it will contain either an error statement or a clinet json object
  */
 const addCamera = (req, res) => {
   let { clientId, cameraId } = req.body

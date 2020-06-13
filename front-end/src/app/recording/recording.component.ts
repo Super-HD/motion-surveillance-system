@@ -106,7 +106,7 @@ export class RecordingComponent implements OnInit {
 
   /**
    * Filter Clips using keyword 
-   * @param filterBy Filter keyword
+   * @param {sting} filterBy Filter keyword
    * @return The clips of an array that meet the condition specified in a callback function
    */
   doFilter(filterBy: string): MotionClip[] {

@@ -17,7 +17,7 @@ export class StreamingService {
 
   /**
    * Get Streming frame image
-   * @param url The url of socket server who publish frame image
+   * @param {string} url The url of socket server who publish frame image
    * @return An Observable of the frame image
    */
   public getStream(url: string) {
