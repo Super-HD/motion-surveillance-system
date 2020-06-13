@@ -86,8 +86,8 @@ async function doSetup() {
   server.listen(5100, () => {
     console.log(`Client Server Successfully Started on Port ${5100}`);
 
-    //The firstframe and frameDelta will be used to be compared to determine whether a motion is detected, between 2 frames
-    var firstFrame, frameDelta, gray, thresh;
+    //The firstframe will be used to be compared to determine whether a motion is detected, between 2 frames using frame differencing
+    var firstFrame;
     //a boolean to determine whether we are writing a video
     var writing = false;
     // the length of the video upon motion detection. Can be adjusted.
@@ -147,13 +147,12 @@ async function doSetup() {
             console.log(file)
             //upload the video onto server
             aws.uploadToS3(file, axios, cameraOne.data._id)
-
           }
         }
         else {
           if (start_time == end_time) {
             if (writing == false) {
-              if (motionDetected(frame, firstFrame, gray, frameDelta)) {
+              if (motionDetected(frame, firstFrame)) {
                 console.log("motion detected");
                 writing = true
                 var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
@@ -167,7 +166,7 @@ async function doSetup() {
           else if (start_time < end_time) {
             if (current_time > start_time && current_time < end_time) {
               if (writing == false) {
-                if (motionDetected(frame, firstFrame, gray, frameDelta)) {
+                if (motionDetected(frame, firstFrame)) {
                   console.log("motion detected");
                   writing = true
                   var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
@@ -181,7 +180,7 @@ async function doSetup() {
           else if (start_time > end_time) {
             if ((current_time > start_time) || (current_time < end_time)) {
               if (writing == false) {
-                if (motionDetected(frame, firstFrame, gray, frameDelta)) {
+                if (motionDetected(frame, firstFrame)) {
                   console.log("motion detected");
                   writing = true
                   var date = today.getFullYear() + (today.getMonth() + 1) + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
@@ -240,17 +239,15 @@ function generateTime(timeObj) {
  * Compares two frames to detect if motion has been detected.
  * @param {Mat} frame the current frame that we captured from the camera
  * @param {Mat} firstFrame the first frame that we recorded, this will be the comparison object with the current frame
- * @param {Mat} gray the frame that is converted to grayscale image
- * @param {Mat} frameDelta The frame to store the computed contour after comparing the difference between the 2 frames
  * @return {boolean} Returns true or false if motion has been detected
  */
-function motionDetected(frame, firstFrame, gray, frameDelta) {
-  gray = frame.cvtColor(cv.COLOR_BGR2GRAY);
-  gray = gray.gaussianBlur(new cv.Size(21, 21), 0);
-  frameDelta = firstFrame.absdiff(gray);
-  thresh = frameDelta.threshold(25, 255, cv.THRESH_BINARY);
-  thresh = thresh.dilate(new cv.Mat(), new cv.Vec(-1, -1), 2);
-  var cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+function motionDetected(frame, firstFrame) {
+  // convert frame into greyscale
+  let grey = (frame.cvtColor(cv.COLOR_BGR2GRAY)).gaussianBlur(new cv.Size(21, 21), 0);
+  // frameDelta stores the computed contour after comparing the difference between the 2 frames. It is used to determine whether a motion is detected, between 2 frames
+  let frameDelta = firstFrame.absdiff(grey);
+  let thresh = (frameDelta.threshold(25, 255, cv.THRESH_BINARY)).dilate(new cv.Mat(), new cv.Vec(-1, -1), 2)
+  let cnts = thresh.findContours(cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
   for (i = 0; i < cnts.length; i++) {
     if (cnts[i].area < 500) { continue }
     return true
