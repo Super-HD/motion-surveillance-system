@@ -3,19 +3,26 @@ Created by Terence Ng
 Updated on 12/06/2020
 This main file defines execution program that all client cameras must run in order to toggle live streaming and motion detection of their video cameras.
 */
-
+// express server
 const express = require('express');
+// configure environment variables
 require('dotenv').config();
+// for file upload procedure
 const busboy = require('connect-busboy')
 const busboyBodyParser = require('busboy-body-parser')
-// cors for allowing cross origin resource sharing between different localhosts
+// for opencv
 const cv = require('opencv4nodejs')
+// configure http client
 const axios = require('axios')
+// cors for allowing cross origin resource sharing between different localhosts
 const cors = require("cors")
+// initiate server instance
 const app = express();
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
+// aws upload module
 const aws = require('./s3-file-upload')
+// ip address of client
 const internalIp = require('internal-ip');
 var assert = require('assert');
 app.use(busboy())
@@ -29,9 +36,7 @@ app.use(express.json());
 var myArgs = process.argv.slice(2);
 // Assert camera location is provided, otherwise an error is report
 assert(cameraLocation = myArgs[0], "Please provide the camera's location")
-
-
-let vCap
+let vCap;
 // Try to open capture from webcam
 try {
   vCap = new cv.VideoCapture(0)
@@ -40,7 +45,7 @@ catch (err) {
   console.log("Camera is not avaiable")
   return
 }
-
+// configure the video capture object for streaming
 vCap.set(cv.CAP_PROP_FRAME_WIDTH, 300);
 vCap.set(cv.CAP_PROP_FRAME_HEIGHT, 300);
 const FPS = 10;
@@ -206,7 +211,6 @@ async function doSetup() {
 function writeFrame(writerObject, frame) {
   writerObject.write(frame)
 }
-
 
 /**
  * Changes the current date object into a number version
